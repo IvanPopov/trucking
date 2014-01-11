@@ -1,0 +1,24 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="576" measuredH="235" mockupW="484" mockupH="198">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::FieldSet" x="92" y="37" w="484" h="198" measuredW="200" measuredH="170" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u0448%u0442%u0440%u0430%u0444</text>
+      </controlProperties>
+    </control>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::DataGrid" x="100" y="107" w="461" h="104" measuredW="384" measuredH="111" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>id%2C%20%u043A%u0440%20%u043D%u0430%u0437%u0432%u0430%u043D%u0438%u0435%2C%20%u043F%u043E%u043B%u043D%u043E%u0435%20%u043D%u0430%u0437%u0432%u0430%u043D%u0438%u0435%2C%20%u0441%u0443%u043C%u043C%u0430%0A%u0448%u0442001%2C%20%u043D%u0435%20%u0432%u044B%u0445%u043E%u0434%2C%20%20%20%20%20%2C%202000%0A%u0448%u0442002%2C%20%u043E%u043F%u043E%u0437%u0434%u0430%u043D%u0438%u0435%2C%20%20%20%20%20%20%2C%20200%20%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Button" x="107" y="64" w="-1" h="-1" measuredW="77" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u0434%u043E%u0431%u0430%u0432%u0438%u0442%u044C</text>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Button" x="199" y="64" w="-1" h="-1" measuredW="70" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>%u0443%u0434%u0430%u043B%u0438%u0442%u044C</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

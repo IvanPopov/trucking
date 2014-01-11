@@ -1,0 +1,17 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="904" measuredH="142" mockupW="889" mockupH="84">
+  <controls>
+    <control controlID="27" controlTypeID="com.balsamiq.mockups::DataGrid" x="15" y="58" w="889" h="84" measuredW="887" measuredH="81" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>id%u041F%u0440%u043E%u0432%u043E%u0434%u043A%u0438%2C%20%u0412%u0440%u0435%u043C%u044F%20%u043F%u0440%u043E%u0432%u043E%u0434%u043A%u0438%2C%20%u041D%u0430%u0438%u043C.%20%u0441%u0447%u0435%u0442%u0430%20%2C%u0421%u0443%u043C%u043C%u0430%2C%20%u0414%u0430%u0442%u0430%2C%20%u0427%u044C%u044F%20%u043F%u0440%u043E%u0432%u043E%u0434%u043A%u0430%2C%20%20%u0442%u0438%u043F%20%u0441%u0447%u0435%u0442%u0430%2C%20%u043E%u0431%u043D%u0443%u043B%u044F%u044E%u0449%u0430%u044F%2C%20%u0442%u0438%u043F%20%u043F%u0440%u043E%u0432%u043E%u0434%u043A%u0438%2C%20%u043D%u043E%u043C%u0435%u0440%20%u0442%u0438%u043F%u0430%0A%u043F%u0440416%2C%2024.11.13%20%u0432%u0441%u043A%2023%3A00%2C%20%u0418%u0433%u043D%u0430%u0442%u043E%u0432%20%u0414%u0435%u043D%u0438%u0441%20%2C%20%2C11.11.13%2C%20%u0422%u0430%u043B%u0438%u043F%u043E%u0432%20%u0420%u0443%u0441%u043B%u0430%u043D%2C%20%u043A%u043E%u043C%u043F%u0430%u043D%u0438%u044F/%u043A%u043B%u0438%u0435%u043D%u0442/%2C%20%2C%20%u043D%u0430%u0447%u0438%u0441%u043B%u0435%u043D%u0438%u0435%20%u043F%u043E%2C%203140%0A%2C%20%20%2C%20%20%2C%20%2C%20%2C%u0414%u0430%u043D%u0438%u0441%u043E%u0432%u0438%u0447%2C/%u043A%u043E%u043D%u0442%20%u043B%u0438%u0446%u043E%2C%20%2C%20%u0437%u0430%u043A%u0430%u0437%u0443</text>
+      </controlProperties>
+    </control>
+    <control controlID="28" controlTypeID="com.balsamiq.mockups::Label" x="328" y="83" w="-1" h="-1" measuredW="30" measuredH="21" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <color>13576743</color>
+        <size>13</size>
+        <text>-500</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
