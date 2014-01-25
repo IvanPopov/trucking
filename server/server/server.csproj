@@ -17,6 +17,10 @@
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="idl\oauth2orize.d.ts" />
+    <TypeScriptCompile Include="libs\db.ts" />
+    <TypeScriptCompile Include="libs\oauth2.ts" />
+    <TypeScriptCompile Include="libs\auth.ts" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -24,9 +28,14 @@
     <TypeScriptCompile Include="idl\express-jwt.d.ts" />
     <TypeScriptCompile Include="idl\express.d.ts" />
     <TypeScriptCompile Include="idl\jsonwebtoken.d.ts" />
+    <TypeScriptCompile Include="idl\nconf.d.ts" />
     <TypeScriptCompile Include="idl\node.d.ts" />
+    <TypeScriptCompile Include="idl\passport.d.ts" />
+    <TypeScriptCompile Include="idl\winston.d.ts" />
+    <TypeScriptCompile Include="libs\log.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="config.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

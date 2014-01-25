@@ -1,42 +1,64 @@
 /// <reference path="idl/express.d.ts" />
 /// <reference path="idl/express-jwt.d.ts" />
 /// <reference path="idl/jsonwebtoken.d.ts" />
+/// <reference path="idl/winston.d.ts" />
+/// <reference path="idl/passport.d.ts" />
 var express = require('express');
-var expressJwt = require('express-jwt');
-var jwt = require('jsonwebtoken');
 
+var config = require('nconf');
+var passport = require('passport');
+var oauth2 = require('./libs/oauth2');
+
+config.argv().env().file({ file: './config.json' });
+
+var log = require('./libs/log')(module);
 var app = express();
 var secret = "[your private key]";
 
-// We are going to protect /api routes with JWT
-app.use('/api', expressJwt({ secret: secret }));
-
+app.use(express.favicon());
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(passport.initialize());
+app.use(express.logger('dev'));
+app.use(express.methodOverride());
+app.use(app.router);
 
-//User validation
-var auth = express.basicAuth(function (user, passwd) {
-    return (user == "admin" && passwd == "admin");
+require("./libs/auth");
+
+app.use(function (err, req, res, next) {
+    res.status(404);
+    log.debug('Not found URL: %s', req.url);
+    res.send({ error: 'Not found' });
+    return;
 });
 
-//Password protected area
-app.get('/authenticate', auth, function (req, res) {
-    var profile = {
-        email: 'admin@example.com',
-        id: 1
-    };
-
-    // We are sending the profile inside the token
-    var token = jwt.sign(profile, secret, { expiresInMinutes: 60 * 5 });
-
-    res.json({ token: token });
+app.use(function (err, req, res, next) {
+    //FIXME: avoid <any> type conversion
+    res.status(err.status || 500);
+    log.error('Internal error(%d): %s', res.statusCode, err.message);
+    res.send({ error: err.message });
+    return;
 });
 
-app.get('/api/restricted', function (req, res) {
-    console.log('user ' + req.user.email + ' is calling /api/restricted');
-    res.json(req.user);
+app.get('/api', passport.authenticate('bearer', { session: false }), function (req, res) {
+    res.send('API is running');
 });
 
-app.listen(3000);
-console.log('Express started on port 3000');
+//FIXME: avoid <any> converion
+app.post('/oauth/token', oauth2.token);
+
+app.get('/api/userInfo', passport.authenticate('bearer', { session: false }), function (req, res) {
+    // req.authInfo is set using the `info` argument supplied by
+    // `BearerStrategy`.  It is typically used to indicate scope of the token,
+    // and used in access control checks.  For illustrative purposes, this
+    // example simply returns the scope in the response.
+    res.json({ user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope });
+});
+
+app.get('/ErrorExample', function (req, res, next) {
+    next(new Error('Random error!'));
+});
+
+app.listen(config.get('port'));
+log.info('Express started on port ' + config.get('port'));
 //# sourceMappingURL=app.js.map
