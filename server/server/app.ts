@@ -1,69 +1,123 @@
 /// <reference path="idl/express.d.ts" />
-/// <reference path="idl/express-jwt.d.ts" />
-/// <reference path="idl/jsonwebtoken.d.ts" />
 /// <reference path="idl/winston.d.ts" />
 /// <reference path="idl/passport.d.ts" />
 
-import express = require('express');
-import winston = require('winston');
-import config = require('nconf');
-import passport = require('passport');
-import oauth2 = require('./libs/oauth2');
+import express = require("express");
+import winston = require("winston");
+import config = require("./libs/config");
+import passport = require("passport");
+import oauth2 = require("./libs/oauth2");
+import db = require("./libs/db");
+import http = require("http");
+import https = require("https");
+import fs = require("fs");
+import type = require("./libs/type");
 
-config.argv().env().file({ file: './config.json' });
+var revalidator = require("revalidator");
+var cors = require("cors");
+var ArgumentParser = require("argparse").ArgumentParser;
+var parser = new ArgumentParser({
+	version: "0.0.1",
+	addHelp: true,
+	description: "Trucking server"
+});
 
-var log: winston.Logger = require('./libs/log')(module);
+parser.addArgument(["-p", "--port"], { help: "Specify port." });
+parser.addArgument(["-d", "--debug"], { help: "Debug mode.", action: "storeTrue" });
+parser.addArgument(["--https"], { help: "Use HTTPS.", action: "storeTrue" });
+
+var args = parser.parseArgs();
+var log: winston.Logger = require("./libs/log")(module);
 var app = express();
-var secret = "[your private key]";
 
+app.use(express.bodyParser());
 app.use(express.favicon());
+app.use(express.logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(passport.initialize());
-app.use(express.logger('dev'));
 app.use(express.methodOverride());
+app.use(cors());
 app.use(app.router);
+
+if ("development" == <any>app.get("env")) {
+	app.use(express.errorHandler());
+}
 
 require("./libs/auth");
 
 app.use(function (err: Error, req: express.Request, res: express.Response, next: Function) {
 	res.status(404);
-	log.debug('Not found URL: %s', req.url);
-	res.send({ error: 'Not found' });
+	log.debug("Not found URL: %s", req.url);
+	res.send({ error: "Not found" });
 	return;
 });
 
 app.use((err: Error, req: express.Request, res: express.Response, next: Function): void => {
 	//FIXME: avoid <any> type conversion
 	res.status((<any>err).status || 500);
-	log.error('Internal error(%d): %s', res.statusCode, err.message);
+	log.error("Internal error(%d): %s", res.statusCode, err.message);
 	res.send({ error: err.message });
 	return;
 });
 
-app.get('/api', passport.authenticate('bearer', { session: false }), (req: express.Request, res: express.Response): void => {
-	res.send('API is running');
+app.get("/api", passport.authenticate("bearer", { session: false }), (req: express.Request, res: express.Response): void => {
+	res.send("API is running");
 });
+/*
+app.get('/auth/vk',
+	passport.authenticate('vkontakte', {
+		scope: ['friends']
+	}),
+	function (req, res) {
+		// The request will be redirected to vk.com 
+		// for authentication, so
+		// this function will not be called.
+	});
+
+app.get('/auth/vk/callback',
+	passport.authenticate('vkontakte', {
+		failureRedirect: '/auth'
+	}),
+	function (req, res) {
+		// Successful authentication
+		//, redirect home.
+		res.redirect('/');
+	});
+*/
 
 //FIXME: avoid <any> converion
-app.post('/oauth/token', (<any>oauth2).token);
+app.post("/oauth/token", (<any>oauth2).token);
 
-app.get('/api/userInfo',
-	passport.authenticate('bearer', { session: false }),
-	(req, res) => {
-		// req.authInfo is set using the `info` argument supplied by
-		// `BearerStrategy`.  It is typically used to indicate scope of the token,
-		// and used in access control checks.  For illustrative purposes, this
-		// example simply returns the scope in the response.
-		res.json({ user_id: req.user.userId, name: req.user.username, scope: (<any>req).authInfo.scope })
+
+import metro = require("./api/metro");
+import catalogs = require("./api/catalogs");
+import userinfo = require("./api/userinfo");
+
+metro(app, log);
+catalogs(app, log);
+userinfo(app, log);
+
+var port: number = parseInt(args.port) || config.get("port");
+var useHttps: boolean = type.isDef(args.https) ? !!args.https : config.get("https");
+
+if (useHttps) {
+	var privateKey: string = fs.readFileSync(config.get("security:key"), 'utf8').toString();
+	var certificate: string = fs.readFileSync(config.get("security:cert"), 'utf8').toString();
+	var passphrase: string = config.get("security:passphrase");
+
+	https.createServer({ key: privateKey, cert: certificate, passphrase: passphrase }, app).listen(port, () => {
+		if ("development" == <any>app.get("env")) {
+			log.info("Express/https server listening on port " + port);
 		}
-	);
+	});
+}
+else {
+	http.createServer(app).listen(port, () => {
+		if ("development" == <any>app.get("env")) {
+			log.info("Express/http server listening on port " + port);
+		}
+	});
+}
 
 
-app.get('/ErrorExample', function (req, res, next) {
-	next(new Error('Random error!'));
-});
-
-
-app.listen(config.get('port'));
-log.info('Express started on port ' + config.get('port'));

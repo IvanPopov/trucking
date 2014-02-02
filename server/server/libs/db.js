@@ -1,158 +1,71 @@
-var crypto = require('crypto');
+/// <reference path="../idl/winston.d.ts" />
+var mysql = require("mysql");
+var mysqlUtilities = require("mysql-utilities");
+var config = require("./config");
+var logger = require("winston");
 
-var db;
-(function (db) {
-    var User = (function () {
-        function User() {
-            this._plainPassword = null;
+var EmployeeModel = require("./db/EmployeeModel");
+exports.EmployeeModel = EmployeeModel;
+var TokenModel = require("./db/TokenModel");
+exports.TokenModel = TokenModel;
+var ClientAppModel = require("./db/ClientAppModel");
+exports.ClientAppModel = ClientAppModel;
+
+var CatalogModel = require("./db/CatalogModel");
+exports.CatalogModel = CatalogModel;
+
+var MetroAPI = require("./db/MetroAPI");
+exports.MetroAPI = MetroAPI;
+
+//seetup databse config
+var dbConfig = {
+    host: config.get("mysql:host"),
+    user: config.get("mysql:user"),
+    password: config.get("mysql:password"),
+    database: config.get("mysql:db")
+};
+
+var connection = null;
+
+function handleDisconnect() {
+    connection = mysql.createConnection(dbConfig); // Recreate the connection, since
+
+    // the old one cannot be reused.
+    connection.connect(function (err) {
+        if (err) {
+            logger.error('error when connecting to db:', err);
+            setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+            return;
         }
-        User.prototype.encryptPassword = function (password) {
-            return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
-            //more secure - return crypto.pbkdf2Sync(password, this.salt, 10000, 512);
-        };
 
-        User.prototype.checkPassword = function (password) {
-            return this.encryptPassword(password) === this.hashedPassword;
-        };
+        mysqlUtilities.upgrade(connection);
+    });
 
-        Object.defineProperty(User.prototype, "password", {
-            get: function () {
-                return this._plainPassword;
-            },
-            set: function (password) {
-                this._plainPassword = password;
-                this.salt = crypto.randomBytes(32).toString('base64');
-
-                //more secure - this.salt = crypto.randomBytes(128).toString('base64');
-                this.hashedPassword = this.encryptPassword(password);
-            },
-            enumerable: true,
-            configurable: true
-        });
-
-        return User;
-    })();
-    db.User = User;
-
-    var UserModel = (function () {
-        function UserModel() {
-            this.users = [];
-            var user = new User;
-            user.id = 1;
-            user.name = "andrey";
-            user.password = "simplepassword";
-            user.created = new Date;
-
-            this.users.push(user);
+    // If you're also serving http, display a 503 error.
+    connection.on('error', function (err) {
+        logger.error('db error', err);
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+            handleDisconnect(); // lost due to either server restart, or a
+        } else {
+            throw err;
         }
-        UserModel.prototype.findByName = function (username, callback) {
-            if (this.users[0].name === username) {
-                return callback(null, this.users[0]);
-            }
+    });
+}
 
-            callback(new Error("User not found"), null);
-        };
+handleDisconnect();
 
-        UserModel.prototype.findById = function (id, callback) {
-            if (this.users[0].id === id) {
-                return callback(null, this.users[0]);
-            }
+exports.clients = new exports.ClientAppModel(connection, "ClientApps");
+exports.users = new exports.EmployeeModel(connection, "Employees");
+exports.accessTokens = new exports.TokenModel(connection, "AccessTokens");
+exports.refreshTokens = new exports.TokenModel(connection, "RefreshTokens");
 
-            callback(new Error("User not found"), null);
-        };
-        return UserModel;
-    })();
-    db.UserModel = UserModel;
+//all catalogues
+exports.catalogs = {
+    metrobranches: new exports.CatalogModel(connection, "MetroBranches"),
+    //metro stations
+    metro: new exports.CatalogModel(connection, "Metro"),
+    streets: new exports.CatalogModel(connection, "Streets")
+};
 
-    var Token = (function () {
-        function Token(token, clientId, userId, created) {
-            if (typeof created === "undefined") { created = new Date; }
-            this.token = token;
-            this.clientId = clientId;
-            this.userId = userId;
-            this.created = created;
-        }
-        return Token;
-    })();
-    db.Token = Token;
-
-    var TokenModel = (function () {
-        function TokenModel() {
-            this.tokens = [];
-        }
-        TokenModel.prototype.remove = function (userId, clientId, callback) {
-            this.tokens.forEach(function (value, i, tokens) {
-                if (value.userId === userId || value.clientId === clientId) {
-                    tokens.splice(i, 1);
-                    return callback(null);
-                }
-            });
-
-            callback(null);
-        };
-
-        TokenModel.prototype.removeByValue = function (token, callback) {
-            this.tokens.forEach(function (value, i, tokens) {
-                if (value.token === token) {
-                    tokens.splice(i, 1);
-                    return callback(null);
-                }
-            });
-
-            callback(null);
-        };
-
-        TokenModel.prototype.save = function (token, callback) {
-            this.tokens.push(token);
-            callback(null);
-        };
-
-        TokenModel.prototype.findByValue = function (tokenValue, callback) {
-            this.tokens.forEach(function (value, i, tokens) {
-                if (value.token === tokenValue) {
-                    return callback(null, value);
-                }
-            });
-
-            callback(new Error("Token not found"), null);
-        };
-        return TokenModel;
-    })();
-    db.TokenModel = TokenModel;
-
-    var Client = (function () {
-        function Client() {
-        }
-        return Client;
-    })();
-    db.Client = Client;
-
-    var ClientModel = (function () {
-        function ClientModel() {
-            this.clients = [];
-            var client = new Client;
-            client.name = "OurService iOS client v1";
-            client.id = "mobileV1";
-            client.secret = "abc123456";
-
-            this.clients.push(client);
-        }
-        ClientModel.prototype.findById = function (id, callback) {
-            if (this.clients[0].id === id) {
-                return callback(null, this.clients[0]);
-            }
-
-            callback(new Error("Client not found"), null);
-        };
-        return ClientModel;
-    })();
-    db.ClientModel = ClientModel;
-
-    db.clients = new ClientModel;
-    db.users = new UserModel;
-    db.accessTokens = new TokenModel;
-    db.refreshTokens = new TokenModel;
-})(db || (db = {}));
-
-module.exports = db;
+exports.metro = new exports.MetroAPI(exports.catalogs.metrobranches, exports.catalogs.metro);
 //# sourceMappingURL=db.js.map

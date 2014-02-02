@@ -12,6 +12,9 @@ declare module "passport" {
 
 	export function initialize(): express.RequestFunction;
 	export function use(opt: any): void;
+
+	export function serializeUser(cb: (user, done) => void);
+	export function deserializeUser(cb: (user, done) => void);
 }
 
 declare module "passport-http" {
@@ -50,5 +53,22 @@ declare module "passport-http-bearer" {
 	export var Strategy: {
 
 		new (fn: (username, password, done) => void): Strategy;
+	};
+}
+
+declare module "passport-vkontakte" {
+	import express = require("express");
+
+	interface Strategy {
+
+	}
+
+	export var Strategy: {
+
+		new (config: {
+			clientID: string;
+			clientSecret: string;
+			callbackURL: string;
+		}, fn: (accessToken, refreshToken, profile, done) => void): Strategy;
 	};
 }

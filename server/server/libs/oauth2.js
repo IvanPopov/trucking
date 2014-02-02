@@ -1,59 +1,74 @@
 /// <reference path="../idl/passport.d.ts" />
 /// <reference path="../idl/oauth2orize.d.ts" />
 /// <reference path="../idl/nconf.d.ts" />
+/// <reference path="../idl/db.d.ts" />
 var oauth2orize = require('oauth2orize');
 var passport = require('passport');
 var crypto = require('crypto');
-var config = require('nconf');
+var config = require('./config');
 var db = require('./db');
+
+var EmployeeModel = require("./db/EmployeeModel");
 
 var users = db.users;
 var accessTokens = db.accessTokens;
 var refreshTokens = db.refreshTokens;
-var Token = db.Token;
-
-config.argv().env().file({ file: './config.json' });
 
 // create OAuth 2.0 server
 var server = oauth2orize.createServer();
 
 // Exchange username & password for access token.
-server.exchange(oauth2orize.exchange.password(function (client, username, password, scope, done) {
-    users.findByName(username, function (err, user) {
+server.exchange(oauth2orize.exchange.password(function (client, email, password, scope, done) {
+    users.findByEmail(email, function (err, employee) {
         if (err) {
             return done(err);
         }
-        if (!user) {
-            return done(null, false);
-        }
-        if (!user.checkPassword(password)) {
+
+        if (!employee) {
             return done(null, false);
         }
 
-        refreshTokens.remove(user.id, client.clientId, function (err) {
+        if (!EmployeeModel.checkPassword(password, employee)) {
+            return done(null, false);
+        }
+
+        refreshTokens.removeByEmployeeAndClient(employee.id_employee, client.id_client, function (err) {
             if (err)
                 return done(err);
         });
-        accessTokens.remove(user.id, client.clientId, function (err) {
+        accessTokens.removeByEmployeeAndClient(employee.id_employee, client.id_client, function (err) {
             if (err)
                 return done(err);
         });
 
         var tokenValue = crypto.randomBytes(32).toString('base64');
         var refreshTokenValue = crypto.randomBytes(32).toString('base64');
-        var token = new Token(tokenValue, client.clientId, user.id);
-        var refreshToken = new Token(refreshTokenValue, client.clientId, user.id);
 
-        refreshTokens.save(refreshToken, function (err) {
+        var token = {
+            id_employee: employee.id_employee,
+            id_clientapp: client.id_client,
+            value: tokenValue
+        };
+
+        var refreshToken = {
+            id_employee: employee.id_employee,
+            id_clientapp: client.id_client,
+            value: refreshTokenValue
+        };
+
+        refreshTokens.insert(refreshToken, function (err) {
             if (err) {
                 return done(err);
             }
         });
+
         var info = { scope: '*' };
-        accessTokens.save(token, function (err) {
+
+        accessTokens.insert(token, function (err) {
             if (err) {
                 return done(err);
             }
+
             done(null, tokenValue, refreshTokenValue, { 'expires_in': config.get('security:tokenLife') });
         });
     });
@@ -72,34 +87,45 @@ server.exchange(oauth2orize.exchange.refreshToken(function (client, refreshToken
             return done(null, false);
         }
 
-        users.findById(token.userId, function (err, user) {
+        users.findByID(token.id_employee, function (err, employee) {
             if (err) {
                 return done(err);
             }
-            if (!user) {
+            if (!employee) {
                 return done(null, false);
             }
-
-            refreshTokens.remove(user.id, client.clientId, function (err) {
+            refreshTokens.removeByEmployeeAndClient(employee.id_employee, client.id_client, function (err) {
                 if (err)
                     return done(err);
             });
-            accessTokens.remove(user.id, client.clientId, function (err) {
+            accessTokens.removeByEmployeeAndClient(employee.id_employee, client.id_client, function (err) {
                 if (err)
                     return done(err);
             });
 
             var tokenValue = crypto.randomBytes(32).toString('base64');
             var refreshTokenValue = crypto.randomBytes(32).toString('base64');
-            var token = new Token(tokenValue, client.clientId, user.id);
-            var refreshToken = new Token(refreshTokenValue, client.clientId, user.id);
-            refreshTokens.save(refreshToken, function (err) {
+            var token = {
+                id_employee: employee.id_employee,
+                id_clientapp: client.id_client,
+                value: tokenValue
+            };
+
+            var refreshToken = {
+                id_employee: employee.id_employee,
+                id_clientapp: client.id_client,
+                value: refreshTokenValue
+            };
+
+            refreshTokens.insert(refreshToken, function (err, token) {
                 if (err) {
                     return done(err);
                 }
             });
+
             var info = { scope: '*' };
-            accessTokens.save(token, function (err) {
+
+            accessTokens.insert(token, function (err, token) {
                 if (err) {
                     return done(err);
                 }

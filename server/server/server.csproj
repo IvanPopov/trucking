@@ -17,10 +17,24 @@
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="api\catalogs.ts" />
+    <TypeScriptCompile Include="api\metro.ts" />
+    <TypeScriptCompile Include="api\userinfo.ts" />
+    <TypeScriptCompile Include="idl\db.d.ts" />
+    <TypeScriptCompile Include="idl\express-validator.d.ts" />
+    <TypeScriptCompile Include="idl\mysql.d.ts" />
     <TypeScriptCompile Include="idl\oauth2orize.d.ts" />
     <TypeScriptCompile Include="libs\db.ts" />
+    <TypeScriptCompile Include="libs\db\CatalogModel.ts" />
+    <TypeScriptCompile Include="libs\db\ClientAppModel.ts" />
+    <TypeScriptCompile Include="libs\db\EmployeeModel.ts" />
+    <TypeScriptCompile Include="libs\db\MetroAPI.ts" />
+    <TypeScriptCompile Include="libs\db\Model.ts" />
+    <TypeScriptCompile Include="libs\db\TokenModel.ts" />
+    <TypeScriptCompile Include="libs\type.ts" />
     <TypeScriptCompile Include="libs\oauth2.ts" />
     <TypeScriptCompile Include="libs\auth.ts" />
+    <TypeScriptCompile Include="libs\config.ts" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -36,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.json" />
+    <Content Include="package.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -43,7 +58,9 @@
       <DependentUpon>web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="sslcert\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

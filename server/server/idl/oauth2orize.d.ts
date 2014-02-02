@@ -1,12 +1,8 @@
 declare module "oauth2orize" {
-	interface Client {
-		clientId: number;
-	}
-
 	export function createServer(): any;
 	export var exchange: {
 		refreshToken: (
-		fn: (client: Client,
+		fn: (client: any,
 		refreshToken: string,
 		scope: any,
 		done: (err: Error, tokenValue: string, refreshTokenValue, tokenInfo: any) => void) => void) => void;

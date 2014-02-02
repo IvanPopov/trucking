@@ -49,4 +49,11 @@ declare module "winston" {
 		}): Logger;
 		prototype: Logger;
 	};
+
+	//default logger
+	function log(level: string, message: string, ...metadata: any[]);
+	function info(message: string, ...metadata: any[]);
+	function warn(message: string, ...metadata: any[]);
+	function error(message: string, ...metadata: any[]);
+	function debug(message: string, ...metadata: any[]);
 } 
