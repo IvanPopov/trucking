@@ -1,0 +1,26 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="well">
+            <form>
+                <legend>Пожалуйста, войдите в систему</legend>
+                <div ng-show="isBadLoginPassword" class="alert alert-danger">
+                    <a class="close" data-dismiss="alert" href="#">×</a>Неверное имя пользователя или пароль!
+                </div>
+                <div ng-show="isOtherError" class="alert alert-danger">
+                    <a class="close" data-dismiss="alert" href="#">×</a>{{ errorText }}
+                </div>
+
+                <div class="form-group">
+                    <label for="inputEmail">Email</label>
+                    <input type="text" ng-model="username" class="form-control" id="inputEmail" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword">Пароль</label>
+                    <input type="password" ng-model="password" class="form-control" id="inputPassword" placeholder="Пароль">
+                </div>
+                
+                <button ng-click="login()" class="btn btn-primary">Войти</button>
+            </form>
+        </div>
+    </div>
+</div>

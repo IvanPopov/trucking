@@ -1,47 +1,38 @@
 ﻿<!DOCTYPE html>
-<html data-ng-app="customersApp">
+<html data-ng-app="WebClientDB">
 <head>
     <title>Customer Manager</title>
 
     <link href="Content/customerManagementStyles.css" rel="stylesheet" />
-    
+
     <!-- Twitter bootstrap для пользовательского интерфейса -->
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <!--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+    <link href="Content/metro-bootstrap.css" rel="stylesheet">
+    
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
 </head>
-    <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="brand " href="#/">
-                        <img src="Content/Images/people.png" alt="logo"> Customer Manager
-                    </a>
-                    <ul class="nav nav-pills" data-ng-controller="NavbarController">
-                        <li data-ng-class="{'active':getClass('/login')}"><a href="#/login">Login</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div ng-view></div>
+<body>
 
 
-        <!-- Vendor Libs: jQuery only used for Bootstrap functionality -->
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-        <script src="Scripts/jquery.min.js"></script>
+    <div ng-view></div>
 
-        <!-- UI Libs -->
-        <script src="Scripts/bootstrap.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-cookies.js"></script>
+    
 
-        <!-- App libs -->
-        <script src="app/app.js"></script>
-        <script src="app/controllers/controllers.js"></script>
+    <script src="app/app.js"></script>
 
-        <script src="app/services/customersService.js"></script>
-        <script src="app/services/usersService.js"></script>
-        <script src="app/services/clientsService.js"></script>
+    <script src="app/controllers/controllers.js"></script>
+    <script src="app/controllers/login.js"></script>
+    <script src="app/controllers/main.js"></script>
 
-    </body>
+    <script src="app/services/customersService.js"></script>
+    <script src="app/services/usersService.js"></script>
+    <script src="app/services/Auth.js"></script>
+    <script src="app/services/clientsService.js"></script>
+
+</body>
 </html>
