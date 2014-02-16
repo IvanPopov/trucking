@@ -31,4 +31,3 @@ var Model = (function () {
 })();
 
 module.exports = Model;
-//# sourceMappingURL=Model.js.map

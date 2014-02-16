@@ -46,4 +46,3 @@ var CatalogModel = (function (_super) {
 })(Model);
 
 module.exports = CatalogModel;
-//# sourceMappingURL=CatalogModel.js.map

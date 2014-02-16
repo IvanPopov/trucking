@@ -1,7 +1,6 @@
 /// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
-var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
@@ -10,14 +9,23 @@ var type = require("../libs/type");
 var revalidator = require("revalidator");
 
 function init(app, log) {
+    app.get("/api/metro/branches", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        db.metro.branches.get(function (err, branches) {
+            if (err)
+                return done(err);
+            res.json(branches);
+        }, req.query);
+    });
+
     app.get("/api/metro/branches/:branch", passport.authenticate("bearer", { session: false }), function (req, res) {
         var cond = {};
+        var branch = req.params.branch;
 
         //search by id
-        if (parseInt(req.params.branch) == req.params.branch) {
-            cond["id_metrobranch"] = parseInt(req.params.branch);
+        if (type.isInt(branch)) {
+            cond["id_metrobranch"] = parseInt(branch);
         } else {
-            cond["name"] = req.params.branch;
+            cond["name"] = branch;
         }
 
         db.metro.getBranch(cond, function (err, branch) {
@@ -98,6 +106,27 @@ function init(app, log) {
         }, req.query);
     });
 
+    app.get("/api/metro/stations/:station", passport.authenticate("bearer", { session: false }), function (req, res) {
+        var cond = {};
+        var station = req.params.station;
+
+        //search by id
+        if (type.isInt(station)) {
+            cond["id_metro"] = parseInt(station);
+        } else {
+            cond["station"] = station;
+        }
+
+        db.metro.stations.findRow(cond, function (err, station) {
+            if (err) {
+                res.status(404).json({ error: "Station not found" });
+                return;
+            }
+
+            res.json(station);
+        });
+    });
+
     app.patch("/api/metro/stations/:station", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var cond = {};
         var station = req.params.station;
@@ -112,7 +141,10 @@ function init(app, log) {
                 station: {
                     type: 'string',
                     maxLength: 128,
-                    required: true
+                    required: false
+                },
+                id_metrobranch: {
+                    type: 'integer'
                 }
             }
         });
@@ -129,7 +161,7 @@ function init(app, log) {
         });
     });
 
-    app.post("/api/metro/stations/", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+    app.post("/api/metro/stations", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var check = revalidator.validate(req.body, {
             properties: {
                 station: {
@@ -158,4 +190,3 @@ function init(app, log) {
 }
 
 module.exports = init;
-//# sourceMappingURL=metro.js.map

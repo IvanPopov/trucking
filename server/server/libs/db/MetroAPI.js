@@ -29,4 +29,3 @@ var MetroAPI = (function () {
 })();
 
 module.exports = MetroAPI;
-//# sourceMappingURL=MetroAPI.js.map

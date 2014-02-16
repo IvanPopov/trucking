@@ -16,4 +16,3 @@ function getLogger(module) {
 }
 
 module.exports = getLogger;
-//# sourceMappingURL=log.js.map

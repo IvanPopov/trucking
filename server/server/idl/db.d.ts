@@ -1,5 +1,6 @@
 declare module trucking.db {
 
+
 	interface IEmployee {
 		id_employee: number;
 		name: string;

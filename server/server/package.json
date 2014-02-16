@@ -1,26 +1,30 @@
 {
-	"name": "trucking",
-	"version": "0.1.0",
-	"author": "Ivan Popov",
-	"description": "Trucking server API.",
-	"private": true,
-	"scripts": {
-		"start": "node ./app.js"
-	},
-	"dependencies" : {
-		"express"       : "3.3.x",
-		"nconf"         : "0.6.x",
-		"winston"       : "0.7.x",
-		"oauth2orize"   : "0.1.x",
-		"passport"      : "0.1.x",
-		"passport-http" : "0.2.x",
-		"passport-http-bearer": "1.0.x",
-		"passport-oauth2-client-password": "0.1.x",
-		"argparse": "latest",
-		"cors": "latest",
-		"revalidator": "latest",
-		"mysql": "latest",
-		"mysql-utilities": "latest",
-		"passport-vkontakte": "latest"
-	}
+  "name": "trucking",
+  "version": "0.1.0",
+  "author": "Ivan Popov",
+  "description": "Trucking server API.",
+  "private": true,
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "dependencies": {
+    "express": "3.3.x",
+    "nconf": "0.6.x",
+    "winston": "0.7.x",
+    "oauth2orize": "0.1.x",
+    "passport": "0.1.x",
+    "passport-http": "0.2.x",
+    "passport-http-bearer": "1.0.x",
+    "passport-oauth2-client-password": "0.1.x",
+    "argparse": "latest",
+    "cors": "latest",
+    "revalidator": "latest",
+    "mysql": "latest",
+    "mysql-utilities": "latest",
+    "passport-vkontakte": "latest"
+  },
+  "devDependencies": {
+    "request": "~2.33.0",
+    "jasmine-expect": "~1.21.0"
+  }
 }

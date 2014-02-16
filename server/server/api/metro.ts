@@ -12,17 +12,28 @@ import type = require("../libs/type");
 var revalidator = require("revalidator");
 
 function init(app: express.Express, log: winston.Logger) {
+
+	app.get("/api/metro/branches",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			db.metro.branches.get((err: Error, branches: trucking.db.IMetroBranch[]) => {
+				if (err) return done(err);
+				res.json(branches);
+			}, req.query);
+		});
+
 	app.get("/api/metro/branches/:branch",
 		passport.authenticate("bearer", { session: false }),
 		(req, res) => {
 			var cond = {};
+			var branch = req.params.branch;
 
 			//search by id
-			if (parseInt(req.params.branch) == req.params.branch) {
-				cond["id_metrobranch"] = parseInt(req.params.branch);
+			if (type.isInt(branch)) {
+				cond["id_metrobranch"] = parseInt(branch);
 			}
 			else { //search by name
-				cond["name"] = req.params.branch;
+				cond["name"] = branch;
 			}
 
 			db.metro.getBranch(cond, (err: Error, branch: trucking.db.IMetroBranch): void => {
@@ -107,6 +118,30 @@ function init(app: express.Express, log: winston.Logger) {
 			}, req.query);
 		});
 
+	app.get("/api/metro/stations/:station",
+		passport.authenticate("bearer", { session: false }),
+		(req, res) => {
+			var cond = {};
+			var station = req.params.station;
+
+			//search by id
+			if (type.isInt(station)) {
+				cond["id_metro"] = parseInt(station);
+			}
+			else { //search by name
+				cond["station"] = station;
+			}
+
+			db.metro.stations.findRow(cond, (err: Error, station: trucking.db.IMetro): void => {
+				if (err) {
+					res.status(404).json({ error: "Station not found" });
+					return;
+				}
+
+				res.json(station);
+			});
+		});
+
 	app.patch("/api/metro/stations/:station",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
@@ -117,13 +152,16 @@ function init(app: express.Express, log: winston.Logger) {
 				cond["id_metro"] = parseInt(station);
 			else //search by name
 				cond["station"] = station;
-
+			
 			var check = revalidator.validate(req.body, {
 				properties: {
 					station: {
 						type: 'string',
 						maxLength: 128,
-						required: true
+						required: false
+					},
+					id_metrobranch: {
+						type: 'integer'
 					}
 				}
 			});
@@ -139,7 +177,7 @@ function init(app: express.Express, log: winston.Logger) {
 			});
 		});
 
-	app.post("/api/metro/stations/",
+	app.post("/api/metro/stations",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
 			var check = revalidator.validate(req.body, {

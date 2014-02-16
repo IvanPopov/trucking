@@ -5,4 +5,3 @@ nconf.argv().env().file({ file: './config.json' });
 nconf.set('env', process.env.NODE_ENV || "development");
 
 module.exports = nconf;
-//# sourceMappingURL=config.js.map

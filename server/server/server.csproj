@@ -22,8 +22,13 @@
     <TypeScriptCompile Include="api\userinfo.ts" />
     <TypeScriptCompile Include="idl\db.d.ts" />
     <TypeScriptCompile Include="idl\express-validator.d.ts" />
+    <TypeScriptCompile Include="idl\form-data.d.ts" />
+    <TypeScriptCompile Include="idl\jasmine.d.ts" />
+    <TypeScriptCompile Include="idl\jasmine-matchers.d.ts" />
     <TypeScriptCompile Include="idl\mysql.d.ts" />
     <TypeScriptCompile Include="idl\oauth2orize.d.ts" />
+    <TypeScriptCompile Include="idl\request.d.ts" />
+    <TypeScriptCompile Include="idl\spec.d.ts" />
     <TypeScriptCompile Include="libs\db.ts" />
     <TypeScriptCompile Include="libs\db\CatalogModel.ts" />
     <TypeScriptCompile Include="libs\db\ClientAppModel.ts" />
@@ -35,7 +40,11 @@
     <TypeScriptCompile Include="libs\oauth2.ts" />
     <TypeScriptCompile Include="libs\auth.ts" />
     <TypeScriptCompile Include="libs\config.ts" />
-    <Content Include="web.config" />
+    <Content Include="sslcert\redme.txt" />
+    <TypeScriptCompile Include="spec\auth.ts" />
+    <TypeScriptCompile Include="spec\setups.ts" />
+    <TypeScriptCompile Include="spec\metroSpec.ts" />
+    <TypeScriptCompile Include="spec\oauth2Spec.ts" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
@@ -51,15 +60,8 @@
   <ItemGroup>
     <Content Include="config.json" />
     <Content Include="package.json" />
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="sslcert\" />
+    <Content Include="sslcert\cacert.pem" />
+    <Content Include="sslcert\privkey.pem" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -89,9 +91,9 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptTarget>ES3</TypeScriptTarget>
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptSourceMap>False</TypeScriptSourceMap>
     <TypeScriptModuleKind>COMMONJS</TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">

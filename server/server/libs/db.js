@@ -68,4 +68,3 @@ exports.catalogs = {
 };
 
 exports.metro = new exports.MetroAPI(exports.catalogs.metrobranches, exports.catalogs.metro);
-//# sourceMappingURL=db.js.map

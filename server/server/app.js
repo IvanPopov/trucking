@@ -115,4 +115,3 @@ if (useHttps) {
         }
     });
 }
-//# sourceMappingURL=app.js.map

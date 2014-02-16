@@ -34,4 +34,3 @@ function init(app, log) {
 }
 
 module.exports = init;
-//# sourceMappingURL=catalogs.js.map

@@ -21,4 +21,3 @@ var ClientAppModel = (function (_super) {
 })(Model);
 
 module.exports = ClientAppModel;
-//# sourceMappingURL=ClientAppModel.js.map

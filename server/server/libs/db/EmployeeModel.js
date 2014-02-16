@@ -47,4 +47,3 @@ var EmployeeModel = (function (_super) {
 })(Model);
 
 module.exports = EmployeeModel;
-//# sourceMappingURL=EmployeeModel.js.map

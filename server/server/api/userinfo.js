@@ -24,4 +24,3 @@ function init(app, log) {
 }
 
 module.exports = init;
-//# sourceMappingURL=userinfo.js.map

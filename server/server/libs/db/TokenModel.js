@@ -37,4 +37,3 @@ var TokenModel = (function (_super) {
 })(Model);
 
 module.exports = TokenModel;
-//# sourceMappingURL=TokenModel.js.map
