@@ -32,6 +32,15 @@ class Model {
 
 		return " LIMIT " + from + "," + count + " ";
 	}
+
+	static parseError(e: MysqlError): Error {
+		//var parsedError: Error = new Error();
+		//switch (e.code) {
+		//	case "ER_ROW_IS_REFERENCED_":
+		//		e.message = "";
+		//}
+		return e;
+	}
 }
 
 export = Model;

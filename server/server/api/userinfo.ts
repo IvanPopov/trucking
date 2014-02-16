@@ -12,6 +12,22 @@ import type = require("../libs/type");
 var revalidator = require("revalidator");
 
 function init(app: express.Express, log: winston.Logger) {
+	/**
+	 * @api {get} /api/userinfo Get user info.
+	 * @apiName GetUserinfo
+	 * @apiGroup User
+	 * @apiPermission emploee
+	 * 
+	 * @apiSuccessExample Success-Response:
+	 *     HTTP/1.1 200 OK
+	 *     {
+	 *       "user_id": "1",
+	 *       "name": "admin",
+	 *       "permissions": 1,
+	 *       "scope": "*"
+	 *     }
+	 */
+
 	app.get("/api/userinfo",
 		passport.authenticate("bearer", { session: false }),
 		(req, res) => {

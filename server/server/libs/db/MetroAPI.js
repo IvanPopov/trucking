@@ -1,15 +1,14 @@
-/// <reference path="../../idl/mysql.d.ts" />
+﻿/// <reference path="../../idl/mysql.d.ts" />
 /// <reference path="../../idl/node.d.ts" />
 /// <reference path="../../idl/db.d.ts" />
 var Model = require("./Model");
-var CatalogModel = require("./CatalogModel");
 
-var MetroAPI = (function () {
-    function MetroAPI(branches, stations) {
+var Metro = (function () {
+    function Metro(branches, stations) {
         this.branches = branches;
         this.stations = stations;
     }
-    MetroAPI.prototype.getBranch = function (cond, cb) {
+    Metro.prototype.getBranch = function (cond, cb) {
         var _this = this;
         this.branches.findRow(cond, function (err, branch) {
             if (err) {
@@ -25,7 +24,7 @@ var MetroAPI = (function () {
             });
         });
     };
-    return MetroAPI;
+    return Metro;
 })();
 
-module.exports = MetroAPI;
+module.exports = Metro;

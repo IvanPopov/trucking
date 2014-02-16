@@ -14,8 +14,10 @@ exports.ClientAppModel = ClientAppModel;
 var CatalogModel = require("./db/CatalogModel");
 exports.CatalogModel = CatalogModel;
 
-var MetroAPI = require("./db/MetroAPI");
-exports.MetroAPI = MetroAPI;
+var Metro = require("./db/Metro");
+exports.Metro = Metro;
+var Streets = require("./db/Streets");
+exports.Streets = Streets;
 
 //seetup databse config
 var dbConfig = {
@@ -39,6 +41,7 @@ function handleDisconnect() {
         }
 
         mysqlUtilities.upgrade(connection);
+        mysqlUtilities.introspection(connection);
     });
 
     // If you're also serving http, display a 503 error.
@@ -54,6 +57,16 @@ function handleDisconnect() {
 
 handleDisconnect();
 
+function isAdmin(user) {
+    return user.permissions == 1;
+}
+exports.isAdmin = isAdmin;
+
+function isEmployee(user) {
+    return true;
+}
+exports.isEmployee = isEmployee;
+
 exports.clients = new exports.ClientAppModel(connection, "ClientApps");
 exports.users = new exports.EmployeeModel(connection, "Employees");
 exports.accessTokens = new exports.TokenModel(connection, "AccessTokens");
@@ -64,7 +77,21 @@ exports.catalogs = {
     metrobranches: new exports.CatalogModel(connection, "MetroBranches"),
     //metro stations
     metro: new exports.CatalogModel(connection, "Metro"),
-    streets: new exports.CatalogModel(connection, "Streets")
+    territorialsigns: new exports.CatalogModel(connection, "TerritorialSigns"),
+    streets: new exports.CatalogModel(connection, "Streets"),
+    tools: new exports.CatalogModel(connection, "Tools"),
+    worktypes: new exports.CatalogModel(connection, "WorkTypes"),
+    paymentterms: new exports.CatalogModel(connection, "PaymentTerms"),
+    prepaymentterms: new exports.CatalogModel(connection, "PrepaymentTerms"),
+    сonditionsofwork: new exports.CatalogModel(connection, "СonditionsOfWork"),
+    addresstype: new exports.CatalogModel(connection, "AddressType"),
+    holdings: new exports.CatalogModel(connection, "Holdings")
 };
 
-exports.metro = new exports.MetroAPI(exports.catalogs.metrobranches, exports.catalogs.metro);
+//for admin
+exports.systemCatalogs = {
+    clientapps: new exports.CatalogModel(connection, "ClientApps")
+};
+
+exports.metro = new exports.Metro(exports.catalogs.metrobranches, exports.catalogs.metro);
+exports.streets = new exports.Streets("territorialsignsstreets", exports.catalogs.streets, exports.catalogs.territorialsigns);

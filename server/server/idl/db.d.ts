@@ -1,3 +1,12 @@
+
+interface MysqlError extends Error {
+	code: any;
+}
+
+interface IMap<T> {
+	[key: string]: T;
+}
+
 declare module trucking.db {
 
 
@@ -25,7 +34,7 @@ declare module trucking.db {
 	}
 
 
-	///Catelogs
+	///Catalogs
 
 	interface IMetroBranch {
 		id_metrobranch: number;
@@ -58,10 +67,40 @@ declare module trucking.db {
 	}
 
 	interface IWorkType {
-		id_worktype;
+		id_worktype: number;
 		short_name: string;
 		name: string;
 		description: string;
+	}
+
+	interface IPaymentTerm {
+		id_prepaymentterm: number;
+		terms: string;
+		description: string;
+	}
+
+	interface IPrepaymentTerm {
+		id_prepaymentterm: number;
+		terms: string;
+		description: string;
+	}
+
+	interface IСonditionOfWork {
+		id_сonditionofwork: number;
+		terms: string;
+		description: string;
+	}
+
+	interface IAddressType {
+		id_addresstype: number;
+		type: string;
+		description: string;
+	}
+
+	interface IHolding {
+		id_holding: number;
+		name: string;
+		short_name: string;
 	}
 
 	///////////////////

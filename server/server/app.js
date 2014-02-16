@@ -39,27 +39,36 @@ app.use(express.methodOverride());
 app.use(cors());
 app.use(app.router);
 
-if ("development" == app.get("env")) {
-    app.use(express.errorHandler());
-}
-
 require("./libs/auth");
 
-app.use(function (err, req, res, next) {
+if ("development" == app.get("env")) {
+    //app.use(express.errorHandler());
+}
+
+app.use(function (req, res, next) {
     res.status(404);
-    log.debug("Not found URL: %s", req.url);
-    res.send({ error: "Not found" });
-    return;
+    res.json({ error: 'Not found' });
 });
 
 app.use(function (err, req, res, next) {
-    //FIXME: avoid <any> type conversion
-    res.status(err.status || 500);
+    // we may use properties of the error object
+    // here and next(err) appropriately, or if
+    // we possibly recovered from the error, simply next().
     log.error("Internal error(%d): %s", res.statusCode, err.message);
-    res.send({ error: err.message });
-    return;
+    res.status(err.status || 500);
+    res.json({ error: err });
 });
 
+/**
+* @apiDefinePermission employee Emploee access rights needed.
+*/
+/**
+* @apiDefinePermission admin Admin access rights needed.
+*/
+/**
+* @api {get} /api
+* @apiPermission employee
+*/
 app.get("/api", passport.authenticate("bearer", { session: false }), function (req, res) {
     res.send("API is running");
 });
@@ -90,10 +99,12 @@ app.post("/oauth/token", oauth2.token);
 var metro = require("./api/metro");
 var catalogs = require("./api/catalogs");
 var userinfo = require("./api/userinfo");
+var streets = require("./api/streets");
 
 metro(app, log);
 catalogs(app, log);
 userinfo(app, log);
+streets(app, log);
 
 var port = parseInt(args.port) || config.get("port");
 var useHttps = type.isDef(args.https) ? !!args.https : config.get("https");

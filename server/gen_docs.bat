@@ -1,0 +1,1 @@
+apidoc -i server/ -o doc/ -e node_modules

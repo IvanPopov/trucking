@@ -74,6 +74,19 @@ describe("metro api", function () {
         });
     });
 
+    it("delete branch (Сокольническая) / obtaining reference error", function (done) {
+        request.del({
+            uri: setups.path("/api/metro/branches/1"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(500);
+            expect(body.error).toBeDefined();
+            done();
+        });
+    });
+
     it("get stations", function (done) {
         request.get({
             uri: setups.path("/api/metro/stations"),
@@ -115,7 +128,19 @@ describe("metro api", function () {
         });
     });
 
-    //todo: delete
+    it("delete station (Марьина роща)", function (done) {
+        request.del({
+            uri: setups.path("/api/metro/stations/Марьина роща"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.deleted).toBeTruthy();
+            done();
+        });
+    });
+
     it("create station (Марьина роща)", function (done) {
         request.post({
             uri: setups.path("/api/metro/stations"),
@@ -125,7 +150,6 @@ describe("metro api", function () {
                 id_metrobranch: 1
             }
         }, function (e, res, body) {
-            console.log(body);
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
             expect(body.created).toBeTruthy();

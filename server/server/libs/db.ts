@@ -12,7 +12,8 @@ export import ClientAppModel = require("./db/ClientAppModel");
 
 export import CatalogModel = require("./db/CatalogModel");
 
-export import MetroAPI = require("./db/MetroAPI");
+export import Metro = require("./db/Metro");
+export import Streets = require("./db/Streets");
 
 //seetup databse config
 var dbConfig = {
@@ -36,6 +37,7 @@ function handleDisconnect(): void {
 		}														// process asynchronous requests in the meantime.
 
 		mysqlUtilities.upgrade(connection);
+		mysqlUtilities.introspection(connection);
 	});															
 	// If you're also serving http, display a 503 error.
 	connection.on('error', (err: Error) => {
@@ -52,11 +54,18 @@ handleDisconnect();
 
 import db = trucking.db;
 
+export function isAdmin(user: db.IEmployee): boolean {
+	return user.permissions == 1;
+}
+
+export function isEmployee(user: db.IEmployee): boolean {
+	return true;
+}
+
 export var clients = new ClientAppModel(connection, "ClientApps");
 export var users = new EmployeeModel(connection, "Employees");
 export var accessTokens = new TokenModel(connection, "AccessTokens");
 export var refreshTokens = new TokenModel(connection, "RefreshTokens");
-
 
 
 //all catalogues
@@ -64,7 +73,23 @@ export var catalogs = {
 	metrobranches: new CatalogModel<db.IMetroBranch>(connection, "MetroBranches"),
 	//metro stations
 	metro: new CatalogModel<db.IMetro>(connection, "Metro"),
-	streets: new CatalogModel<db.IStreet>(connection, "Streets")
+	territorialsigns: new CatalogModel<db.ITerritorialSign>(connection, "TerritorialSigns"),
+	streets: new CatalogModel<db.IStreet>(connection, "Streets"),
+
+	tools: new CatalogModel<db.ITool>(connection, "Tools"),
+	worktypes: new CatalogModel<db.IWorkType>(connection, "WorkTypes"),
+
+	paymentterms: new CatalogModel<db.IPaymentTerm>(connection, "PaymentTerms"),
+	prepaymentterms: new CatalogModel<db.IPrepaymentTerm>(connection, "PrepaymentTerms"),
+	сonditionsofwork: new CatalogModel<db.IСonditionOfWork>(connection, "СonditionsOfWork"),
+	addresstype: new CatalogModel<db.IAddressType>(connection, "AddressType"),
+	holdings: new CatalogModel<db.IHolding>(connection, "Holdings"),
 };
 
-export var metro = new MetroAPI(catalogs.metrobranches, catalogs.metro);
+//for admin
+export var systemCatalogs = {
+	clientapps: new CatalogModel<db.IClientApp>(connection, "ClientApps")
+}
+
+export var metro = new Metro(catalogs.metrobranches, catalogs.metro);
+export var streets = new Streets("territorialsignsstreets", catalogs.streets, catalogs.territorialsigns);

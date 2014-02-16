@@ -6,8 +6,24 @@ declare module "mysql" {
 	function createConnection(config: any): Connection;
 	function createPool(config: any);
 
+	interface MysqlError extends Error {
+		code: any;
+	}
+
 	interface QueryCallback {
 		(err: any, result: any): void;
+	}
+
+	interface Field {
+		Field: string;
+		Type: string;
+		Collation: string;
+		Null: string;
+		Key: string;
+		Default: any;
+		Extra: string;
+		Privileges: string;
+		Comment: string;
 	}
 
 	class Connection extends events.EventEmitter {
@@ -37,6 +53,7 @@ declare module "mysql" {
 
 		//mysql-utilities
 		queryRow(sql, values?, cb?: QueryCallback): void;
+		fields(table: string, cb: QueryCallback): void;
 	}
 
 	function escape(value): string;

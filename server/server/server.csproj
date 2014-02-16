@@ -19,8 +19,10 @@
   <ItemGroup>
     <TypeScriptCompile Include="api\catalogs.ts" />
     <TypeScriptCompile Include="api\metro.ts" />
+    <TypeScriptCompile Include="api\streets.ts" />
     <TypeScriptCompile Include="api\userinfo.ts" />
     <TypeScriptCompile Include="idl\db.d.ts" />
+    <TypeScriptCompile Include="idl\excel-export.d.ts" />
     <TypeScriptCompile Include="idl\express-validator.d.ts" />
     <TypeScriptCompile Include="idl\form-data.d.ts" />
     <TypeScriptCompile Include="idl\jasmine.d.ts" />
@@ -33,8 +35,9 @@
     <TypeScriptCompile Include="libs\db\CatalogModel.ts" />
     <TypeScriptCompile Include="libs\db\ClientAppModel.ts" />
     <TypeScriptCompile Include="libs\db\EmployeeModel.ts" />
-    <TypeScriptCompile Include="libs\db\MetroAPI.ts" />
+    <TypeScriptCompile Include="libs\db\Metro.ts" />
     <TypeScriptCompile Include="libs\db\Model.ts" />
+    <TypeScriptCompile Include="libs\db\Streets.ts" />
     <TypeScriptCompile Include="libs\db\TokenModel.ts" />
     <TypeScriptCompile Include="libs\type.ts" />
     <TypeScriptCompile Include="libs\oauth2.ts" />
@@ -42,9 +45,11 @@
     <TypeScriptCompile Include="libs\config.ts" />
     <Content Include="sslcert\redme.txt" />
     <TypeScriptCompile Include="spec\auth.ts" />
+    <TypeScriptCompile Include="spec\catalogsSpec.ts" />
     <TypeScriptCompile Include="spec\setups.ts" />
     <TypeScriptCompile Include="spec\metroSpec.ts" />
     <TypeScriptCompile Include="spec\oauth2Spec.ts" />
+    <TypeScriptCompile Include="spec\streetsSpec.ts" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />

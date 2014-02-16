@@ -27,6 +27,15 @@ var Model = (function () {
 
         return " LIMIT " + from + "," + count + " ";
     };
+
+    Model.parseError = function (e) {
+        //var parsedError: Error = new Error();
+        //switch (e.code) {
+        //	case "ER_ROW_IS_REFERENCED_":
+        //		e.message = "";
+        //}
+        return e;
+    };
     return Model;
 })();
 

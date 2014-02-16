@@ -13,7 +13,7 @@ import CatalogModel = require("./CatalogModel");
 import IQueryCond = trucking.db.IQueryCond;
 
 
-class MetroAPI {
+class Metro {
 	constructor(
 		public branches: CatalogModel<trucking.db.IMetroBranch>,
 		public stations: CatalogModel<trucking.db.IMetro>) {
@@ -36,4 +36,4 @@ class MetroAPI {
 	}
 }
 
-export = MetroAPI;
+export = Metro;
