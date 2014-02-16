@@ -22,8 +22,8 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiGroup Metro
 	 * @apiPermission emploee
 	 * 
-	 * @apiParam {Integer} from View from number.
-	 * @apiParam {Integer} count View number of branches.
+	 * @apiParam {Integer} [from] View from number.
+	 * @apiParam {Integer} [count] View number of branches.
 	 *
 	 * @apiSuccess {Object[]} branches List of metro branches.
 	 * @apiSuccess {Number}   branches.name  Branch name.
@@ -282,8 +282,8 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiGroup Metro
 	 * @apiPermission emploee
 	 * 
-	 * @apiParam {Integer} from View from number.
-	 * @apiParam {Integer} count View number of branches.
+	 * @apiParam {Integer} [from] View from number.
+	 * @apiParam {Integer} [count] View number of branches.
 	 *
 	 * @apiSuccessExample Success-Response:
 	 *     HTTP/1.1 200 OK

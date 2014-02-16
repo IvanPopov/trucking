@@ -1,7 +1,6 @@
 /// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
-var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
@@ -42,7 +41,7 @@ function init(app, log) {
     *
     * @apiParam {String} name Catalog name.
     *
-    * @apiParam {String} export Export into format. Supported: xlsx.
+    * @apiParam {String} [export] Export into format. Supported: xlsx.
     *
     */
     app.get("/api/catalogs/:name", passport.authenticate("bearer", { session: false }), function (req, res) {

@@ -18,9 +18,9 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiGroup Streets
 	 * @apiPermission emploee
 	 *
-	 * @apiParam {Integer} sign Only streets assigned with this territorial sign.
-	 * @apiParam {Integer} count Number of streets for display.
-	 * @apiParam {Integer} from From number of street.
+	 * @apiParam {Integer} [sign] Only streets assigned with this territorial sign.
+	 * @apiParam {Integer} [count] Number of streets for display.
+	 * @apiParam {Integer} [from] From number of street.
 	 */
 
 	app.get("/api/streets",

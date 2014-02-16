@@ -53,7 +53,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * 
 	 * @apiParam {String} name Catalog name.
 	 * 
-	 * @apiParam {String} export Export into format. Supported: xlsx.
+	 * @apiParam {String} [export] Export into format. Supported: xlsx.
 	 *
 	 */
 	app.get("/api/catalogs/:name",

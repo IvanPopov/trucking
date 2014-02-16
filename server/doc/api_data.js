@@ -50,7 +50,7 @@ define({ api: [
             "group": "Parameter",
             "type": "String",
             "field": "export",
-            "optional": false,
+            "optional": true,
             "description": "Export into format. Supported: xlsx."
           }
         ]
@@ -565,14 +565,14 @@ define({ api: [
             "group": "Parameter",
             "type": "Integer",
             "field": "from",
-            "optional": false,
+            "optional": true,
             "description": "View from number."
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "field": "count",
-            "optional": false,
+            "optional": true,
             "description": "View number of branches."
           }
         ]
@@ -734,14 +734,14 @@ define({ api: [
             "group": "Parameter",
             "type": "Integer",
             "field": "from",
-            "optional": false,
+            "optional": true,
             "description": "View from number."
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "field": "count",
-            "optional": false,
+            "optional": true,
             "description": "View number of branches."
           }
         ]
@@ -834,21 +834,21 @@ define({ api: [
             "group": "Parameter",
             "type": "Integer",
             "field": "sign",
-            "optional": false,
+            "optional": true,
             "description": "Only streets assigned with this territorial sign."
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "field": "count",
-            "optional": false,
+            "optional": true,
             "description": "Number of streets for display."
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "field": "from",
-            "optional": false,
+            "optional": true,
             "description": "From number of street."
           }
         ]

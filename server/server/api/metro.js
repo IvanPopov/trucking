@@ -1,8 +1,7 @@
-/// <reference path="../idl/winston.d.ts" />
+﻿/// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
 /// <reference path="../idl/db.d.ts" />
-var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
@@ -17,8 +16,8 @@ function init(app, log) {
     * @apiGroup Metro
     * @apiPermission emploee
     *
-    * @apiParam {Integer} from View from number.
-    * @apiParam {Integer} count View number of branches.
+    * @apiParam {Integer} [from] View from number.
+    * @apiParam {Integer} [count] View number of branches.
     *
     * @apiSuccess {Object[]} branches List of metro branches.
     * @apiSuccess {Number}   branches.name  Branch name.
@@ -256,8 +255,8 @@ function init(app, log) {
     * @apiGroup Metro
     * @apiPermission emploee
     *
-    * @apiParam {Integer} from View from number.
-    * @apiParam {Integer} count View number of branches.
+    * @apiParam {Integer} [from] View from number.
+    * @apiParam {Integer} [count] View number of branches.
     *
     * @apiSuccessExample Success-Response:
     *     HTTP/1.1 200 OK
