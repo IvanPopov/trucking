@@ -41,7 +41,7 @@ function init(app, log) {
     *
     * @apiParam {String} name Catalog name.
     *
-    * @apiParam {String} [export] Export into format. Supported: xlsx.
+    * @apiParam (Parameters only for admin users:) {String} [export] Export into format. Supported: xlsx.
     *
     */
     app.get("/api/catalogs/:name", passport.authenticate("bearer", { session: false }), function (req, res) {
@@ -58,7 +58,7 @@ function init(app, log) {
                     return;
                 }
 
-                if (req.query.format == "xlsx") {
+                if (req.query.format == "xlsx" && db.isAdmin(req.user)) {
                     catalog.convertToXlsx(rows, function (e, xlsx) {
                         if (e) {
                             return res.json(500, {

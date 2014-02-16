@@ -45,9 +45,11 @@ define({ api: [
             "field": "name",
             "optional": false,
             "description": "Catalog name."
-          },
+          }
+        ],
+        "Parameters only for admin users:": [
           {
-            "group": "Parameter",
+            "group": "Parameters only for admin users:",
             "type": "String",
             "field": "export",
             "optional": true,

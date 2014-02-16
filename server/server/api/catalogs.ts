@@ -53,7 +53,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * 
 	 * @apiParam {String} name Catalog name.
 	 * 
-	 * @apiParam {String} [export] Export into format. Supported: xlsx.
+	 * @apiParam (Parameters only for admin users:) {String} [export] Export into format. Supported: xlsx.
 	 *
 	 */
 	app.get("/api/catalogs/:name",
@@ -72,7 +72,7 @@ function init(app: express.Express, log: winston.Logger) {
 						return;
 					}
 
-					if (req.query.format == "xlsx") {
+					if (req.query.format == "xlsx" && db.isAdmin(req.user)) {
 						catalog.convertToXlsx(rows, (e: Error, xlsx: NodeBuffer) => {
 							if (e) {
 								return res.json(500, {
