@@ -10,7 +10,7 @@ var Model = (function () {
         }
     }
     Model.parseLimitCond = function (cond) {
-        if (!type.isDef(cond)) {
+        if (!type.isDefAndNotNull(cond)) {
             return "";
         }
 

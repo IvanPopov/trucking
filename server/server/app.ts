@@ -110,11 +110,13 @@ import metro = require("./api/metro");
 import catalogs = require("./api/catalogs");
 import userinfo = require("./api/userinfo");
 import streets = require("./api/streets");
+import nomenclatures = require("./api/nomenclatures");
 
 metro(app, log);
 catalogs(app, log);
 userinfo(app, log);
 streets(app, log);
+nomenclatures(app, log);
 
 var port: number = parseInt(args.port) || config.get("port");
 var useHttps: boolean = type.isDef(args.https) ? !!args.https : config.get("https");

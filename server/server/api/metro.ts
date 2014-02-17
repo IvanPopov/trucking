@@ -26,8 +26,8 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {Integer} [count] View number of branches.
 	 *
 	 * @apiSuccess {Object[]} branches List of metro branches.
-	 * @apiSuccess {Number}   branches.name  Branch name.
-	 * @apiSuccess {String}   branches.id_metrobranch Branch unique id.
+	 * @apiSuccess {String}   branches.name  Branch name.
+	 * @apiSuccess {Integer}  branches.id_metrobranch Branch unique id.
 	 */
 
 	app.get("/api/metro/branches",

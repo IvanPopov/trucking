@@ -21,8 +21,8 @@ var CatalogModel = (function (_super) {
         this.connect.queryRow("SELECT * FROM " + this.table + " where ?", cond, cb);
     };
 
-    CatalogModel.prototype.find = function (cond, cb) {
-        this.connect.query("SELECT * FROM " + this.table + " where ?", cond, cb);
+    CatalogModel.prototype.find = function (cond, cb, limit) {
+        this.connect.query("SELECT * FROM " + this.table + " where ?" + " " + Model.parseLimitCond(limit), cond, cb);
     };
 
     //get all rows

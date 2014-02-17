@@ -592,14 +592,14 @@
           },
           {
             "group": "Success 200",
-            "type": "Number",
+            "type": "String",
             "field": "branches.name",
             "optional": false,
             "description": "Branch name."
           },
           {
             "group": "Success 200",
-            "type": "String",
+            "type": "Integer",
             "field": "branches.id_metrobranch",
             "optional": false,
             "description": "Branch unique id."
@@ -762,6 +762,174 @@
   },
   {
     "type": "get",
+    "url": "/api/nomenclatures/groups",
+    "title": "Get nomenclature groups.",
+    "name": "GetNomenclatureGroups",
+    "group": "Nomenclatures",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "from",
+            "optional": true,
+            "description": "View from number."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "count",
+            "optional": true,
+            "description": "View number of groups."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "field": "nomenclatureGroup",
+            "optional": false,
+            "description": "List of nomenclature groups."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "nomenclatureGroup.id_nomenclaturegroup",
+            "optional": false,
+            "description": "Group."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "nomenclatureGroup.name",
+            "optional": false,
+            "description": "Name."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   [\n\t\t{\n\t\t\t\"id_nomenclaturegroup\": 0,\n\t\t\t\"name\": \"loaders\"\n\t\t}\n   ]\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\nomenclatures.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/nomenclatures",
+    "title": "Get nomenclatures.",
+    "name": "GetNomenclatures",
+    "group": "Nomenclatures",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "from",
+            "optional": true,
+            "description": "View from number."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "count",
+            "optional": true,
+            "description": "View number of nomenclatures."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "group",
+            "optional": true,
+            "description": "Nomenclature group."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "field": "nomenclatures",
+            "optional": false,
+            "description": "List of nomenclatures."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "nomenclatures.name",
+            "optional": false,
+            "description": "Name."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "nomenclatures.description",
+            "optional": false,
+            "description": "Description."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "nomenclatures.unit",
+            "optional": false,
+            "description": "Unit."
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "field": "nomenclatures.rate",
+            "optional": false,
+            "description": "Rate."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "nomenclatures.type",
+            "optional": false,
+            "description": "Can have two values​​: 0 - service, 1 - goods."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "nomenclatures.id_worktype",
+            "optional": false,
+            "description": "Work type."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "nomenclatures.id_nomenclaturegroup",
+            "optional": false,
+            "description": "Group."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   [\n\t\t{\n\t\t\t\"name\": \"loader\",\n\t\t\t\"description\": \"Loading operations\",\n\t\t\t\"unit\": \"kg\",\n\t\t\t\"rate\": 200.0,\n\t\t\t\"type\": 0,\n\t\t\t\"id_worktype\": 25,\n\t\t\t\"id_nomenclaturegroup\": 0\n\t\t}\n   ]\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\nomenclatures.js"
+  },
+  {
+    "type": "get",
     "url": "/api/streets/:id",
     "title": "Get street by id.",
     "name": "GetStreetById",
@@ -895,40 +1063,6 @@
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metro",
-            "optional": false,
-            "description": "Station unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metrobranch",
-            "optional": false,
-            "description": "Branch unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "field": "station",
-            "optional": false,
-            "description": "Station unique name."
-          }
-        ]
-      }
-    },
-    "group": "metro.js",
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "server\\api\\metro.js"
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
             "type": "String",
             "field": "name",
             "optional": false,
@@ -961,6 +1095,40 @@
             "field": "stations.station",
             "optional": false,
             "description": "Branch station name."
+          }
+        ]
+      }
+    },
+    "group": "metro.js",
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "server\\api\\metro.js"
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": false,
+            "description": "Station unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metrobranch",
+            "optional": false,
+            "description": "Branch unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "station",
+            "optional": false,
+            "description": "Station unique name."
           }
         ]
       }

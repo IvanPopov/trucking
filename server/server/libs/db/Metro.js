@@ -2,6 +2,7 @@
 /// <reference path="../../idl/node.d.ts" />
 /// <reference path="../../idl/db.d.ts" />
 var Model = require("./Model");
+var CatalogModel = require("./CatalogModel");
 
 var Metro = (function () {
     function Metro(branches, stations) {

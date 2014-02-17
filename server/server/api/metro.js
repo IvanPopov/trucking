@@ -1,7 +1,8 @@
-﻿/// <reference path="../idl/winston.d.ts" />
+/// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
 /// <reference path="../idl/db.d.ts" />
+var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
@@ -20,8 +21,8 @@ function init(app, log) {
     * @apiParam {Integer} [count] View number of branches.
     *
     * @apiSuccess {Object[]} branches List of metro branches.
-    * @apiSuccess {Number}   branches.name  Branch name.
-    * @apiSuccess {String}   branches.id_metrobranch Branch unique id.
+    * @apiSuccess {String}   branches.name  Branch name.
+    * @apiSuccess {Integer}  branches.id_metrobranch Branch unique id.
     */
     app.get("/api/metro/branches", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         db.metro.branches.get(function (err, branches) {

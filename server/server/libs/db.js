@@ -85,7 +85,9 @@ exports.catalogs = {
     prepaymentterms: new exports.CatalogModel(connection, "PrepaymentTerms"),
     сonditionsofwork: new exports.CatalogModel(connection, "СonditionsOfWork"),
     addresstype: new exports.CatalogModel(connection, "AddressType"),
-    holdings: new exports.CatalogModel(connection, "Holdings")
+    holdings: new exports.CatalogModel(connection, "Holdings"),
+    nomenclatures: new exports.CatalogModel(connection, "Nomenclatures"),
+    nomenclaturegroups: new exports.CatalogModel(connection, "NomenclatureGroups")
 };
 
 //for admin

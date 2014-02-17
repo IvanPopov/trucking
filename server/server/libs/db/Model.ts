@@ -15,7 +15,7 @@ class Model {
 	}
 
 	static parseLimitCond(cond?: IQueryCond): string {
-		if (!type.isDef(cond)) {
+		if (!type.isDefAndNotNull(cond)) {
 			return "";
 		}
 

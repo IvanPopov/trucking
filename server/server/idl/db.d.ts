@@ -103,6 +103,21 @@ declare module trucking.db {
 		short_name: string;
 	}
 
+	interface INomenclature {
+		id_nomenclature: number;
+		name: string;
+		description: string;
+		unit: string;
+		rate: number;
+		type: number; //0 - услуга, 1 - товар
+		id_worktype: number;
+	}
+
+	interface INomenclatureGroup {
+		id_nomenclaturegroup: number;
+		name: string;
+	}
+
 	///////////////////
 
 	interface IQueryCond {

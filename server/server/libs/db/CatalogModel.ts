@@ -18,8 +18,8 @@ class CatalogModel<ENTRY_T> extends Model {
 		this.connect.queryRow("SELECT * FROM " + this.table + " where ?", cond, cb);
 	}
 
-	find(cond: any, cb: (err: Error, entry: ENTRY_T[]) => void): void {
-		this.connect.query("SELECT * FROM " + this.table + " where ?", cond, cb);
+	find(cond: any, cb: (err: Error, entry: ENTRY_T[]) => void, limit?: IQueryCond): void {
+		this.connect.query("SELECT * FROM " + this.table + " where ?" + " " + Model.parseLimitCond(limit), cond, cb);
 	}
 
 	//get all rows

@@ -84,6 +84,9 @@ export var catalogs = {
 	сonditionsofwork: new CatalogModel<db.IСonditionOfWork>(connection, "СonditionsOfWork"),
 	addresstype: new CatalogModel<db.IAddressType>(connection, "AddressType"),
 	holdings: new CatalogModel<db.IHolding>(connection, "Holdings"),
+
+	nomenclatures: new CatalogModel<db.INomenclature>(connection, "Nomenclatures"),
+	nomenclaturegroups: new CatalogModel<db.INomenclatureGroup>(connection, "NomenclatureGroups"),
 };
 
 //for admin
