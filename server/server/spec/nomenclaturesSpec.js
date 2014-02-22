@@ -23,7 +23,7 @@ describe("nomenclatures api", function () {
 
     it("read nomenclature groups", function (done) {
         request.get({
-            uri: setups.path("/api/nomenclatures/groups"),
+            uri: setups.path("/api/catalogs/nomenclatures/groups"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {
@@ -36,7 +36,7 @@ describe("nomenclatures api", function () {
 
     it("read nomenclatures", function (done) {
         request.get({
-            uri: setups.path("/api/nomenclatures"),
+            uri: setups.path("/api/catalogs/nomenclatures"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {
@@ -49,7 +49,7 @@ describe("nomenclatures api", function () {
 
     it("read nomenclatures by group (1)", function (done) {
         request.get({
-            uri: setups.path("/api/nomenclatures?group=1"),
+            uri: setups.path("/api/catalogs/nomenclatures?group=1"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {

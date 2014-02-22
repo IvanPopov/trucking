@@ -1,4 +1,4 @@
-/// <reference path="../idl/winston.d.ts" />
+﻿/// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
 var express = require("express");
@@ -351,6 +351,134 @@ function init(app, log) {
                 return done(err);
             res.json(result);
         });
+    });
+
+    /**
+    * @api {get} /api/catalogs/nomenclatures/groups Get nomenclature groups.
+    * @apiName GetNomenclatureGroups
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} [from] View from number.
+    * @apiParam {Integer} [count] View number of groups.
+    *
+    * @apiSuccess {Object[]} nomenclatureGroup List of nomenclature groups.
+    * @apiSuccess {Integer}  nomenclatureGroup.id_nomenclaturegroup Group.
+    * @apiSuccess {String}   nomenclatureGroup.name  Name.
+    *
+    * @apiSuccessExample Success-Response:
+    *     HTTP/1.1 200 OK
+    *     [
+    *			{
+    *				"id_nomenclaturegroup": 0,
+    *				"name": "loaders"
+    *			}
+    *     ]
+    */
+    app.get("/api/catalogs/nomenclatures/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        db.catalogs.nomenclaturegroups.get(function (err, groups) {
+            if (err)
+                return done(err);
+            res.json(groups);
+        }, req.query);
+    });
+
+    /**
+    * @api {post} /api/catalogs/nomenclatures/groups Create new nomenclature group.
+    * @apiName CreateNomenclatureGroup
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {String} name Name.
+    *
+    * @apiSuccessStructure Created
+    */
+    app.post("/api/catalogs/nomenclatures/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var check = revalidator.validate(req.body, {
+            properties: {
+                name: {
+                    type: 'string',
+                    maxLength: 128,
+                    required: true
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.nomenclaturegroups.create(req.body, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /**
+    * @api {get} /api/catalogs/nomenclatures Get nomenclatures.
+    * @apiName GetNomenclatures
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} [from] View from number.
+    * @apiParam {Integer} [count] View number of nomenclatures.
+    * @apiParam {Integer} [group] Nomenclature group.
+    *
+    * @apiSuccess {Object[]} nomenclatures List of nomenclatures.
+    * @apiSuccess {String}   nomenclatures.name  Name.
+    * @apiSuccess {String}   nomenclatures.description Description.
+    * @apiSuccess {String}   nomenclatures.unit Unit.
+    * @apiSuccess {Number}   nomenclatures.rate Rate.
+    * @apiSuccess {Integer}  nomenclatures.type Can have two values​​: 0 - service, 1 - goods.
+    * @apiSuccess {Integer}  nomenclatures.id_worktype Work type.
+    * @apiSuccess {Integer}  nomenclatures.id_nomenclaturegroup Group.
+    *
+    * @apiSuccessExample Success-Response:
+    *     HTTP/1.1 200 OK
+    *     [
+    *			{
+    *				"name": "loader",
+    *				"description": "Loading operations",
+    *				"unit": "kg",
+    *				"rate": 200.0,
+    *				"type": 0,
+    *				"id_worktype": 25,
+    *				"id_nomenclaturegroup": 0
+    *			}
+    *     ]
+    */
+    app.get("/api/catalogs/nomenclatures", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var check = revalidator.validate(req.query, {
+            properties: {
+                name: {
+                    description: 'view nomenclature in group',
+                    type: 'string',
+                    pattern: /^[12]{1}$/
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        if (type.isString(req.query.group)) {
+            var cond = { id_nomenclaturegroup: parseInt(req.query.group) || 0 };
+            db.catalogs.nomenclatures.find(cond, function (err, nomenclatures) {
+                if (err)
+                    return done(err);
+                res.json(nomenclatures);
+            }, req.query);
+        } else {
+            db.catalogs.nomenclatures.get(function (err, nomenclatures) {
+                if (err)
+                    return done(err);
+                res.json(nomenclatures);
+            }, req.query);
+        }
     });
 }
 

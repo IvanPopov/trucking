@@ -70,6 +70,13 @@ declare module trucking.db {
 
 		unit_sec: number;
 		rate_sec: number;
+
+		id_toolgroup: number;
+	}
+
+	interface IToolGroup {
+		id_toolgroup: number;
+		name: string;
 	}
 
 	interface IUnit {

@@ -20,7 +20,6 @@
     <TypeScriptCompile Include="api\catalogs.ts" />
     <TypeScriptCompile Include="api\contractors.ts" />
     <TypeScriptCompile Include="api\metro.ts" />
-    <TypeScriptCompile Include="api\nomenclatures.ts" />
     <TypeScriptCompile Include="api\streets.ts" />
     <TypeScriptCompile Include="api\userinfo.ts" />
     <TypeScriptCompile Include="idl\db.d.ts" />

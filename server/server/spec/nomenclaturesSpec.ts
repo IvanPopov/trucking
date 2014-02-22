@@ -22,7 +22,7 @@ describe("nomenclatures api", ()=> {
 	it("read nomenclature groups", (done: () => void) => {
 		request.get(
 			{
-				uri: setups.path("/api/nomenclatures/groups"),
+				uri: setups.path("/api/catalogs/nomenclatures/groups"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
 			}, (e, res, body: db.IMetroBranch[]) => {
@@ -36,7 +36,7 @@ describe("nomenclatures api", ()=> {
 	it("read nomenclatures", (done: ()=> void)=> {
 		request.get(
 		{
-			uri: setups.path("/api/nomenclatures"),
+			uri: setups.path("/api/catalogs/nomenclatures"),
 			headers: { "Authorization": ("Bearer " + grant.access_token) },
 			json: true
 		}, (e, res, body: db.IMetroBranch[])=> {
@@ -50,7 +50,7 @@ describe("nomenclatures api", ()=> {
 	it("read nomenclatures by group (1)", (done: () => void) => {
 		request.get(
 			{
-				uri: setups.path("/api/nomenclatures?group=1"),
+				uri: setups.path("/api/catalogs/nomenclatures?group=1"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
 			}, (e, res, body: db.IMetroBranch[]) => {
