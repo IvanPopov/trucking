@@ -46,13 +46,13 @@ if ("development" == <any>app.get("env")) {
 	//app.use(express.errorHandler());
 }
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
 	res.status(404);
 	res.json({ error: 'Not found' });
 });
 
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
 	// we may use properties of the error object
 	// here and next(err) appropriately, or if
 	// we possibly recovered from the error, simply next().
@@ -111,12 +111,14 @@ import catalogs = require("./api/catalogs");
 import userinfo = require("./api/userinfo");
 import streets = require("./api/streets");
 import nomenclatures = require("./api/nomenclatures");
+import contractors = require("./api/contractors");
 
 metro(app, log);
 catalogs(app, log);
 userinfo(app, log);
 streets(app, log);
 nomenclatures(app, log);
+contractors(app, log);
 
 var port: number = parseInt(args.port) || config.get("port");
 var useHttps: boolean = type.isDef(args.https) ? !!args.https : config.get("https");

@@ -110,7 +110,7 @@ function init(app: express.Express, log: winston.Logger) {
 		});
 
 	/**
-	 * @api {post} /api/metro/branches/ Create branch.
+	 * @api {post} /api/metro/branches Create branch.
 	 * @apiName CreateBranch
 	 * @apiGroup Metro
 	 * @apiPermission emploee
@@ -118,15 +118,11 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {String} name New branch name.
 	 * @apiParam {Integer} color New branch color.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "created": true
-	 *     }
+	 * @apiSuccessStructure Created
 	 */
 
 
-	app.post("/api/metro/branches/",
+	app.post("/api/metro/branches",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
 			var check = revalidator.validate(req.body, {
@@ -163,11 +159,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {String} [name] New branch name.
 	 * @apiParam {Integer} [color] New branch color.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "patched": true
-	 *     }
+	 * @apiSuccessStructure Patched
 	 */
 
 	/**
@@ -179,11 +171,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {String} [name] New branch name.
 	 * @apiParam {Integer} [color] New branch color.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "patched": true
-	 *     }
+	 * @apiSuccessStructure Patched
 	 */
 
 	app.patch("/api/metro/branches/:branch",
@@ -228,11 +216,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 *
 	 * @apiParam {String} name Branch unique name.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "deleted": true
-	 *     }
+	 * @apiSuccessStructure Deleted
 	 */
 
 	/**
@@ -241,13 +225,9 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiGroup Metro
 	 * @apiPermission emploee
 	 *
-	 * @apiParam {String} id Branch unique id.
+	 * @apiParam {Integer} id Branch unique id.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "deleted": true
-	 *     }
+	 * @apiSuccessStructure Deleted
 	 */
 
 	app.del("/api/metro/branches/:branch",

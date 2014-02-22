@@ -87,12 +87,16 @@ export var catalogs = {
 
 	nomenclatures: new CatalogModel<db.INomenclature>(connection, "Nomenclatures"),
 	nomenclaturegroups: new CatalogModel<db.INomenclatureGroup>(connection, "NomenclatureGroups"),
+
+	contractors: new CatalogModel<db.IContractor>(connection, "Contractors"),
+	contractortypes: new CatalogModel<db.IContractorType>(connection, "ContractorTypes"),
+	units: new CatalogModel<db.IUnit>(connection, "Units")
 };
 
 //for admin
 export var systemCatalogs = {
 	clientapps: new CatalogModel<db.IClientApp>(connection, "ClientApps")
-}
+};
 
 export var metro = new Metro(catalogs.metrobranches, catalogs.metro);
 export var streets = new Streets("territorialsignsstreets", catalogs.streets, catalogs.territorialsigns);

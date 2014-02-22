@@ -13,6 +13,41 @@ import Model = require("./Model");
 
 import IQueryCond = trucking.db.IQueryCond;
 
+/**
+ * @apiDefineSuccessStructure Created
+ * @apiSuccess {Boolean} created Is created.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "created": true
+ *     } 
+ */
+
+/**
+ * @apiDefineSuccessStructure Deleted
+ * @apiSuccess {Boolean} deleted Is deleted.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "deleted": true
+ *     } 
+ */
+
+
+/**
+ * @apiDefineSuccessStructure Patched
+ * @apiSuccess {Boolean} patched Is patched.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "patched": true
+ *     } 
+ */
+
+
 class CatalogModel<ENTRY_T> extends Model {
 	findRow(cond: any, cb: (err: Error, entry: ENTRY_T) => void): void {
 		this.connect.queryRow("SELECT * FROM " + this.table + " where ?", cond, cb);
@@ -25,12 +60,12 @@ class CatalogModel<ENTRY_T> extends Model {
 	//get all rows
 	get(cb: (err: Error, rows: ENTRY_T[]) => void, cond?: IQueryCond): void {
 		this.connect.query("SELECT * FROM " + this.table + "" + Model.parseLimitCond(cond),
-			(err: Error, rows: ENTRY_T[]): void => {
+			(err: Error, rows: ENTRY_T[]) => {
 				if (err) {
 					return cb(err, null);
 				}
 
-				cb(null, rows);
+				return cb(null, rows);
 			});
 	}
 
@@ -45,26 +80,26 @@ class CatalogModel<ENTRY_T> extends Model {
 				for (var key in rows[i]) {
 					row.push(rows[i][key]);
 				}
-				
+
 				conf.rows.push(row);
 			}
 
 			var xlsx: NodeBuffer = nodeExcel.execute(conf);
-			cb(null, xlsx);
+			return cb(null, xlsx);
 		});
 	}
 
 	patch(cond: Object, data: Object, cb: (err: Error, result: any) => void): void {
 		this.connect.query("UPDATE " + this.table + " SET ? WHERE ?", [data, cond], (err, res) => {
 			if (err) return cb(err, false);
-			cb(null, { patched: res.affectedRows > 0 });
+			return cb(null, { patched: res.affectedRows > 0 });
 		});
 	}
 
 	create(data: Object, cb: (err: Error, result: any) => void): void {
 		this.connect.query("INSERT INTO " + this.table + " SET ?", [data], (err, res) => {
 			if (err) return cb(err, false);
-			cb(null, { created: res.affectedRows > 0 });
+			return cb(null, { created: res.affectedRows > 0 });
 		});
 	}
 
@@ -131,7 +166,7 @@ class CatalogModel<ENTRY_T> extends Model {
 				return "number";
 			}
 		}
-		
+
 		for (var i = 0; i < CatalogModel.MYSQL_STRING_TYPES.length; ++i) {
 			if (type.indexOf(CatalogModel.MYSQL_STRING_TYPES[i]) != -1) {
 				return "string";

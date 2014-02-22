@@ -35,7 +35,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 *     ]
 	 */
 	app.get("/api/nomenclatures/groups",
-		//passport.authenticate("bearer", { session: false }),
+		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
 			db.catalogs.nomenclaturegroups.get((err: Error, branches: trucking.db.INomenclatureGroup[]) => {
 				if (err) return done(err);
@@ -80,7 +80,6 @@ function init(app: express.Express, log: winston.Logger) {
 	app.get("/api/nomenclatures",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
-			var cond = null;
 			var check = revalidator.validate(req.query, {
 				properties: {
 					name: {
@@ -97,19 +96,20 @@ function init(app: express.Express, log: winston.Logger) {
 			}
 
 			if (type.isString(req.query.group)) {
-				cond = { id_nomenclaturegroup: parseInt(req.query.group) || 0 };
+				var cond = { id_nomenclaturegroup: parseInt(req.query.group) || 0 };
 				db.catalogs.nomenclatures.find(cond, (err: Error, branches: trucking.db.INomenclature[]) => {
 					if (err) return done(err);
 					res.json(branches);
 				}, req.query);
 			}
 			else {
-				db.catalogs.nomenclatures.get((err: Error, branches: trucking.db.INomenclature[]) => {
+				db.catalogs.nomenclatures.get(
+					(err: Error, branches: trucking.db.INomenclature[]): void => {
 					if (err) return done(err);
 					res.json(branches);
 				}, req.query);
 			}
-			
+
 		});
 }
 

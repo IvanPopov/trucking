@@ -32,8 +32,7 @@ function init(app, log) {
     *			}
     *     ]
     */
-    app.get("/api/nomenclatures/groups", //passport.authenticate("bearer", { session: false }),
-    function (req, res, done) {
+    app.get("/api/nomenclatures/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         db.catalogs.nomenclaturegroups.get(function (err, branches) {
             if (err)
                 return done(err);
@@ -75,7 +74,6 @@ function init(app, log) {
     *     ]
     */
     app.get("/api/nomenclatures", passport.authenticate("bearer", { session: false }), function (req, res, done) {
-        var cond = null;
         var check = revalidator.validate(req.query, {
             properties: {
                 name: {
@@ -92,7 +90,7 @@ function init(app, log) {
         }
 
         if (type.isString(req.query.group)) {
-            cond = { id_nomenclaturegroup: parseInt(req.query.group) || 0 };
+            var cond = { id_nomenclaturegroup: parseInt(req.query.group) || 0 };
             db.catalogs.nomenclatures.find(cond, function (err, branches) {
                 if (err)
                     return done(err);

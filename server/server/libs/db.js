@@ -87,7 +87,10 @@ exports.catalogs = {
     addresstype: new exports.CatalogModel(connection, "AddressType"),
     holdings: new exports.CatalogModel(connection, "Holdings"),
     nomenclatures: new exports.CatalogModel(connection, "Nomenclatures"),
-    nomenclaturegroups: new exports.CatalogModel(connection, "NomenclatureGroups")
+    nomenclaturegroups: new exports.CatalogModel(connection, "NomenclatureGroups"),
+    contractors: new exports.CatalogModel(connection, "Contractors"),
+    contractortypes: new exports.CatalogModel(connection, "ContractorTypes"),
+    units: new exports.CatalogModel(connection, "Units")
 };
 
 //for admin

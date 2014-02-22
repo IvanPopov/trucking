@@ -101,12 +101,14 @@ var catalogs = require("./api/catalogs");
 var userinfo = require("./api/userinfo");
 var streets = require("./api/streets");
 var nomenclatures = require("./api/nomenclatures");
+var contractors = require("./api/contractors");
 
 metro(app, log);
 catalogs(app, log);
 userinfo(app, log);
 streets(app, log);
 nomenclatures(app, log);
+contractors(app, log);
 
 var port = parseInt(args.port) || config.get("port");
 var useHttps = type.isDef(args.https) ? !!args.https : config.get("https");

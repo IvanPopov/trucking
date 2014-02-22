@@ -52,9 +52,87 @@ describe("catalogs api", function () {
             uri: setups.path("/api/catalogs/streets?format=xlsx"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
+        }, function (e, res) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            done();
+        });
+    });
+
+    it("create unit", function (done) {
+        request.post({
+            uri: setups.path("/api/catalogs/units"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: { unit: "kg", description: "kilogramm" }
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
+            expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("patch unit", function (done) {
+        request.patch({
+            uri: setups.path("/api/catalogs/units/kg"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: { unit: "kilo" }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.patched).toBeTruthy();
+            done();
+        });
+    });
+
+    it("create tool", function (done) {
+        request.post({
+            uri: setups.path("/api/catalogs/tools"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: { name: "tool", unit: "kilo", rate: 10 }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("patch tool", function (done) {
+        request.patch({
+            uri: setups.path("/api/catalogs/tools/tool"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: { description: "description" }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.patched).toBeTruthy();
+            done();
+        });
+    });
+
+    it("delete tool", function (done) {
+        request.del({
+            uri: setups.path("/api/catalogs/tools/tool"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.deleted).toBeTruthy();
+            done();
+        });
+    });
+
+    it("delete unit", function (done) {
+        request.del({
+            uri: setups.path("/api/catalogs/units/kilo"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.deleted).toBeTruthy();
             done();
         });
     });

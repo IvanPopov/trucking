@@ -25,7 +25,7 @@ describe("catalogs api", () => {
 				uri: setups.path("/api/catalogs"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetroBranch[]) => {
+			}, (e, res, body: Array<any>) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArray();
@@ -39,7 +39,7 @@ describe("catalogs api", () => {
 				uri: setups.path("/api/catalogs/streets"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetroBranch[]) => {
+			}, (e, res, body: db.IStreet[]) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArray();
@@ -53,11 +53,98 @@ describe("catalogs api", () => {
 				uri: setups.path("/api/catalogs/streets?format=xlsx"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetroBranch[]) => {
+			}, (e, res) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				done();
 			});
 	});
-}); 
+
+	it("create unit", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/catalogs/units"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: { unit: "kg", description: "kilogramm" }
+			}, (e, res, body: any) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.created).toBeTruthy();
+				done();
+			});
+	});
+
+	it("patch unit", (done: () => void) => {
+		request.patch(
+			{
+				uri: setups.path("/api/catalogs/units/kg"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: { unit: "kilo" }
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.patched).toBeTruthy();
+				done();
+			});
+	});
+
+	
+
+	it("create tool", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/catalogs/tools"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: { name: "tool", unit: "kilo", rate: 10 }
+			}, (e, res, body: any) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.created).toBeTruthy();
+				done();
+			});
+	});
+
+	it("patch tool", (done: () => void) => {
+		request.patch(
+			{
+				uri: setups.path("/api/catalogs/tools/tool"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: { description: "description" }
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.patched).toBeTruthy();
+				done();
+			});
+	});
+
+
+	it("delete tool", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/catalogs/tools/tool"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.deleted).toBeTruthy();
+				done();
+			});
+	});
+
+	it("delete unit", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/catalogs/units/kilo"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.deleted).toBeTruthy();
+				done();
+			});
+	});
+});
 

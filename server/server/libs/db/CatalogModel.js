@@ -12,6 +12,36 @@ var nodeExcel = require("excel-export");
 
 var Model = require("./Model");
 
+/**
+* @apiDefineSuccessStructure Created
+* @apiSuccess {Boolean} created Is created.
+*
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "created": true
+*     }
+*/
+/**
+* @apiDefineSuccessStructure Deleted
+* @apiSuccess {Boolean} deleted Is deleted.
+*
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "deleted": true
+*     }
+*/
+/**
+* @apiDefineSuccessStructure Patched
+* @apiSuccess {Boolean} patched Is patched.
+*
+* @apiSuccessExample Success-Response:
+*     HTTP/1.1 200 OK
+*     {
+*       "patched": true
+*     }
+*/
 var CatalogModel = (function (_super) {
     __extends(CatalogModel, _super);
     function CatalogModel() {
@@ -32,7 +62,7 @@ var CatalogModel = (function (_super) {
                 return cb(err, null);
             }
 
-            cb(null, rows);
+            return cb(null, rows);
         });
     };
 
@@ -53,7 +83,7 @@ var CatalogModel = (function (_super) {
             }
 
             var xlsx = nodeExcel.execute(conf);
-            cb(null, xlsx);
+            return cb(null, xlsx);
         });
     };
 
@@ -61,7 +91,7 @@ var CatalogModel = (function (_super) {
         this.connect.query("UPDATE " + this.table + " SET ? WHERE ?", [data, cond], function (err, res) {
             if (err)
                 return cb(err, false);
-            cb(null, { patched: res.affectedRows > 0 });
+            return cb(null, { patched: res.affectedRows > 0 });
         });
     };
 
@@ -69,7 +99,7 @@ var CatalogModel = (function (_super) {
         this.connect.query("INSERT INTO " + this.table + " SET ?", [data], function (err, res) {
             if (err)
                 return cb(err, false);
-            cb(null, { created: res.affectedRows > 0 });
+            return cb(null, { created: res.affectedRows > 0 });
         });
     };
 

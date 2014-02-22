@@ -64,6 +64,17 @@ declare module trucking.db {
 		id_tool: number;
 		name: string;
 		description: string;
+
+		unit: string;
+		rate: number;
+
+		unit_sec: number;
+		rate_sec: number;
+	}
+
+	interface IUnit {
+		unit: string;
+		description: string;
 	}
 
 	interface IWorkType {
@@ -115,6 +126,22 @@ declare module trucking.db {
 
 	interface INomenclatureGroup {
 		id_nomenclaturegroup: number;
+		name: string;
+	}
+
+	interface IContractor {
+		id_contractor: number;
+		id_holding: number;
+		id_employee: number;
+		name: string;
+		short_name: string;
+
+		id_contractortype: number; // 0 - клиент, 1 - клиент
+
+	}
+
+	interface IContractorType {
+		id_contractortype: number;
 		name: string;
 	}
 

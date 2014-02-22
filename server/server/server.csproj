@@ -18,6 +18,7 @@
   </PropertyGroup>
   <ItemGroup>
     <TypeScriptCompile Include="api\catalogs.ts" />
+    <TypeScriptCompile Include="api\contractors.ts" />
     <TypeScriptCompile Include="api\metro.ts" />
     <TypeScriptCompile Include="api\nomenclatures.ts" />
     <TypeScriptCompile Include="api\streets.ts" />
@@ -35,6 +36,7 @@
     <TypeScriptCompile Include="libs\db.ts" />
     <TypeScriptCompile Include="libs\db\CatalogModel.ts" />
     <TypeScriptCompile Include="libs\db\ClientAppModel.ts" />
+    <TypeScriptCompile Include="libs\db\Contractors.ts" />
     <TypeScriptCompile Include="libs\db\EmployeeModel.ts" />
     <TypeScriptCompile Include="libs\db\Metro.ts" />
     <TypeScriptCompile Include="libs\db\Model.ts" />
@@ -47,6 +49,7 @@
     <Content Include="sslcert\redme.txt" />
     <TypeScriptCompile Include="spec\auth.ts" />
     <TypeScriptCompile Include="spec\catalogsSpec.ts" />
+    <TypeScriptCompile Include="spec\nomenclaturesSpec.ts" />
     <TypeScriptCompile Include="spec\setups.ts" />
     <TypeScriptCompile Include="spec\metroSpec.ts" />
     <TypeScriptCompile Include="spec\oauth2Spec.ts" />

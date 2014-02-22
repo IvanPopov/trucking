@@ -96,7 +96,7 @@ function init(app, log) {
     });
 
     /**
-    * @api {post} /api/metro/branches/ Create branch.
+    * @api {post} /api/metro/branches Create branch.
     * @apiName CreateBranch
     * @apiGroup Metro
     * @apiPermission emploee
@@ -104,13 +104,9 @@ function init(app, log) {
     * @apiParam {String} name New branch name.
     * @apiParam {Integer} color New branch color.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "created": true
-    *     }
+    * @apiSuccessStructure Created
     */
-    app.post("/api/metro/branches/", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+    app.post("/api/metro/branches", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var check = revalidator.validate(req.body, {
             properties: {
                 name: {
@@ -146,11 +142,7 @@ function init(app, log) {
     * @apiParam {String} [name] New branch name.
     * @apiParam {Integer} [color] New branch color.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "patched": true
-    *     }
+    * @apiSuccessStructure Patched
     */
     /**
     * @api {patch} /api/metro/branches/:id Change branch by id.
@@ -161,11 +153,7 @@ function init(app, log) {
     * @apiParam {String} [name] New branch name.
     * @apiParam {Integer} [color] New branch color.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "patched": true
-    *     }
+    * @apiSuccessStructure Patched
     */
     app.patch("/api/metro/branches/:branch", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var cond = {};
@@ -208,11 +196,7 @@ function init(app, log) {
     *
     * @apiParam {String} name Branch unique name.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "deleted": true
-    *     }
+    * @apiSuccessStructure Deleted
     */
     /**
     * @api {delete} /api/metro/branches/:id Delete branch by id.
@@ -220,13 +204,9 @@ function init(app, log) {
     * @apiGroup Metro
     * @apiPermission emploee
     *
-    * @apiParam {String} id Branch unique id.
+    * @apiParam {Integer} id Branch unique id.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "deleted": true
-    *     }
+    * @apiSuccessStructure Deleted
     */
     app.del("/api/metro/branches/:branch", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var cond = {};
