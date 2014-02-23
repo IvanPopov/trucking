@@ -13,16 +13,16 @@ require("jasmine-expect");
 
 import db = trucking.db;
 
-describe("nomenclatures api", ()=> {
+describe("worktypes api", ()=> {
 	var grant: IOAuth2Grant = null;
 	auth((e, res, body)=> { grant = body; });
 
 	beforeEach(()=> waitsFor((): boolean=> !!grant));
 
-	it("read nomenclature groups", (done: () => void) => {
+	it("read worktype groups", (done: () => void) => {
 		request.get(
 			{
-				uri: setups.path("/api/catalogs/nomenclatures/groups"),
+				uri: setups.path("/api/catalogs/worktypes/groups"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
 			}, (e, res, body: db.IMetroBranch[]) => {
@@ -33,10 +33,10 @@ describe("nomenclatures api", ()=> {
 			});
 	});
 
-	it("read nomenclatures", (done: ()=> void)=> {
+	it("read worktypes", (done: ()=> void)=> {
 		request.get(
 		{
-			uri: setups.path("/api/catalogs/nomenclatures"),
+			uri: setups.path("/api/catalogs/worktypes"),
 			headers: { "Authorization": ("Bearer " + grant.access_token) },
 			json: true
 		}, (e, res, body: db.IMetroBranch[])=> {
@@ -47,10 +47,10 @@ describe("nomenclatures api", ()=> {
 		});
 	});
 
-	it("read nomenclatures by group (1)", (done: () => void) => {
+	it("read worktypes by group (1)", (done: () => void) => {
 		request.get(
 			{
-				uri: setups.path("/api/catalogs/nomenclatures?group=1"),
+				uri: setups.path("/api/catalogs/worktypes?group=1"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
 			}, (e, res, body: db.IMetroBranch[]) => {

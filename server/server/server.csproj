@@ -48,7 +48,7 @@
     <Content Include="sslcert\redme.txt" />
     <TypeScriptCompile Include="spec\auth.ts" />
     <TypeScriptCompile Include="spec\catalogsSpec.ts" />
-    <TypeScriptCompile Include="spec\nomenclaturesSpec.ts" />
+    <TypeScriptCompile Include="spec\worktypesSpec.ts" />
     <TypeScriptCompile Include="spec\setups.ts" />
     <TypeScriptCompile Include="spec\metroSpec.ts" />
     <TypeScriptCompile Include="spec\oauth2Spec.ts" />

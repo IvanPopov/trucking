@@ -77,7 +77,6 @@ export var catalogs = {
 	streets: new CatalogModel<db.IStreet>(connection, "Streets"),
 
 	tools: new CatalogModel<db.ITool>(connection, "Tools"),
-	worktypes: new CatalogModel<db.IWorkType>(connection, "WorkTypes"),
 
 	paymentterms: new CatalogModel<db.IPaymentTerm>(connection, "PaymentTerms"),
 	prepaymentterms: new CatalogModel<db.IPrepaymentTerm>(connection, "PrepaymentTerms"),
@@ -85,8 +84,8 @@ export var catalogs = {
 	addresstype: new CatalogModel<db.IAddressType>(connection, "AddressType"),
 	holdings: new CatalogModel<db.IHolding>(connection, "Holdings"),
 
-	nomenclatures: new CatalogModel<db.INomenclature>(connection, "Nomenclatures"),
-	nomenclaturegroups: new CatalogModel<db.INomenclatureGroup>(connection, "NomenclatureGroups"),
+	worktypes: new CatalogModel<db.IWorkType>(connection, "WorkTypes"),
+	worktypegroups: new CatalogModel<db.IWorkTypeGroup>(connection, "WorkTypeGroups"),
 
 	contractors: new CatalogModel<db.IContractor>(connection, "Contractors"),
 	contractortypes: new CatalogModel<db.IContractorType>(connection, "ContractorTypes"),

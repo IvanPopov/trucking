@@ -354,29 +354,29 @@ function init(app, log) {
     });
 
     /**
-    * @api {get} /api/catalogs/nomenclatures/groups Get nomenclature groups.
-    * @apiName GetNomenclatureGroups
+    * @api {get} /api/catalogs/worktypes/groups Get worktype groups.
+    * @apiName GetWorkTypeGroups
     * @apiGroup Catalogs
     * @apiPermission emploee
     *
     * @apiParam {Integer} [from] View from number.
     * @apiParam {Integer} [count] View number of groups.
     *
-    * @apiSuccess {Object[]} nomenclatureGroup List of nomenclature groups.
-    * @apiSuccess {Integer}  nomenclatureGroup.id_nomenclaturegroup Group.
-    * @apiSuccess {String}   nomenclatureGroup.name  Name.
+    * @apiSuccess {Object[]} worktypeGroup List of worktype groups.
+    * @apiSuccess {Integer}  worktypeGroup.id_worktypegroup Group.
+    * @apiSuccess {String}   worktypeGroup.name  Name.
     *
     * @apiSuccessExample Success-Response:
     *     HTTP/1.1 200 OK
     *     [
     *			{
-    *				"id_nomenclaturegroup": 0,
+    *				"id_worktypegroup": 0,
     *				"name": "loaders"
     *			}
     *     ]
     */
-    app.get("/api/catalogs/nomenclatures/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
-        db.catalogs.nomenclaturegroups.get(function (err, groups) {
+    app.get("/api/catalogs/worktypes/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        db.catalogs.worktypegroups.get(function (err, groups) {
             if (err)
                 return done(err);
             res.json(groups);
@@ -384,8 +384,8 @@ function init(app, log) {
     });
 
     /**
-    * @api {post} /api/catalogs/nomenclatures/groups Create new nomenclature group.
-    * @apiName CreateNomenclatureGroup
+    * @api {post} /api/catalogs/worktypes/groups Create new worktype group.
+    * @apiName CreateWorkTypeGroup
     * @apiGroup Catalogs
     * @apiPermission emploee
     *
@@ -393,7 +393,7 @@ function init(app, log) {
     *
     * @apiSuccessStructure Created
     */
-    app.post("/api/catalogs/nomenclatures/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+    app.post("/api/catalogs/worktypes/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var check = revalidator.validate(req.body, {
             properties: {
                 name: {
@@ -409,7 +409,7 @@ function init(app, log) {
             return;
         }
 
-        db.catalogs.nomenclaturegroups.create(req.body, function (err, result) {
+        db.catalogs.worktypegroups.create(req.body, function (err, result) {
             if (err)
                 return done(err);
             res.json(result);
@@ -417,66 +417,54 @@ function init(app, log) {
     });
 
     /**
-    * @api {get} /api/catalogs/nomenclatures Get nomenclatures.
-    * @apiName GetNomenclatures
+    * @api {get} /api/catalogs/worktypes Get worktypes.
+    * @apiName GetWorkTypes
     * @apiGroup Catalogs
     * @apiPermission emploee
     *
     * @apiParam {Integer} [from] View from number.
-    * @apiParam {Integer} [count] View number of nomenclatures.
-    * @apiParam {Integer} [group] Nomenclature group.
+    * @apiParam {Integer} [count] View number of worktypes.
+    * @apiParam {Integer} [group] WorkType group.
     *
-    * @apiSuccess {Object[]} nomenclatures List of nomenclatures.
-    * @apiSuccess {String}   nomenclatures.name  Name.
-    * @apiSuccess {String}   nomenclatures.description Description.
-    * @apiSuccess {String}   nomenclatures.unit Unit.
-    * @apiSuccess {Number}   nomenclatures.rate Rate.
-    * @apiSuccess {Integer}  nomenclatures.type Can have two values​​: 0 - service, 1 - goods.
-    * @apiSuccess {Integer}  nomenclatures.id_worktype Work type.
-    * @apiSuccess {Integer}  nomenclatures.id_nomenclaturegroup Group.
+    * @apiSuccess {Object[]} worktypes List of worktypes.
+    * @apiSuccess {String}   worktypes.name  Name.
+    * @apiSuccess {String}   worktypes.short_name Short name.
+    * @apiSuccess {String}   worktypes.unit Unit.
+    * @apiSuccess {Number}   worktypes.rate Rate.
+    * @apiSuccess {Number}   worktypes.unit_sec Unit second.
+    * @apiSuccess {Number}   worktypes.rate_sec Rate second.
+    * @apiSuccess {Integer}  worktypes.id_worktype Work type.
+    * @apiSuccess {Integer}  worktypes.id_worktypegroup Group.
     *
     * @apiSuccessExample Success-Response:
     *     HTTP/1.1 200 OK
     *     [
     *			{
     *				"name": "loader",
-    *				"description": "Loading operations",
+    *				"short_name": "ld",
     *				"unit": "kg",
     *				"rate": 200.0,
+    *				"unit_sec": null,
+    *				"rate_sec": 0,
     *				"type": 0,
     *				"id_worktype": 25,
-    *				"id_nomenclaturegroup": 0
+    *				"id_worktypegroup": 0
     *			}
     *     ]
     */
-    app.get("/api/catalogs/nomenclatures", passport.authenticate("bearer", { session: false }), function (req, res, done) {
-        var check = revalidator.validate(req.query, {
-            properties: {
-                name: {
-                    description: 'view nomenclature in group',
-                    type: 'string',
-                    pattern: /^[12]{1}$/
-                }
-            }
-        });
-
-        if (!check.valid) {
-            res.json(400, check);
-            return;
-        }
-
+    app.get("/api/catalogs/worktypes", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         if (type.isString(req.query.group)) {
-            var cond = { id_nomenclaturegroup: parseInt(req.query.group) || 0 };
-            db.catalogs.nomenclatures.find(cond, function (err, nomenclatures) {
+            var cond = { id_worktypegroup: parseInt(req.query.group) || 0 };
+            db.catalogs.worktypes.find(cond, function (err, worktypes) {
                 if (err)
                     return done(err);
-                res.json(nomenclatures);
+                res.json(worktypes);
             }, req.query);
         } else {
-            db.catalogs.nomenclatures.get(function (err, nomenclatures) {
+            db.catalogs.worktypes.get(function (err, worktypes) {
                 if (err)
                     return done(err);
-                res.json(nomenclatures);
+                res.json(worktypes);
             }, req.query);
         }
     });

@@ -84,13 +84,6 @@ declare module trucking.db {
 		description: string;
 	}
 
-	interface IWorkType {
-		id_worktype: number;
-		short_name: string;
-		name: string;
-		description: string;
-	}
-
 	interface IPaymentTerm {
 		id_prepaymentterm: number;
 		terms: string;
@@ -121,17 +114,17 @@ declare module trucking.db {
 		short_name: string;
 	}
 
-	interface INomenclature {
-		id_nomenclature: number;
+	interface IWorkType {
+		id_worktype: number;
 		name: string;
-		description: string;
+		short_name: string;
 		unit: string;
 		rate: number;
 		type: number; //0 - услуга, 1 - товар
-		id_worktype: number;
+		id_worktypegroup: number;
 	}
 
-	interface INomenclatureGroup {
+	interface IWorkTypeGroup {
 		id_nomenclaturegroup: number;
 		name: string;
 	}
