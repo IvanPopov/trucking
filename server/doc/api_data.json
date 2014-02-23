@@ -6,16 +6,16 @@
           {
             "group": "Success 200",
             "type": "Boolean",
-            "field": "deleted",
+            "field": "patched",
             "optional": false,
-            "description": "Is deleted."
+            "description": "Is patched."
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
         }
       ]
     },
@@ -32,16 +32,16 @@
           {
             "group": "Success 200",
             "type": "Boolean",
-            "field": "patched",
+            "field": "deleted",
             "optional": false,
-            "description": "Is patched."
+            "description": "Is deleted."
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
         }
       ]
     },
@@ -76,6 +76,78 @@
     "url": "",
     "version": "0.0.0",
     "filename": "server\\libs\\db\\CatalogModel.js"
+  },
+  {
+    "type": "post",
+    "url": "/api/catalogs/worktypes/:worktype/tools",
+    "title": "Add tool in worktype.",
+    "name": "AddToolInWorkType",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "worktype",
+            "optional": false,
+            "description": "Worktype unique id."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_tool",
+            "optional": false,
+            "description": "Tool, that will be added."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/tools/:tool",
+    "title": "Delete tool by id.",
+    "name": "Catalogs",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "tool",
+            "optional": false,
+            "description": "Tool unique id."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "deleted",
+            "optional": false,
+            "description": "Is deleted."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
   },
   {
     "type": "patch",
@@ -135,6 +207,13 @@
             "field": "rate_sec",
             "optional": true,
             "description": "Second rate."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_toolgroup",
+            "optional": true,
+            "description": "Group."
           }
         ]
       }
@@ -219,6 +298,13 @@
             "field": "rate_sec",
             "optional": true,
             "description": "Second rate."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_toolgroup",
+            "optional": true,
+            "description": "Group."
           }
         ]
       }
@@ -268,6 +354,97 @@
             "field": "description",
             "optional": true,
             "description": "Description."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "patched",
+            "optional": false,
+            "description": "Is patched."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "patch",
+    "url": "/api/catalogs/worktypes/:worktype",
+    "title": "Change worktype.",
+    "name": "ChangeWorkTypeById",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "worktype",
+            "optional": false,
+            "description": "Worktype id."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": true,
+            "description": "Tool name."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "short_name",
+            "optional": true,
+            "description": "Description."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "unit",
+            "optional": true,
+            "description": "Unit."
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "rate",
+            "optional": true,
+            "description": "Rate."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "unit_sec",
+            "optional": true,
+            "description": "Second unit."
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "rate_sec",
+            "optional": true,
+            "description": "Second rate."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_worktypegroup",
+            "optional": true,
+            "description": "Group."
           }
         ]
       }
@@ -345,6 +522,13 @@
             "field": "rate_sec",
             "optional": true,
             "description": "Second rate."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_toolgroup",
+            "optional": true,
+            "description": "Group."
           }
         ]
       }
@@ -422,6 +606,90 @@
   },
   {
     "type": "post",
+    "url": "/api/catalogs/tools",
+    "title": "Create new worktype.",
+    "name": "CreateWorkType",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": false,
+            "description": "Tool name."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "short_name",
+            "optional": false,
+            "description": "Short name."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "unit",
+            "optional": false,
+            "description": "Unit."
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "rate",
+            "optional": false,
+            "description": "Rate."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "unit_sec",
+            "optional": true,
+            "description": "Second unit."
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "rate_sec",
+            "optional": true,
+            "description": "Second rate."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_worktypegroup",
+            "optional": true,
+            "description": "Group."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "created",
+            "optional": false,
+            "description": "Is created."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "post",
     "url": "/api/catalogs/worktypes/groups",
     "title": "Create new worktype group.",
     "name": "CreateWorkTypeGroup",
@@ -456,6 +724,120 @@
         {
           "title": "Success-Response:",
           "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/worktypes/:worktype/tools",
+    "title": "Delete tool in worktype.",
+    "name": "DelToolInWorkType",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "worktype",
+            "optional": false,
+            "description": "Worktype unique id."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_tool",
+            "optional": false,
+            "description": "Tool, that will be removed."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/worktypes/:worktype",
+    "title": "Delete worktype by id.",
+    "name": "DelWorkType",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "worktype",
+            "optional": false,
+            "description": "Worktype unique id."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "deleted",
+            "optional": false,
+            "description": "Is deleted."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/worktypes/groups/:group",
+    "title": "Delete worktype group by id.",
+    "name": "DelWorkTypeGroup",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "group",
+            "optional": false,
+            "description": "Worktype group unique id."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "deleted",
+            "optional": false,
+            "description": "Is deleted."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
         }
       ]
     },
@@ -578,6 +960,15 @@
   },
   {
     "type": "get",
+    "url": "/api/catalogs/worktypes/:worktype",
+    "name": "GetWorkType",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "get",
     "url": "/api/catalogs/worktypes/groups",
     "title": "Get worktype groups.",
     "name": "GetWorkTypeGroups",
@@ -636,6 +1027,16 @@
         }
       ]
     },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/catalogs/worktypes/:worktype/tools",
+    "title": "Get tools for worktype.",
+    "name": "GetWorkTypeTools",
+    "group": "Catalogs",
+    "permission": "emploee",
     "version": "0.0.0",
     "filename": "server\\api\\catalogs.js"
   },
@@ -818,48 +1219,6 @@
     },
     "version": "0.0.0",
     "filename": "server\\api\\contractors.js"
-  },
-  {
-    "type": "delete",
-    "url": "/api/catalogs/tools/:tool",
-    "title": "Delete tool by id.",
-    "name": "Catalogs",
-    "group": "Metro",
-    "permission": "emploee",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "field": "tool",
-            "optional": false,
-            "description": "Tool unique id."
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "server\\api\\catalogs.js"
   },
   {
     "type": "patch",
@@ -1746,6 +2105,14 @@
   },
   {
     "type": "get",
+    "url": "/api/contractors/types",
+    "description": "Get all contractor types.",
+    "group": "contractors.js",
+    "version": "0.0.0",
+    "filename": "server\\api\\contractors.js"
+  },
+  {
+    "type": "get",
     "url": "/api/contractors/:contractor/holding",
     "description": "<strong style=\"color: red;\">NOT IMPLEMENTED</strong>\nGet holding information for current contractor.",
     "group": "contractors.js",
@@ -1753,12 +2120,38 @@
     "filename": "server\\api\\contractors.js"
   },
   {
-    "type": "get",
-    "url": "/api/contractors/types",
-    "description": "Get all contractor types.",
-    "group": "contractors.js",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": false,
+            "description": "Station unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metrobranch",
+            "optional": false,
+            "description": "Branch unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "station",
+            "optional": false,
+            "description": "Station unique name."
+          }
+        ]
+      }
+    },
+    "group": "metro.js",
+    "type": "",
+    "url": "",
     "version": "0.0.0",
-    "filename": "server\\api\\contractors.js"
+    "filename": "server\\api\\metro.js"
   },
   {
     "success": {
@@ -1798,40 +2191,6 @@
             "field": "stations.station",
             "optional": false,
             "description": "Branch station name."
-          }
-        ]
-      }
-    },
-    "group": "metro.js",
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "server\\api\\metro.js"
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metro",
-            "optional": false,
-            "description": "Station unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metrobranch",
-            "optional": false,
-            "description": "Branch unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "field": "station",
-            "optional": false,
-            "description": "Station unique name."
           }
         ]
       }

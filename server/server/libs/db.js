@@ -87,6 +87,7 @@ exports.catalogs = {
     holdings: new exports.CatalogModel(connection, "Holdings"),
     worktypes: new exports.CatalogModel(connection, "WorkTypes"),
     worktypegroups: new exports.CatalogModel(connection, "WorkTypeGroups"),
+    worktypestools: new exports.CatalogModel(connection, "WorkTypesTools"),
     contractors: new exports.CatalogModel(connection, "Contractors"),
     contractortypes: new exports.CatalogModel(connection, "ContractorTypes"),
     units: new exports.CatalogModel(connection, "Units")

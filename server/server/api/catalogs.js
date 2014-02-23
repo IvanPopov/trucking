@@ -11,76 +11,6 @@ var revalidator = require("revalidator");
 
 function init(app, log) {
     /**
-    * @api {get} /api/catalogs Get catalogs list.
-    * @apiDescription
-    * <strong>Note: Admin view more catalogs, then employeers.</strong>
-    *
-    * @apiGroup Catalogs
-    * @apiName GetCatalogs
-    * @apiPermission emploee
-    *
-    * @apiSuccess {String[]} catalogs List of available catalogs.
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     [
-    *       "streets",
-    *       "metro",
-    *       "holdings"
-    *       "paymentterms",
-    *       "addresstype"
-    *     ]
-    */
-    app.get("/api/catalogs", passport.authenticate("bearer", { session: false }), function (req, res, done) {
-        res.json(Object.keys(db.catalogs).concat(db.isAdmin(req.user) ? Object.keys(db.systemCatalogs) : []));
-    });
-
-    /**
-    * @api {get} /api/catalogs/:name Read catalog.
-    * @apiName ReadCatalog
-    * @apiGroup Catalogs
-    * @apiPermission emploee
-    *
-    * @apiParam {String} name Catalog name.
-    *
-    * @apiParam (Parameters only for admin users:) {String} [export] Export into format. Supported: xlsx.
-    *
-    */
-    app.get("/api/catalogs/:name", passport.authenticate("bearer", { session: false }), function (req, res) {
-        var catalogName = (req.params.name || "").toLowerCase();
-        var query = req.query;
-
-        var catalog = db.catalogs[catalogName];
-
-        if (type.isDefAndNotNull(catalog)) {
-            catalog.get(function (err, rows) {
-                if (err) {
-                    log.error(err.message);
-                    res.json({ error: "Unknown error" });
-                    return;
-                }
-
-                if (req.query.format == "xlsx" && db.isAdmin(req.user)) {
-                    catalog.convertToXlsx(rows, function (e, xlsx) {
-                        if (e) {
-                            return res.json(500, {
-                                error: "Could not export catalog to XLSX"
-                            });
-                        }
-
-                        res.setHeader('Content-Type', 'application/vnd.openxmlformats');
-                        res.setHeader("Content-Disposition", "attachment; filename=" + catalogName + ".xlsx");
-                        res.end(xlsx, 'binary');
-                    });
-                } else {
-                    res.json(rows);
-                }
-            }, query);
-        } else {
-            res.status(404).json({ error: "Catalog not found" });
-        }
-    });
-
-    /**
     * @api {post} /api/catalogs/units Create new unit.
     * @apiName CreateUnit
     * @apiGroup Catalogs
@@ -189,6 +119,7 @@ function init(app, log) {
     * @apiParam {Number} rate Rate.
     * @apiParam {String} [unit_sec] Second unit.
     * @apiParam {Number} [rate_sec] Second rate.
+    * @apiParam {Integer} [id_toolgroup] Group.
     *
     * @apiSuccessStructure Created
     */
@@ -219,6 +150,9 @@ function init(app, log) {
                 },
                 rate_sec: {
                     type: 'number'
+                },
+                id_toolgroup: {
+                    type: 'integer'
                 }
             }
         });
@@ -249,6 +183,7 @@ function init(app, log) {
     * @apiParam {Number} [rate] Rate.
     * @apiParam {String} [unit_sec] Second unit.
     * @apiParam {Number} [rate_sec] Second rate.
+    * @apiParam {Integer} [id_toolgroup] Group.
     *
     * @apiSuccessStructure Patched
     */
@@ -266,6 +201,7 @@ function init(app, log) {
     * @apiParam {Number} [rate] Rate.
     * @apiParam {String} [unit_sec] Second unit.
     * @apiParam {Number} [rate_sec] Second rate.
+    * @apiParam {Integer} [id_toolgroup] Group.
     *
     * @apiSuccessStructure Patched
     */
@@ -301,6 +237,9 @@ function init(app, log) {
                 },
                 rate_sec: {
                     type: 'number'
+                },
+                id_toolgroup: {
+                    type: 'integer'
                 }
             }
         });
@@ -330,7 +269,7 @@ function init(app, log) {
     /**
     * @api {delete} /api/catalogs/tools/:tool Delete tool by id.
     * @apiName Catalogs
-    * @apiGroup Metro
+    * @apiGroup Catalogs
     * @apiPermission emploee
     *
     * @apiParam {Integer} tool Tool unique id.
@@ -353,6 +292,11 @@ function init(app, log) {
         });
     });
 
+    /******************************************************************
+    *
+    *		Worktypes API
+    *
+    ******************************************************************/
     /**
     * @api {get} /api/catalogs/worktypes/groups Get worktype groups.
     * @apiName GetWorkTypeGroups
@@ -417,6 +361,26 @@ function init(app, log) {
     });
 
     /**
+    * @api {delete} /api/catalogs/worktypes/groups/:group Delete worktype group by id.
+    * @apiName DelWorkTypeGroup
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} group Worktype group unique id.
+    *
+    * @apiSuccessStructure Deleted
+    */
+    app.del("/api/catalogs/worktypes/groups/:group", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = { id_worktypegroup: parseInt(req.params.group) };
+
+        db.catalogs.worktypegroups.del(cond, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /**
     * @api {get} /api/catalogs/worktypes Get worktypes.
     * @apiName GetWorkTypes
     * @apiGroup Catalogs
@@ -466,6 +430,331 @@ function init(app, log) {
                     return done(err);
                 res.json(worktypes);
             }, req.query);
+        }
+    });
+
+    /**
+    * @api {get} /api/catalogs/worktypes/:worktype
+    * @apiName GetWorkType
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    */
+    app.get("/api/catalogs/worktypes/:worktype", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = { id_worktype: parseInt(req.params.worktype) || 0 };
+
+        db.catalogs.worktypes.findRow(cond, function (err, worktype) {
+            if (err)
+                return done(err);
+            res.json(worktype);
+        });
+    });
+
+    /**
+    * @api {get} /api/catalogs/worktypes/:worktype/tools Get tools for worktype.
+    * @apiName GetWorkTypeTools
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    */
+    app.get("/api/catalogs/worktypes/:worktype/tools", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.worktype) || 0;
+
+        db.catalogs.worktypestools.connect.query("SELECT t.* FROM " + db.catalogs.worktypestools.table + " wtt, " + db.catalogs.tools.table + " t WHERE wtt.id_worktype = ? AND t.id_tool = wtt.id_tool", [id], function (err, rows) {
+            if (err)
+                return done(err);
+            res.json(rows);
+        });
+    });
+
+    /**
+    * @api {post} /api/catalogs/worktypes/:worktype/tools Add tool in worktype.
+    * @apiName AddToolInWorkType
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} worktype Worktype unique id.
+    * @apiParam {Integer} id_tool Tool, that will be added.
+    */
+    app.post("/api/catalogs/worktypes/:worktype/tools", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.worktype) || 0;
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                id_tool: {
+                    type: 'integer',
+                    required: true
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.worktypestools.create({
+            id_worktype: id,
+            id_tool: req.body.id_tool
+        }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /**
+    * @api {delete} /api/catalogs/worktypes/:worktype/tools Delete tool in worktype.
+    * @apiName DelToolInWorkType
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} worktype Worktype unique id.
+    * @apiParam {Integer} id_tool Tool, that will be removed.
+    */
+    app.del("/api/catalogs/worktypes/:worktype/tools", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.worktype) || 0;
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                id_tool: {
+                    type: 'integer',
+                    required: true
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.worktypestools.del({
+            id_worktype: id,
+            id_tool: req.body.id_tool
+        }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /**
+    * @api {post} /api/catalogs/tools Create new worktype.
+    * @apiName CreateWorkType
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {String} name Tool name.
+    * @apiParam {String} short_name Short name.
+    * @apiParam {String} unit Unit.
+    * @apiParam {Number} rate Rate.
+    * @apiParam {String} [unit_sec] Second unit.
+    * @apiParam {Number} [rate_sec] Second rate.
+    * @apiParam {Integer} [id_worktypegroup] Group.
+    *
+    * @apiSuccessStructure Created
+    */
+    app.post("/api/catalogs/worktypes", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var check = revalidator.validate(req.body, {
+            properties: {
+                name: {
+                    type: 'string',
+                    maxLength: 256,
+                    required: true
+                },
+                short_name: {
+                    type: "string",
+                    maxLength: 45,
+                    required: true
+                },
+                unit: {
+                    type: 'string',
+                    maxLength: 16,
+                    required: true
+                },
+                rate: {
+                    type: 'number',
+                    required: true
+                },
+                unit_sec: {
+                    type: 'string',
+                    maxLength: 16
+                },
+                rate_sec: {
+                    type: 'number'
+                },
+                id_worktypegroup: {
+                    type: 'integer'
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.worktypes.create(req.body, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /**
+    * @api {patch} /api/catalogs/worktypes/:worktype Change worktype.
+    * @apiName ChangeWorkTypeById
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} worktype Worktype id.
+    *
+    * @apiParam {String} [name] Tool name.
+    * @apiParam {String} [short_name] Description.
+    * @apiParam {String} [unit] Unit.
+    * @apiParam {Number} [rate] Rate.
+    * @apiParam {String} [unit_sec] Second unit.
+    * @apiParam {Number} [rate_sec] Second rate.
+    * @apiParam {Integer} [id_worktypegroup] Group.
+    *
+    * @apiSuccessStructure Patched
+    */
+    app.patch("/api/catalogs/worktypes/:worktype", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = { id_worktype: parseInt(req.params.worktype) || 0 };
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                name: {
+                    type: 'string',
+                    maxLength: 256
+                },
+                short_name: {
+                    type: "string",
+                    maxLength: 45
+                },
+                unit: {
+                    type: 'string',
+                    maxLength: 16
+                },
+                rate: {
+                    type: 'number'
+                },
+                unit_sec: {
+                    type: 'string',
+                    maxLength: 16
+                },
+                rate_sec: {
+                    type: 'number'
+                },
+                id_worktypegroup: {
+                    type: 'integer'
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.worktypes.patch(cond, req.body, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /**
+    * @api {delete} /api/catalogs/worktypes/:worktype Delete worktype by id.
+    * @apiName DelWorkType
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} worktype Worktype unique id.
+    *
+    * @apiSuccessStructure Deleted
+    */
+    app.del("/api/catalogs/worktypes/:worktype", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = { id_worktype: parseInt(req.params.worktype) || 0 };
+
+        db.catalogs.worktypes.del(cond, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /******************************************************************
+    *
+    *		Catalogs common API
+    *
+    ******************************************************************/
+    /**
+    * @api {get} /api/catalogs Get catalogs list.
+    * @apiDescription
+    * <strong>Note: Admin view more catalogs, then employeers.</strong>
+    *
+    * @apiGroup Catalogs
+    * @apiName GetCatalogs
+    * @apiPermission emploee
+    *
+    * @apiSuccess {String[]} catalogs List of available catalogs.
+    * @apiSuccessExample Success-Response:
+    *     HTTP/1.1 200 OK
+    *     [
+    *       "streets",
+    *       "metro",
+    *       "holdings"
+    *       "paymentterms",
+    *       "addresstype"
+    *     ]
+    */
+    app.get("/api/catalogs", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        res.json(Object.keys(db.catalogs).concat(db.isAdmin(req.user) ? Object.keys(db.systemCatalogs) : []));
+    });
+
+    /**
+    * @api {get} /api/catalogs/:name Read catalog.
+    * @apiName ReadCatalog
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {String} name Catalog name.
+    *
+    * @apiParam (Parameters only for admin users:) {String} [export] Export into format. Supported: xlsx.
+    *
+    */
+    app.get("/api/catalogs/:name", passport.authenticate("bearer", { session: false }), function (req, res) {
+        var catalogName = (req.params.name || "").toLowerCase();
+        var query = req.query;
+
+        var catalog = db.catalogs[catalogName];
+
+        if (type.isDefAndNotNull(catalog)) {
+            catalog.get(function (err, rows) {
+                if (err) {
+                    log.error(err.message);
+                    res.json({ error: "Unknown error" });
+                    return;
+                }
+
+                if (req.query.format == "xlsx" && db.isAdmin(req.user)) {
+                    catalog.convertToXlsx(rows, function (e, xlsx) {
+                        if (e) {
+                            return res.json(500, {
+                                error: "Could not export catalog to XLSX"
+                            });
+                        }
+
+                        res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+                        res.setHeader("Content-Disposition", "attachment; filename=" + catalogName + ".xlsx");
+                        res.end(xlsx, 'binary');
+                    });
+                } else {
+                    res.json(rows);
+                }
+            }, query);
+        } else {
+            res.status(404).json({ error: "Catalog not found" });
         }
     });
 }

@@ -129,6 +129,13 @@ declare module trucking.db {
 		name: string;
 	}
 
+	//соответствие между таблицами WorkTypes и Tools
+	//т.е. какие инструменты закреплены за типом работ
+	interface IWorkTypeTool {
+		id_worktype: number;
+		id_tool: number;
+	}
+
 	interface IContractor {
 		id_contractor: number;
 		id_holding: number;

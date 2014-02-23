@@ -86,6 +86,7 @@ export var catalogs = {
 
 	worktypes: new CatalogModel<db.IWorkType>(connection, "WorkTypes"),
 	worktypegroups: new CatalogModel<db.IWorkTypeGroup>(connection, "WorkTypeGroups"),
+	worktypestools: new CatalogModel<db.IWorkTypeTool>(connection, "WorkTypesTools"),
 
 	contractors: new CatalogModel<db.IContractor>(connection, "Contractors"),
 	contractortypes: new CatalogModel<db.IContractorType>(connection, "ContractorTypes"),
