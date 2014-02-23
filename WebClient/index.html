@@ -2,37 +2,105 @@
 <html data-ng-app="WebClientDB">
 <head>
     <title>Customer Manager</title>
-
-    <link href="Content/customerManagementStyles.css" rel="stylesheet" />
-
-    <!-- Twitter bootstrap для пользовательского интерфейса -->
-
-    <!--<link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
-    <link href="Content/metro-bootstrap.css" rel="stylesheet">
     
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- ToDO: Создать иконку приложения-->
+    <link rel="shortcut icon" href="Content/favicon.ico">
+
+    <!-- Стили приложения-->
+    <link href="Content/Styles.css" rel="stylesheet" />
+
+    <!-- Twitter bootstrap-->
     <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-
+    <link href="Content/metro-bootstrap.css" rel="stylesheet">
+    
+    <!-- Для редактируемых полей в таблицах -->
+    <link href="http://vitalets.github.io/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+    
 </head>
 <body>
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation" ng-controller="NavbarController">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Перевезём</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li ng-class="getClass('/main')"><a href="#/main">Главная</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Справочники <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="catalog in CatalogsList" ng-class="">
+                                <a href='#/catalog/{{catalog}}'>{{catalog}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demo <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Nav header</li>
+                            <li><a href="#">Separated link</a></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="./">Выход</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
 
+    <div ng-view class="container">
 
-    <div ng-view></div>
+        <!-- Main component for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <h1>Navbar example</h1>
+            <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+            <p>To see the difference between static and fixed top navbars, just scroll.</p>
+            <p>
+                <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
+            </p>
+        </div>
+
+    </div> <!-- /container -->
+
 
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular-cookies.js"></script>
     
+    <!-- Для редактируемых полей в таблицах -->
+    <script src="http://vitalets.github.io/angular-xeditable/dist/js/xeditable.js"></script>
 
     <script src="app/app.js"></script>
 
-    <script src="app/controllers/controllers.js"></script>
-    <script src="app/controllers/login.js"></script>
-    <script src="app/controllers/main.js"></script>
+    <script src="app/controllers/Login.js"></script>
+    <script src="app/controllers/Main.js"></script>
+    <script src="app/controllers/Navbar.js"></script>
+    <script src="app/controllers/Catalog.js"></script>
+    <script src="app/controllers/CatalogTools.js"></script>
 
-    <script src="app/services/customersService.js"></script>
-    <script src="app/services/usersService.js"></script>
+    <script src="app/services/CustomersService.js"></script>
+    <script src="app/services/UsersService.js"></script>
     <script src="app/services/Auth.js"></script>
-    <script src="app/services/clientsService.js"></script>
+    <script src="app/services/ClientsService.js"></script>
 
 </body>
 </html>
