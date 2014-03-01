@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(passport.initialize());
 app.use(express.methodOverride());
-app.use(cors());
+app.use(cors({methods: ["GET", "POST", "PATCH", "DELETE"]}));
 app.use(app.router);
 
 require("./libs/auth");

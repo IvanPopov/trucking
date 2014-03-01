@@ -19,6 +19,35 @@ describe("worktypes api", ()=> {
 
 	beforeEach(()=> waitsFor((): boolean=> !!grant));
 
+
+	it("create worktype group", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/catalogs/worktypes/groups"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {name: "test group"}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.created).toBeTruthy();
+				done();
+			});
+	});
+
+	it("delete worktype group", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/catalogs/worktypes/groups/test group"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.deleted).toBeTruthy();
+				done();
+			});
+	});
+
 	it("read worktype groups", (done: () => void) => {
 		request.get(
 			{

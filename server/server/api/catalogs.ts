@@ -387,7 +387,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 	/**
 	 * @api {delete} /api/catalogs/worktypes/groups/:group Delete worktype group by id.
-	 * @apiName DelWorkTypeGroup
+	 * @apiName DelWorkTypeGroupById
 	 * @apiGroup Catalogs
 	 * @apiPermission emploee
 	 *
@@ -395,10 +395,27 @@ function init(app: express.Express, log: winston.Logger) {
 	 *
 	 * @apiSuccessStructure Deleted
 	 */
+	/**
+	 * @api {delete} /api/catalogs/worktypes/groups/:group Delete worktype group by name.
+	 * @apiName DelWorkTypeGroupByName
+	 * @apiGroup Catalogs
+	 * @apiPermission emploee
+	 *
+	 * @apiParam {String} group Worktype group unique name.
+	 *
+	 * @apiSuccessStructure Deleted
+	 */
 	app.del("/api/catalogs/worktypes/groups/:group",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
-			var cond = { id_worktypegroup: parseInt(req.params.group) };
+			var cond = {};
+			var group = req.params.group;
+
+			if (type.isInt(group)) //search by id
+				cond["id_worktypegroup"] = parseInt(group);
+			else //search by name
+				cond["name"] = group;
+			
 
 			db.catalogs.worktypegroups.del(cond, (err, result) => {
 				if (err) return done(err);

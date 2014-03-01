@@ -21,6 +21,32 @@ describe("worktypes api", function () {
         });
     });
 
+    it("create worktype group", function (done) {
+        request.post({
+            uri: setups.path("/api/catalogs/worktypes/groups"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: { name: "test group" }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("delete worktype group", function (done) {
+        request.del({
+            uri: setups.path("/api/catalogs/worktypes/groups/test group"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.deleted).toBeTruthy();
+            done();
+        });
+    });
+
     it("read worktype groups", function (done) {
         request.get({
             uri: setups.path("/api/catalogs/worktypes/groups"),
