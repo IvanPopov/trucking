@@ -49,7 +49,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			db.catalogs.units.create(req.body, (err, result) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(201, result);
 			});
 		});
 
@@ -108,9 +108,9 @@ function init(app: express.Express, log: winston.Logger) {
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
 			var unit = req.params.unit;
-			db.catalogs.units.del({ unit: unit }, (err: MysqlError, result) => {
+			db.catalogs.units.del({ unit: unit }, (err: MysqlError) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(204, null);
 			});
 		});
 
@@ -175,7 +175,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			db.catalogs.tools.create(req.body, (err, result) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(201, result);
 			});
 		});
 
@@ -302,9 +302,9 @@ function init(app: express.Express, log: winston.Logger) {
 				cond["name"] = tool;
 
 
-			db.catalogs.tools.del(cond, (err, result) => {
+			db.catalogs.tools.del(cond, (err) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(204, null);
 			});
 		});
 
@@ -381,7 +381,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			db.catalogs.worktypegroups.create(req.body, (err, result) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(201, result);
 			});
 		});
 
@@ -417,9 +417,9 @@ function init(app: express.Express, log: winston.Logger) {
 				cond["name"] = group;
 			
 
-			db.catalogs.worktypegroups.del(cond, (err, result) => {
+			db.catalogs.worktypegroups.del(cond, (err) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(204, null);
 			});
 		});
 
@@ -557,7 +557,7 @@ function init(app: express.Express, log: winston.Logger) {
 				},
 				(err, result) => {
 					if (err) return done(err);
-					res.json(result);
+					res.json(201, result);
 				});
 		});
 
@@ -594,9 +594,9 @@ function init(app: express.Express, log: winston.Logger) {
 					id_worktype: id,
 					id_tool: req.body.id_tool
 				},
-				(err, result) => {
+				(err) => {
 					if (err) return done(err);
-					res.json(result);
+					res.json(204, null);
 				});
 		});
 
@@ -660,7 +660,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			db.catalogs.worktypes.create(req.body, (err, result) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(201, result);
 			});
 		});
 
@@ -743,11 +743,18 @@ function init(app: express.Express, log: winston.Logger) {
 		(req, res, done) => {
 			var cond = { id_worktype: parseInt(req.params.worktype) || 0 };
 
-			db.catalogs.worktypes.del(cond, (err, result) => {
+			db.catalogs.worktypes.del(cond, (err) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(204, null);
 			});
 		});
+
+	/******************************************************************
+	 *
+	 *		Contractors API
+	 *
+	 ******************************************************************/
+
 
 	/******************************************************************
 	 *

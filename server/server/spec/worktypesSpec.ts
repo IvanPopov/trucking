@@ -28,7 +28,7 @@ describe("worktypes api", ()=> {
 				json: {name: "test group"}
 			}, (e, res, body) => {
 				expect(e).toBeNull();
-				expect(res.statusCode).toBe(200);
+				expect(res.statusCode).toBe(201);
 				expect(body.created).toBeTruthy();
 				done();
 			});
@@ -40,10 +40,10 @@ describe("worktypes api", ()=> {
 				uri: setups.path("/api/catalogs/worktypes/groups/test group"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body) => {
+			}, (e, res) => {
+			console.log(res.statusCode);
 				expect(e).toBeNull();
-				expect(res.statusCode).toBe(200);
-				expect(body.deleted).toBeTruthy();
+				expect(res.statusCode).toBe(204);
 				done();
 			});
 	});

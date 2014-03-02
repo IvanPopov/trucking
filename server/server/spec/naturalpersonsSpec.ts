@@ -7,25 +7,24 @@
 import request = require("request");
 import setups = require("./setups");
 import auth = require("./auth");
-import fs = require("fs");
-
+import type = require("../libs/type");
 require("jasmine-expect");
 
 import db = trucking.db;
 
-describe("catalogs api", () => {
+describe("naturalpersons api", () => {
 	var grant: IOAuth2Grant = null;
 	auth((e, res, body) => { grant = body; });
 
 	beforeEach(() => waitsFor((): boolean => !!grant));
 
-	it("get catalogs list", (done: () => void) => {
+	it("get naturalpersons", (done: () => void) => {
 		request.get(
 			{
-				uri: setups.path("/api/catalogs"),
+				uri: setups.path("/api/naturalpersons"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: Array<any>) => {
+			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArray();
@@ -33,13 +32,13 @@ describe("catalogs api", () => {
 			});
 	});
 
-	it("read catalog (streets)", (done: () => void) => {
+	it("get naturalpersons brigades", (done: () => void) => {
 		request.get(
 			{
-				uri: setups.path("/api/catalogs/streets"),
+				uri: setups.path("/api/naturalpersons/brigades"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IStreet[]) => {
+			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArray();
@@ -47,102 +46,97 @@ describe("catalogs api", () => {
 			});
 	});
 
-	it("export catalog into XLSX (streets)", (done: () => void) => {
+	it("get naturalpersons (4) emails", (done: () => void) => {
 		request.get(
 			{
-				uri: setups.path("/api/catalogs/streets?format=xlsx"),
+				uri: setups.path("/api/naturalpersons/4/emails"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body).toBeArray();
+				done();
+			});
+	});
+
+	it("get naturalpersons (4) worktypes", (done: () => void) => {
+		request.get(
+			{
+				uri: setups.path("/api/naturalpersons/4/worktypes"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body).toBeArray();
+				done();
+			});
+	});
+
+	it("get naturalpersons (4) phones", (done: () => void) => {
+		request.get(
+			{
+				uri: setups.path("/api/naturalpersons/4/phones"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body).toBeArray();
+				done();
+			});
+	});
+
+	it("get naturalpersons (4)", (done: () => void) => {
+		request.get(
+			{
+				uri: setups.path("/api/naturalpersons/4"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(type.isString(body["name"])).toBeTruthy();
+				done();
+			});
+	});
+
+	it("create naturalpersons", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/naturalpersons"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					name: "Петров Петр Петрович",
+					pass_serial: "4000",
+					pass_number: "600000",
+					pass_issued: "Красногорским УВД, Красногорского района 0059",
+					address: "Бульварное кольцо, 10, Москва, 10000",
+					id_metro: "3",
+					DOB: "21 July 1990",
+					height: 180
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(201);
+				expect(body.created).toBeTruthy();
+				done();
+			});
+	});
+
+	it("delete naturalpersons", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/naturalpersons/4000-600000"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
 			}, (e, res) => {
 				expect(e).toBeNull();
-				expect(res.statusCode).toBe(200);
-				done();
-			});
-	});
-
-	it("create unit", (done: () => void) => {
-		request.post(
-			{
-				uri: setups.path("/api/catalogs/units"),
-				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: { unit: "kg", description: "kilogramm" }
-			}, (e, res, body: any) => {
-				expect(e).toBeNull();
-				expect(res.statusCode).toBe(201);
-				expect(body.created).toBeTruthy();
-				done();
-			});
-	});
-
-	it("patch unit", (done: () => void) => {
-		request.patch(
-			{
-				uri: setups.path("/api/catalogs/units/kg"),
-				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: { unit: "kilo" }
-			}, (e, res, body) => {
-				expect(e).toBeNull();
-				expect(res.statusCode).toBe(200);
-				expect(body.unit).toBe("kilo");
-				done();
-			});
-	});
-
-	
-
-	it("create tool", (done: () => void) => {
-		request.post(
-			{
-				uri: setups.path("/api/catalogs/tools"),
-				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: { name: "tool", unit: "kilo", rate: 10 }
-			}, (e, res, body: any) => {
-				expect(e).toBeNull();
-				expect(res.statusCode).toBe(201);
-				expect(body.created).toBeTruthy();
-				done();
-			});
-	});
-
-	it("patch tool", (done: () => void) => {
-		request.patch(
-			{
-				uri: setups.path("/api/catalogs/tools/tool"),
-				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: { description: "description" }
-			}, (e, res, body) => {
-				expect(e).toBeNull();
-				expect(res.statusCode).toBe(200);
-				expect(body.description).toBe("description");
-				done();
-			});
-	});
-
-
-	it("delete tool", (done: () => void) => {
-		request.del(
-			{
-				uri: setups.path("/api/catalogs/tools/tool"),
-				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: true
-			}, (e, res, body) => {
-				expect(e).toBeNull();
 				expect(res.statusCode).toBe(204);
 				done();
 			});
 	});
 
-	it("delete unit", (done: () => void) => {
-		request.del(
-			{
-				uri: setups.path("/api/catalogs/units/kilo"),
-				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: true
-			}, (e, res, body) => {
-				expect(e).toBeNull();
-				expect(res.statusCode).toBe(204);
-				done();
-			});
-	});
 });
 

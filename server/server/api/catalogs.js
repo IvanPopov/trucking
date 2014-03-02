@@ -44,7 +44,7 @@ function init(app, log) {
         db.catalogs.units.create(req.body, function (err, result) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(201, result);
         });
     });
 
@@ -100,10 +100,10 @@ function init(app, log) {
     */
     app.del("/api/catalogs/units/:unit", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var unit = req.params.unit;
-        db.catalogs.units.del({ unit: unit }, function (err, result) {
+        db.catalogs.units.del({ unit: unit }, function (err) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(204, null);
         });
     });
 
@@ -165,7 +165,7 @@ function init(app, log) {
         db.catalogs.tools.create(req.body, function (err, result) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(201, result);
         });
     });
 
@@ -285,10 +285,10 @@ function init(app, log) {
         else
             cond["name"] = tool;
 
-        db.catalogs.tools.del(cond, function (err, result) {
+        db.catalogs.tools.del(cond, function (err) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(204, null);
         });
     });
 
@@ -356,7 +356,7 @@ function init(app, log) {
         db.catalogs.worktypegroups.create(req.body, function (err, result) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(201, result);
         });
     });
 
@@ -389,10 +389,10 @@ function init(app, log) {
         else
             cond["name"] = group;
 
-        db.catalogs.worktypegroups.del(cond, function (err, result) {
+        db.catalogs.worktypegroups.del(cond, function (err) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(204, null);
         });
     });
 
@@ -513,7 +513,7 @@ function init(app, log) {
         }, function (err, result) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(201, result);
         });
     });
 
@@ -546,10 +546,10 @@ function init(app, log) {
         db.catalogs.worktypestools.del({
             id_worktype: id,
             id_tool: req.body.id_tool
-        }, function (err, result) {
+        }, function (err) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(204, null);
         });
     });
 
@@ -612,7 +612,7 @@ function init(app, log) {
         db.catalogs.worktypes.create(req.body, function (err, result) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(201, result);
         });
     });
 
@@ -692,13 +692,18 @@ function init(app, log) {
     app.del("/api/catalogs/worktypes/:worktype", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var cond = { id_worktype: parseInt(req.params.worktype) || 0 };
 
-        db.catalogs.worktypes.del(cond, function (err, result) {
+        db.catalogs.worktypes.del(cond, function (err) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(204, null);
         });
     });
 
+    /******************************************************************
+    *
+    *		Contractors API
+    *
+    ******************************************************************/
     /******************************************************************
     *
     *		Catalogs common API

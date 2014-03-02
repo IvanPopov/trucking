@@ -129,7 +129,7 @@ function init(app, log) {
         db.metro.branches.create(req.body, function (err, result) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(201, result);
         });
     });
 
@@ -217,16 +217,10 @@ function init(app, log) {
         else
             cond["name"] = branch;
 
-        db.metro.branches.del(cond, function (err, result) {
-            //if (err) {
-            //	var e = { error: "Unknown error." };
-            //	if (err.code == "ER_ROW_IS_REFERENCED_") {
-            //	}
-            // return res.json(e, 400);
-            //}
+        db.metro.branches.del(cond, function (err) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(204, null);
         });
     });
 
@@ -332,11 +326,7 @@ function init(app, log) {
     * @apiParam {String} [station] New station name.
     * @apiParam {Integer} [id_metrobranch] New station branch.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "patched": true
-    *     }
+    * @apiSuccessStructure Patched
     */
     /**
     * @api {patch} /api/metro/stations/:id Change station by id.
@@ -345,13 +335,9 @@ function init(app, log) {
     * @apiPermission emploee
     *
     * @apiParam {String} [station] New station name.
-    * @apiParam {Integer} [id_metrobranch] New station branch.
+    * @apiParam {Integerpa [id_metrobranch] New station branch.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "patched": true
-    *     }
+    * @apiSuccessStructure Patched
     */
     app.patch("/api/metro/stations/:station", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var cond = {};
@@ -396,11 +382,7 @@ function init(app, log) {
     * @apiParam {String} station New station name.
     * @apiParam {Integer} id_metrobranch New station branch.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "created": true
-    *     }
+    * @apiSuccessStructure Created
     */
     app.post("/api/metro/stations", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var check = revalidator.validate(req.body, {
@@ -425,7 +407,7 @@ function init(app, log) {
         db.metro.stations.create(req.body, function (err, result) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(201, result);
         });
     });
 
@@ -437,11 +419,7 @@ function init(app, log) {
     *
     * @apiParam {String} name Station unique name.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "deleted": true
-    *     }
+    * @apiSuccessStructure Deleted
     */
     /**
     * @api {delete} /api/metro/stations/:id Delete station by id.
@@ -451,11 +429,7 @@ function init(app, log) {
     *
     * @apiParam {String} id Station unique id.
     *
-    * @apiSuccessExample Success-Response:
-    *     HTTP/1.1 200 OK
-    *     {
-    *       "deleted": true
-    *     }
+    * @apiSuccessStructure Deleted
     */
     app.del("/api/metro/stations/:station", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var cond = {};
@@ -466,10 +440,10 @@ function init(app, log) {
         else
             cond["station"] = station;
 
-        db.metro.stations.del(cond, function (err, result) {
+        db.metro.stations.del(cond, function (err) {
             if (err)
                 return done(err);
-            res.json(result);
+            res.json(204, null);
         });
     });
 }

@@ -15,33 +15,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
-        }
-      ]
-    },
-    "group": "CatalogModel.js",
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "server\\libs\\db\\CatalogModel.js"
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -67,7 +41,22 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+        }
+      ]
+    },
+    "group": "CatalogModel.js",
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "server\\libs\\db\\CatalogModel.js"
+  },
+  {
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -128,21 +117,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -233,7 +211,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -324,7 +302,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -373,7 +351,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -464,7 +442,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -548,7 +526,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
         }
       ]
     },
@@ -597,7 +575,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
         }
       ]
     },
@@ -681,7 +659,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
         }
       ]
     },
@@ -723,7 +701,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
         }
       ]
     },
@@ -781,21 +759,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -806,7 +773,7 @@
     "type": "delete",
     "url": "/api/catalogs/worktypes/groups/:group",
     "title": "Delete worktype group by id.",
-    "name": "DelWorkTypeGroup",
+    "name": "DelWorkTypeGroupById",
     "group": "Catalogs",
     "permission": "emploee",
     "parameter": {
@@ -823,21 +790,41 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/worktypes/groups/:group",
+    "title": "Delete worktype group by name.",
+    "name": "DelWorkTypeGroupByName",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "group",
+            "optional": false,
+            "description": "Worktype group unique name."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -865,21 +852,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -907,21 +883,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -1262,7 +1227,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -1311,7 +1276,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -1337,19 +1302,29 @@
           },
           {
             "group": "Parameter",
-            "type": "Integer",
-            "field": "id_metrobranch",
-            "optional": true,
-            "description": "New station branch."
+            "field": "{Integerpa",
+            "optional": false,
+            "description": "[id_metrobranch] New station branch."
           }
         ]
       }
     },
     "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "patched",
+            "optional": false,
+            "description": "Is patched."
+          }
+        ]
+      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -1384,10 +1359,21 @@
       }
     },
     "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "patched",
+            "optional": false,
+            "description": "Is patched."
+          }
+        ]
+      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"patched\": true\n   }\n"
+          "content": "   HTTP/1.1 200 OK\n"
         }
       ]
     },
@@ -1436,7 +1422,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
         }
       ]
     },
@@ -1471,10 +1457,21 @@
       }
     },
     "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "created",
+            "optional": false,
+            "description": "Is created."
+          }
+        ]
+      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
         }
       ]
     },
@@ -1502,21 +1499,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -1544,21 +1530,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "field": "deleted",
-            "optional": false,
-            "description": "Is deleted."
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -1589,7 +1564,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -1620,7 +1595,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 200 OK\n   {\n     \"deleted\": true\n   }\n"
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -1975,6 +1950,240 @@
     "filename": "server\\api\\metro.js"
   },
   {
+    "type": "delete",
+    "url": "/api/naturalpersons/:id",
+    "title": "Delete person by id.",
+    "name": "DeleteNaturalPersonById",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/naturalpersons/:passport",
+    "title": "Delete person by passport.",
+    "name": "DeleteNaturalPersonByPassport",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Passport",
+            "field": "passport",
+            "optional": false,
+            "description": "Person passport in format 0000-000000."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/brigades",
+    "title": "Get brigades list.",
+    "name": "GetBrigades",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/:id",
+    "title": "Get natural person by id.",
+    "name": "GetNaturalPersonById",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/:passport",
+    "title": "Get natural person by passport.",
+    "name": "GetNaturalPersonByPassport",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "passport",
+            "optional": false,
+            "description": "Passport serial and number in format 0000-000000."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/:id/emails",
+    "title": "Get emails.",
+    "name": "GetNaturalPersonEmails",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/:id/phones",
+    "title": "Get phones.",
+    "name": "GetNaturalPersonPhones",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/:id/worktypes",
+    "title": "Get worktypes.",
+    "name": "GetNaturalPersonWorkTypes",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/:id",
+    "title": "Get natural person list.",
+    "name": "GetNaturalPersons",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "brigade",
+            "optional": true,
+            "description": "Brigade unique id."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/search/:query",
+    "title": "Search natural persons.",
+    "description": "<span class=\"alert alert-error\">Experimental API. Search occurs in the fields: name, pass_serial, pass_number, id_naturalperson</span>",
+    "name": "SearchNaturalPersons",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "query",
+            "optional": false,
+            "description": "Query string."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
     "type": "get",
     "url": "/api/streets/:id",
     "title": "Get street by id.",
@@ -2105,16 +2314,16 @@
   },
   {
     "type": "get",
-    "url": "/api/contractors/types",
-    "description": "Get all contractor types.",
+    "url": "/api/contractors/:contractor/holding",
+    "description": "<strong style=\"color: red;\">NOT IMPLEMENTED</strong>\nGet holding information for current contractor.",
     "group": "contractors.js",
     "version": "0.0.0",
     "filename": "server\\api\\contractors.js"
   },
   {
     "type": "get",
-    "url": "/api/contractors/:contractor/holding",
-    "description": "<strong style=\"color: red;\">NOT IMPLEMENTED</strong>\nGet holding information for current contractor.",
+    "url": "/api/contractors/types",
+    "description": "Get all contractor types.",
     "group": "contractors.js",
     "version": "0.0.0",
     "filename": "server\\api\\contractors.js"

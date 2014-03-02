@@ -18,7 +18,7 @@ import IQueryCond = trucking.db.IQueryCond;
  * @apiSuccess {Boolean} created Is created.
  *
  * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
+ *     HTTP/1.1 201 Created
  *     {
  *       "created": true
  *     } 
@@ -26,13 +26,9 @@ import IQueryCond = trucking.db.IQueryCond;
 
 /**
  * @apiDefineSuccessStructure Deleted
- * @apiSuccess {Boolean} deleted Is deleted.
  *
  * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "deleted": true
- *     } 
+ *     HTTP/1.1 204 No Content
  */
 
 
@@ -42,9 +38,6 @@ import IQueryCond = trucking.db.IQueryCond;
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
- *     {
- *       "patched": true
- *     } 
  */
 
 
@@ -90,15 +83,31 @@ class CatalogModel<ENTRY_T> extends Model {
 	}
 
 	patch(cond: Object, data: Object, cb: (err: Error, result: any) => void): void {
-		this.connect.query("UPDATE " + this.table + " SET ? WHERE ?", [data, cond], (err, res) => {
-			if (err) return cb(err, false);
-			return cb(null, { patched: res.affectedRows > 0 });
+		if (!type.isDefAndNotNull(data)) {
+			return cb(new Error("Data for patching not specified."), null);
+		}
+
+		this.connect.query("UPDATE ?? SET ? WHERE ?", [this.table, data, cond], (err, res) => {
+			if (err) return cb(err, null);
+			
+			//avoid conflicts in condition dependent data.
+			for (var i in data) {
+				if (type.isDef(cond[i]))
+					cond[i] = data[i];
+			}
+
+			this.findRow(cond, cb);
 		});
 	}
 
 	create(data: Object, cb: (err: Error, result: any) => void): void {
+		if (!type.isDefAndNotNull(data)) {
+			cb(null, { created: false });
+		}
+
 		this.connect.query("INSERT INTO " + this.table + " SET ?", [data], (err, res) => {
 			if (err) return cb(err, false);
+			console.log(res);
 			return cb(null, { created: res.affectedRows > 0 });
 		});
 	}
@@ -106,7 +115,7 @@ class CatalogModel<ENTRY_T> extends Model {
 	del(cond: Object, cb: (err: Error, result: any) => void): void {
 		this.connect.query("DELETE FROM " + this.table + " WHERE ?", cond, (err, res) => {
 			if (err) return cb(Model.parseError(err), false);
-			cb(null, { deleted: res.affectedRows > 0 });
+			cb(null, /*res.affectedRows > 0*/true);
 		});
 	}
 

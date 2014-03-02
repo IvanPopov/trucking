@@ -146,7 +146,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			db.metro.branches.create(req.body, (err, result) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(201, result);
 			});
 		});
 
@@ -241,17 +241,9 @@ function init(app: express.Express, log: winston.Logger) {
 			else //search by name
 				cond["name"] = branch;
 			
-			db.metro.branches.del(cond, (err: MysqlError, result) => {
-				//if (err) {
-				//	var e = { error: "Unknown error." };
-
-				//	if (err.code == "ER_ROW_IS_REFERENCED_") {
-
-				//	}
-				// return res.json(e, 400);
-				//}
+			db.metro.branches.del(cond, (err: MysqlError) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(204, null);
 			});
 		});
 
@@ -366,11 +358,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {String} [station] New station name.
 	 * @apiParam {Integer} [id_metrobranch] New station branch.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "patched": true
-	 *     }
+	 * @apiSuccessStructure Patched
 	 */
 
 	/**
@@ -380,13 +368,9 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiPermission emploee
 	 * 
 	 * @apiParam {String} [station] New station name.
-	 * @apiParam {Integer} [id_metrobranch] New station branch.
+	 * @apiParam {Integerpa [id_metrobranch] New station branch.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "patched": true
-	 *     }
+	 * @apiSuccessStructure Patched
 	 */
 
 	app.patch("/api/metro/stations/:station",
@@ -433,11 +417,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {String} station New station name.
 	 * @apiParam {Integer} id_metrobranch New station branch.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "created": true
-	 *     }
+	 * @apiSuccessStructure Created
 	 */
 
 	app.post("/api/metro/stations",
@@ -464,7 +444,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			db.metro.stations.create(req.body, (err, result) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(201, result);
 			});
 		});
 
@@ -477,11 +457,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 *
 	 * @apiParam {String} name Station unique name.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "deleted": true
-	 *     }
+	 * @apiSuccessStructure Deleted
 	 */
 
 	/**
@@ -492,11 +468,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 *
 	 * @apiParam {String} id Station unique id.
 	 *
-	 * @apiSuccessExample Success-Response:
-	 *     HTTP/1.1 200 OK
-	 *     {
-	 *       "deleted": true
-	 *     }
+	 * @apiSuccessStructure Deleted
 	 */
 
 	app.del("/api/metro/stations/:station",
@@ -510,9 +482,9 @@ function init(app: express.Express, log: winston.Logger) {
 			else //search by name
 				cond["station"] = station;
 
-			db.metro.stations.del(cond, (err, result) => {
+			db.metro.stations.del(cond, (err) => {
 				if (err) return done(err);
-				res.json(result);
+				res.json(204, null);
 			});
 		});
 }

@@ -15,6 +15,8 @@ export import CatalogModel = require("./db/CatalogModel");
 export import Metro = require("./db/Metro");
 export import Streets = require("./db/Streets");
 
+export import NaturalPersonModel = require("./db/NaturalPersonModel");
+
 //seetup databse config
 var dbConfig = {
 	host: config.get("mysql:host"),
@@ -67,7 +69,6 @@ export var users = new EmployeeModel(connection, "Employees");
 export var accessTokens = new TokenModel(connection, "AccessTokens");
 export var refreshTokens = new TokenModel(connection, "RefreshTokens");
 
-
 //all catalogues
 export var catalogs = {
 	metrobranches: new CatalogModel<db.IMetroBranch>(connection, "MetroBranches"),
@@ -92,6 +93,8 @@ export var catalogs = {
 	contractortypes: new CatalogModel<db.IContractorType>(connection, "ContractorTypes"),
 	units: new CatalogModel<db.IUnit>(connection, "Units")
 };
+
+export var naturalpersons = new NaturalPersonModel(connection, catalogs.worktypes);
 
 //for admin
 export var systemCatalogs = {

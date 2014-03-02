@@ -66,7 +66,7 @@ describe("catalogs api", function () {
             json: { unit: "kg", description: "kilogramm" }
         }, function (e, res, body) {
             expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
+            expect(res.statusCode).toBe(201);
             expect(body.created).toBeTruthy();
             done();
         });
@@ -80,7 +80,7 @@ describe("catalogs api", function () {
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
-            expect(body.patched).toBeTruthy();
+            expect(body.unit).toBe("kilo");
             done();
         });
     });
@@ -92,7 +92,7 @@ describe("catalogs api", function () {
             json: { name: "tool", unit: "kilo", rate: 10 }
         }, function (e, res, body) {
             expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
+            expect(res.statusCode).toBe(201);
             expect(body.created).toBeTruthy();
             done();
         });
@@ -106,7 +106,7 @@ describe("catalogs api", function () {
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
-            expect(body.patched).toBeTruthy();
+            expect(body.description).toBe("description");
             done();
         });
     });
@@ -118,8 +118,7 @@ describe("catalogs api", function () {
             json: true
         }, function (e, res, body) {
             expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
-            expect(body.deleted).toBeTruthy();
+            expect(res.statusCode).toBe(204);
             done();
         });
     });
@@ -131,8 +130,7 @@ describe("catalogs api", function () {
             json: true
         }, function (e, res, body) {
             expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
-            expect(body.deleted).toBeTruthy();
+            expect(res.statusCode).toBe(204);
             done();
         });
     });

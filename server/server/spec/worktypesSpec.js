@@ -28,7 +28,7 @@ describe("worktypes api", function () {
             json: { name: "test group" }
         }, function (e, res, body) {
             expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
+            expect(res.statusCode).toBe(201);
             expect(body.created).toBeTruthy();
             done();
         });
@@ -39,10 +39,10 @@ describe("worktypes api", function () {
             uri: setups.path("/api/catalogs/worktypes/groups/test group"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
-        }, function (e, res, body) {
+        }, function (e, res) {
+            console.log(res.statusCode);
             expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
-            expect(body.deleted).toBeTruthy();
+            expect(res.statusCode).toBe(204);
             done();
         });
     });

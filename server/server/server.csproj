@@ -20,6 +20,7 @@
     <TypeScriptCompile Include="api\catalogs.ts" />
     <TypeScriptCompile Include="api\contractors.ts" />
     <TypeScriptCompile Include="api\metro.ts" />
+    <TypeScriptCompile Include="api\naturalpersons.ts" />
     <TypeScriptCompile Include="api\streets.ts" />
     <TypeScriptCompile Include="api\userinfo.ts" />
     <TypeScriptCompile Include="idl\db.d.ts" />
@@ -39,6 +40,7 @@
     <TypeScriptCompile Include="libs\db\EmployeeModel.ts" />
     <TypeScriptCompile Include="libs\db\Metro.ts" />
     <TypeScriptCompile Include="libs\db\Model.ts" />
+    <TypeScriptCompile Include="libs\db\NaturalPersonModel.ts" />
     <TypeScriptCompile Include="libs\db\Streets.ts" />
     <TypeScriptCompile Include="libs\db\TokenModel.ts" />
     <TypeScriptCompile Include="libs\type.ts" />
@@ -48,6 +50,7 @@
     <Content Include="sslcert\redme.txt" />
     <TypeScriptCompile Include="spec\auth.ts" />
     <TypeScriptCompile Include="spec\catalogsSpec.ts" />
+    <TypeScriptCompile Include="spec\naturalpersonsSpec.ts" />
     <TypeScriptCompile Include="spec\worktypesSpec.ts" />
     <TypeScriptCompile Include="spec\setups.ts" />
     <TypeScriptCompile Include="spec\metroSpec.ts" />

@@ -152,6 +152,50 @@ declare module trucking.db {
 		name: string;
 	}
 
+	interface  INaturalPerson {
+		id_naturalperson: number;
+		id_employee: number;
+		name: string;		 //varchar(256)
+		pass_serial: number; //int(4)
+		pass_number: number; //int(6)
+		pass_issued: string; //varchar(256)
+		card_number: number; //int(16)
+		requisites_comment: string; //varchar(256)
+		id_leading_type_of_work: number; 
+		address: number; //varchar(256)
+		id_metro: number;
+		id_brigade: number;
+		DOB: Date;
+		date_of_employment: Date;
+		status: number; //tinyint(4)
+		fired: boolean;
+		firing_comments: string;
+		id_firing_employee: number;
+		clothing_size: string; //varchar(45)
+		height: number; //int(11)
+	}
+
+	interface IBrigade {
+		id_brigade: number;
+	}
+
+	interface  INaturalPersonEmail {
+		id_naturalperson: number;
+		email: string;
+	}
+
+	interface INaturalPersonWorkType {
+		id_naturalperson: number;
+		id_worktype: number;
+		rate: number;
+	}
+
+	interface INaturalPersonPhone {
+		id_naturalperson: number;
+		phone: string;
+	}
+
+
 	///////////////////
 
 	interface IQueryCond {

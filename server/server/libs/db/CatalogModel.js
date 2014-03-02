@@ -8,6 +8,7 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var type = require("../type");
 var nodeExcel = require("excel-export");
 
 var Model = require("./Model");
@@ -17,20 +18,16 @@ var Model = require("./Model");
 * @apiSuccess {Boolean} created Is created.
 *
 * @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
+*     HTTP/1.1 201 Created
 *     {
 *       "created": true
 *     }
 */
 /**
 * @apiDefineSuccessStructure Deleted
-* @apiSuccess {Boolean} deleted Is deleted.
 *
 * @apiSuccessExample Success-Response:
-*     HTTP/1.1 200 OK
-*     {
-*       "deleted": true
-*     }
+*     HTTP/1.1 204 No Content
 */
 /**
 * @apiDefineSuccessStructure Patched
@@ -38,9 +35,6 @@ var Model = require("./Model");
 *
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 200 OK
-*     {
-*       "patched": true
-*     }
 */
 var CatalogModel = (function (_super) {
     __extends(CatalogModel, _super);
@@ -88,17 +82,33 @@ var CatalogModel = (function (_super) {
     };
 
     CatalogModel.prototype.patch = function (cond, data, cb) {
-        this.connect.query("UPDATE " + this.table + " SET ? WHERE ?", [data, cond], function (err, res) {
+        var _this = this;
+        if (!type.isDefAndNotNull(data)) {
+            return cb(new Error("Data for patching not specified."), null);
+        }
+
+        this.connect.query("UPDATE ?? SET ? WHERE ?", [this.table, data, cond], function (err, res) {
             if (err)
-                return cb(err, false);
-            return cb(null, { patched: res.affectedRows > 0 });
+                return cb(err, null);
+
+            for (var i in data) {
+                if (type.isDef(cond[i]))
+                    cond[i] = data[i];
+            }
+
+            _this.findRow(cond, cb);
         });
     };
 
     CatalogModel.prototype.create = function (data, cb) {
+        if (!type.isDefAndNotNull(data)) {
+            cb(null, { created: false });
+        }
+
         this.connect.query("INSERT INTO " + this.table + " SET ?", [data], function (err, res) {
             if (err)
                 return cb(err, false);
+            console.log(res);
             return cb(null, { created: res.affectedRows > 0 });
         });
     };
@@ -107,7 +117,7 @@ var CatalogModel = (function (_super) {
         this.connect.query("DELETE FROM " + this.table + " WHERE ?", cond, function (err, res) {
             if (err)
                 return cb(Model.parseError(err), false);
-            cb(null, { deleted: res.affectedRows > 0 });
+            cb(null, true);
         });
     };
 

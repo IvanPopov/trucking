@@ -111,12 +111,14 @@ import catalogs = require("./api/catalogs");
 import userinfo = require("./api/userinfo");
 import streets = require("./api/streets");
 import contractors = require("./api/contractors");
+import naturalpersons = require("./api/naturalpersons");
 
 metro(app, log);
 catalogs(app, log);
 userinfo(app, log);
 streets(app, log);
 contractors(app, log);
+naturalpersons(app, log);
 
 var port: number = parseInt(args.port) || config.get("port");
 var useHttps: boolean = type.isDef(args.https) ? !!args.https : config.get("https");

@@ -19,6 +19,9 @@ exports.Metro = Metro;
 var Streets = require("./db/Streets");
 exports.Streets = Streets;
 
+var NaturalPersonModel = require("./db/NaturalPersonModel");
+exports.NaturalPersonModel = NaturalPersonModel;
+
 //seetup databse config
 var dbConfig = {
     host: config.get("mysql:host"),
@@ -92,6 +95,8 @@ exports.catalogs = {
     contractortypes: new exports.CatalogModel(connection, "ContractorTypes"),
     units: new exports.CatalogModel(connection, "Units")
 };
+
+exports.naturalpersons = new exports.NaturalPersonModel(connection, exports.catalogs.worktypes);
 
 //for admin
 exports.systemCatalogs = {

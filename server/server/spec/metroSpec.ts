@@ -70,7 +70,7 @@ describe("metro api", () => {
 			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
-				expect(body.patched).toBeTruthy();
+				expect(body.color).toBe(0xFF0000);
 				done();
 			});
 	});
@@ -126,9 +126,10 @@ describe("metro api", () => {
 					id_metrobranch: 1
 				}
 			}, (e, res, body) => {
+			
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
-				expect(body.patched).toBeTruthy();
+				expect(body.id_metrobranch).toBe(1);
 				done();
 			});
 	});
@@ -139,10 +140,9 @@ describe("metro api", () => {
 				uri: setups.path("/api/metro/stations/Марьина роща"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body) => {
+			}, (e, res) => {
 				expect(e).toBeNull();
-				expect(res.statusCode).toBe(200);
-				expect(body.deleted).toBeTruthy();
+				expect(res.statusCode).toBe(204);
 				done();
 			});
 	});
@@ -158,7 +158,7 @@ describe("metro api", () => {
 				}
 			}, (e, res, body) => {
 				expect(e).toBeNull();
-				expect(res.statusCode).toBe(200);
+				expect(res.statusCode).toBe(201);
 				expect(body.created).toBeTruthy();
 				done();
 			});

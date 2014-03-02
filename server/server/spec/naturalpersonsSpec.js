@@ -6,9 +6,10 @@
 var request = require("request");
 var setups = require("./setups");
 var auth = require("./auth");
+var type = require("../libs/type");
 require("jasmine-expect");
 
-describe("metro api", function () {
+describe("naturalpersons api", function () {
     var grant = null;
     auth(function (e, res, body) {
         grant = body;
@@ -20,9 +21,9 @@ describe("metro api", function () {
         });
     });
 
-    it("get branches", function (done) {
+    it("get naturalpersons", function (done) {
         request.get({
-            uri: setups.path("/api/metro/branches"),
+            uri: setups.path("/api/naturalpersons"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {
@@ -33,63 +34,9 @@ describe("metro api", function () {
         });
     });
 
-    it("get branche (1)", function (done) {
+    it("get naturalpersons brigades", function (done) {
         request.get({
-            uri: setups.path("/api/metro/branches/1"),
-            headers: { "Authorization": ("Bearer " + grant.access_token) },
-            json: true
-        }, function (e, res, body) {
-            expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
-            expect(body.name).toBe("Сокольническая");
-            done();
-        });
-    });
-
-    it("get branche (Сокольническая)", function (done) {
-        request.get({
-            uri: setups.path("/api/metro/branches/Сокольническая"),
-            headers: { "Authorization": ("Bearer " + grant.access_token) },
-            json: true
-        }, function (e, res, body) {
-            expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
-            expect(body.name).toBe("Сокольническая");
-            done();
-        });
-    });
-
-    it("change branche color (1)", function (done) {
-        request.patch({
-            uri: setups.path("/api/metro/branches/1"),
-            headers: { "Authorization": ("Bearer " + grant.access_token) },
-            json: {
-                color: 0xFF0000
-            }
-        }, function (e, res, body) {
-            expect(e).toBeNull();
-            expect(res.statusCode).toBe(200);
-            expect(body.color).toBe(0xFF0000);
-            done();
-        });
-    });
-
-    it("delete branch (Сокольническая) / obtaining reference error", function (done) {
-        request.del({
-            uri: setups.path("/api/metro/branches/1"),
-            headers: { "Authorization": ("Bearer " + grant.access_token) },
-            json: true
-        }, function (e, res, body) {
-            expect(e).toBeNull();
-            expect(res.statusCode).toBe(500);
-            expect(body.error).toBeDefined();
-            done();
-        });
-    });
-
-    it("get stations", function (done) {
-        request.get({
-            uri: setups.path("/api/metro/stations"),
+            uri: setups.path("/api/naturalpersons/brigades"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {
@@ -100,58 +47,88 @@ describe("metro api", function () {
         });
     });
 
-    it("get station (Охотный ряд)", function (done) {
+    it("get naturalpersons (4) emails", function (done) {
         request.get({
-            uri: setups.path("/api/metro/stations/Охотный ряд"),
+            uri: setups.path("/api/naturalpersons/4/emails"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
-            expect(body.station).toBe("Охотный ряд");
+            expect(body).toBeArray();
             done();
         });
     });
 
-    it("change station branch (3 | Охотный ряд)", function (done) {
-        request.patch({
-            uri: setups.path("/api/metro/stations/3"),
+    it("get naturalpersons (4) worktypes", function (done) {
+        request.get({
+            uri: setups.path("/api/naturalpersons/4/worktypes"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
-            json: {
-                id_metrobranch: 1
-            }
+            json: true
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
-            expect(body.id_metrobranch).toBe(1);
+            expect(body).toBeArray();
             done();
         });
     });
 
-    it("delete station (Марьина роща)", function (done) {
-        request.del({
-            uri: setups.path("/api/metro/stations/Марьина роща"),
+    it("get naturalpersons (4) phones", function (done) {
+        request.get({
+            uri: setups.path("/api/naturalpersons/4/phones"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
-        }, function (e, res) {
+        }, function (e, res, body) {
             expect(e).toBeNull();
-            expect(res.statusCode).toBe(204);
+            expect(res.statusCode).toBe(200);
+            expect(body).toBeArray();
             done();
         });
     });
 
-    it("create station (Марьина роща)", function (done) {
+    it("get naturalpersons (4)", function (done) {
+        request.get({
+            uri: setups.path("/api/naturalpersons/4"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(type.isString(body["name"])).toBeTruthy();
+            done();
+        });
+    });
+
+    it("create naturalpersons", function (done) {
         request.post({
-            uri: setups.path("/api/metro/stations"),
+            uri: setups.path("/api/naturalpersons"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: {
-                station: "Марьина роща",
-                id_metrobranch: 1
+                name: "Петров Петр Петрович",
+                pass_serial: "4000",
+                pass_number: "600000",
+                pass_issued: "Красногорским УВД, Красногорского района 0059",
+                address: "Бульварное кольцо, 10, Москва, 10000",
+                id_metro: "3",
+                DOB: "21 July 1990",
+                height: 180
             }
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(201);
             expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("delete naturalpersons", function (done) {
+        request.del({
+            uri: setups.path("/api/naturalpersons/4000-600000"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(204);
             done();
         });
     });
