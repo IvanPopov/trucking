@@ -6,3 +6,10 @@ body {
   min-height: 2000px;
   padding-top: 70px;
 }
+
+.editButton { float:right }
+
+.catalogTable td {
+    text-align: center;
+    vertical-align: middle;
+}

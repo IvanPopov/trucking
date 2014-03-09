@@ -45,9 +45,26 @@ app.controller('CatalogToolsController', function ($scope, $location, $http, $ro
         return $http({
             url: $rootScope.CONFIG.apiUrl + '/api/catalogs/tools/' + id,
             data: data,
-            method: "PATCH"
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
-
-        //return $http.post( $rootScope.CONFIG.apiUrl + '/api/catalogs/tools/' + id, data);
     };
+
+    $scope.saveField = function (name, value, id) {
+        var data = {};
+        data[name] = value;
+
+        console.log(JSON.stringify(data));
+        return $http({
+            url: $rootScope.CONFIG.apiUrl + '/api/catalogs/tools/' + id,
+            data: data,
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    };
+
 });

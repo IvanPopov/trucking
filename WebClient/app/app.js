@@ -29,7 +29,8 @@ app.config(function ($routeProvider) {
 // Параметры OAuth-авторизации
 .run(function ($rootScope) {
     $rootScope.CONFIG = {
-        apiUrl: 'http://192.168.1.111:1337',
+        //apiUrl: 'http://192.168.1.111:1337',
+        apiUrl: 'http://127.0.0.1:1337',
         clientId: 'web_v1',
         clientSecret: 'abc123456',
     };

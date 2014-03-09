@@ -1,9 +1,9 @@
 ﻿<div ng-controller="CatalogToolsController">
-    <table class="table table-bordered table-hover table-condensed">
+    <table class="catalogTable table table-bordered table-hover table-condensed">
         <tr style="font-weight: bold">
             <td style="width:35%">Имя</td>
             <td style="width:20%">Описание</td>
-            <td style="width:20%">Ставка1</td>
+            <td style="width:20%" title="Тут надо сделать подсказку, зачем нужна ставка 1">Ставка1</td>
             <td style="width:25%">Единица1</td>
             <td style="width:20%">Ставка2</td>
             <td style="width:25%">Единица2</td>
@@ -34,10 +34,15 @@
                     {{ tool.unit || 'empty' }}
                 </span>
             </td>
-            <td>
+            <td ng-mouseenter="show = true" ng-mouseleave="show = false">
                 <!-- editable -->
-                <span editable-text="tool.rate_sec" e-name="rate_sec" e-form="rowform" onbeforesave="checkName($data, tool.id_tool)" e-required>
+                <span editable-number="tool.rate_sec" e-min="0" e-min="100000" e-name="rate_sec" e-form="rate_sec_Form" e-required onbeforesave="saveField('rate_sec', $data, tool.id_tool)">
                     {{ tool.rate_sec || 'empty' }}
+                    <span class="editButton">
+                        <button type="button" class="btn btn-default btn-xs" ng-click="rate_sec_Form.$show()" ng-show="show">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </span>
                 </span>
             </td>
             <td>
