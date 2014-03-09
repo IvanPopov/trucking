@@ -93,10 +93,11 @@ exports.catalogs = {
     worktypestools: new exports.CatalogModel(connection, "WorkTypesTools"),
     contractors: new exports.CatalogModel(connection, "Contractors"),
     contractortypes: new exports.CatalogModel(connection, "ContractorTypes"),
-    units: new exports.CatalogModel(connection, "Units")
+    units: new exports.CatalogModel(connection, "Units"),
+    naturalpersons: new exports.NaturalPersonModel(connection, exports.catalogs.worktypes)
 };
 
-exports.naturalpersons = new exports.NaturalPersonModel(connection, exports.catalogs.worktypes);
+exports.naturalpersons = exports.catalogs.naturalpersons;
 
 //for admin
 exports.systemCatalogs = {
