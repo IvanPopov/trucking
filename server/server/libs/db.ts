@@ -93,10 +93,10 @@ export var catalogs = {
 	contractortypes: new CatalogModel<db.IContractorType>(connection, "ContractorTypes"),
 	units: new CatalogModel<db.IUnit>(connection, "Units"),
 
-	naturalpersons: new NaturalPersonModel(connection, catalogs.worktypes)
+	naturalpersons: null
 };
 
-export var naturalpersons = catalogs.naturalpersons;
+export var naturalpersons = catalogs.naturalpersons = new NaturalPersonModel(connection, catalogs.worktypes);
 
 //for admin
 export var systemCatalogs = {
