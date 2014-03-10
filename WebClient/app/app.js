@@ -25,8 +25,12 @@ app.config(function ($routeProvider) {
             controller: 'CatalogNaturalPersonsController'
         })
         .when('/catalog/naturalpersons/:id_naturalperson', {
-            templateUrl: '/app/views/naturalPersons.html',
+            templateUrl: '/app/views/naturalPerson.html',
             controller: 'NaturalPersonController'
+        })
+        .when('/catalog/:catalog/download', {
+            templateUrl: '/app/views/catalog.html',
+            controller: 'CatalogControllerDownloader'
         })
         .when('/catalog/:catalog', {
             templateUrl: '/app/views/catalog.html',

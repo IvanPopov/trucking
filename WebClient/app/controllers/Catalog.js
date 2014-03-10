@@ -23,3 +23,23 @@ app.controller('CatalogController', function ($scope, $location, $http, $rootSco
         });
     }
 });
+
+app.controller('CatalogControllerDownloader', function ($scope, $location, $http, $rootScope, $routeParams) {
+
+    // Мне нравится идея складывать код инициализации в один метод таким образом
+    init();
+
+    function init() {
+        var catalogName = $routeParams.catalog;
+        $http({
+            url: $rootScope.CONFIG.apiUrl + "/api/catalogs/" + catalogName + "?format=xlsx",
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            responseType: "blob"
+        }).success(function (data) {
+            saveAs(data, catalogName + ".xlsx");
+        });
+    }
+});

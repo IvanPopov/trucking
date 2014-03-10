@@ -1,3 +1,40 @@
 ﻿<!--
     Редактирование физического лица
--->
+    -->
+<!--
+
+    http://stackoverflow.com/questions/14250642/angularjs-how-to-remove-an-item-from-scope
+
+
+
+    -->
+
+<div class="row">
+    <div class="col-md-4">
+        <!-- Form Name -->
+        <legend>Телефоны</legend>
+
+        <!-- Список телефонов физического лица-->
+        <table>
+            <tr ng-repeat="phone in personPhones">
+                <td>
+                    {{phone.phone}}
+                    <button type="button" class="btn btn-default btn-xs" ng-click="deletePhone(phone.phone)">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+
+        <form ng-submit="addPhone(newPhone)">
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="newPhone">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">+</button>
+                </span>
+            </div><!-- /input-group -->
+        </form>
+        
+    </div>
+</div>

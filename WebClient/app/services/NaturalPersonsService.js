@@ -15,36 +15,23 @@ app.factory('naturalPersonsService', function ($http, $rootScope, $resource) {
     // Вся инициализация в этом методе
     function init() {
         apiUrl = $rootScope.CONFIG.apiUrl;
-        return { getNaturalPersons: getNaturalPersons };
+        return {
+            getNaturalPersons: getNaturalPersons,
+            getPhones: getPhones
+        };
     }
 
     function getNaturalPersons() {
-        return $http({
-            url: apiUrl + "/api/catalogs/" + catalogName,
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
-    }
-    /*
-    function getNaturalPersonsResource() {
-        return $resource(apiUrl + "/api/catalogs/" + catalogName + ":id", {}, {
-            query: {
-                method: 'GET',
-                params: { id: 'phones' },
-                isArray: true
-            }
-        });
+        return $resource(apiUrl + "/api/" + catalogName + "/:id_naturalperson", {
+            id_naturalperson: '@id_naturalperson'
+        },
+        { 'save': { method: 'PATCH' } });
     }
 
-    function getNaturalPerson(id) {
-        return $resource(apiUrl + "/api/catalogs/" + catalogName + ":id", {}, {
-            query: {
-                method: 'GET',
-                params: { phoneId: 'phones' },
-                isArray: true
-            }
+    function getPhones(personId) {
+        return $resource(apiUrl + "/api/naturalPersons/" + personId + "/phones/:phone", {},
+        {
+            'create': { method: 'post', url: apiUrl + "/api/naturalPersons/" + personId + "/phones/" }
         });
-    }*/
+    }
 });

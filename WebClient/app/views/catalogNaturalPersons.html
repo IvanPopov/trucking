@@ -9,7 +9,9 @@
                 {{ person.name || 'empty' }}
             </td>
             <td>
-                {{ person.id_naturalperson || 'empty' }}
+                <a href="#/catalog/naturalpersons/{{person.id_naturalperson || 'empty' }}">
+                    {{ person.id_naturalperson || 'empty' }}
+                </a>
             </td>
         </tr>
     </table>
