@@ -228,6 +228,7 @@ describe("naturalpersons api", () => {
 					rate: rate
 				}
 			}, (e, res, body) => {
+				console.log(body);
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body.rate).toBe(rate);

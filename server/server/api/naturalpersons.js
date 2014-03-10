@@ -249,6 +249,53 @@ function init(app, log) {
         });
     });
 
+    function formatPhoneNumber(tel) {
+        if (!tel) {
+            return '';
+        }
+
+        var tel = tel.toString().trim();
+        var value = tel.replace(/^\+/, '').replace(/[\-\(\)\s]/g, '');
+
+        if (value.match(/[^0-9]+/)) {
+            return null;
+        }
+
+        var country, city, number;
+
+        switch (value.length) {
+            case 10:
+                country = 1;
+                city = value.slice(0, 3);
+                number = value.slice(3);
+                break;
+
+            case 11:
+                country = value[0];
+                city = value.slice(1, 4);
+                number = value.slice(4);
+                break;
+
+            case 12:
+                country = value.slice(0, 3);
+                city = value.slice(3, 5);
+                number = value.slice(5);
+                break;
+
+            default:
+                return null;
+        }
+
+        if (country == 1) {
+            country = "";
+        }
+
+        number = number.slice(0, 3) + '-' + number.slice(3);
+
+        return ((tel[0] === '+' ? '+' : '') + country + " (" + city + ") " + number).trim();
+    }
+    ;
+
     /**
     * @api {post} /api/naturalpersons/:id/phones Create natural person phone.
     * @apiName CreateNaturalPersonPhone
@@ -260,7 +307,7 @@ function init(app, log) {
     */
     app.post("/api/naturalpersons/:id/phones", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var id = parseInt(req.params.id) || 0;
-        var pattern = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+        var pattern = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)[\d\- ]{7,10}$/;
         var phone = req.body.phone;
 
         var check = revalidator.validate(req.body, {
@@ -278,7 +325,7 @@ function init(app, log) {
             return;
         }
 
-        db.naturalpersons.phones.create({ id_naturalperson: id, phone: phone }, function (err, result) {
+        db.naturalpersons.phones.create({ id_naturalperson: id, phone: formatPhoneNumber(phone) }, function (err, result) {
             if (err)
                 return done(err);
             res.json(201, result);

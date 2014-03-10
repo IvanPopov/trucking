@@ -44,7 +44,7 @@ var CatalogModel = (function (_super) {
         _super.apply(this, arguments);
     }
     CatalogModel.prototype.findRow = function (cond, cb) {
-        this.connect.queryRow("SELECT * FROM " + this.table + " where ?", cond, cb);
+        this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.where(cond), cb);
     };
 
     CatalogModel.prototype.find = function (cond, cb, limit) {
@@ -89,9 +89,11 @@ var CatalogModel = (function (_super) {
             return cb(new Error("Data for patching not specified."), null);
         }
 
-        console.log(mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data]));
+        var q = mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data]);
 
-        this.connect.query("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data], function (err, res) {
+        //q = q.replace(/\`/g, '');
+        //console.log(q);
+        this.connect.query(q, function (err, res) {
             if (err)
                 return cb(err, null);
 
@@ -185,8 +187,7 @@ var CatalogModel = (function (_super) {
             where += (where.length ? " AND " : "") + mysql.format("?? = ?", [field, cond[field]]);
         }
 
-        where += " LIMIT 1";
-
+        //where += " LIMIT 1";
         return where;
     };
     CatalogModel.MYSQL_NUMBER_TYPES = [

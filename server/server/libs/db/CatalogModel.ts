@@ -43,7 +43,7 @@ import IQueryCond = trucking.db.IQueryCond;
 
 class CatalogModel<ENTRY_T> extends Model {
 	findRow(cond: any, cb: (err: Error, entry: ENTRY_T) => void): void {
-		this.connect.queryRow("SELECT * FROM " + this.table + " where ?", cond, cb);
+		this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.where(cond), cb);
 	}
 
 	find(cond: any, cb: (err: Error, entry: ENTRY_T[]) => void, limit?: IQueryCond): void {
@@ -87,9 +87,11 @@ class CatalogModel<ENTRY_T> extends Model {
 			return cb(new Error("Data for patching not specified."), null);
 		}
 
-		console.log(mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data]));
+		var q = mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data]);
+		//q = q.replace(/\`/g, '');
+		//console.log(q);
 
-		this.connect.query("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data], (err, res) => {
+		this.connect.query(q, (err, res) => {
 			if (err) return cb(err, null);
 
 			//avoid conflicts in condition dependent data.
@@ -200,7 +202,7 @@ class CatalogModel<ENTRY_T> extends Model {
 			where += (where.length ? " AND " : "") + mysql.format("?? = ?", [field, cond[field]]);
 		}
 
-		where += " LIMIT 1";
+		//where += " LIMIT 1";
 
 		return where;
 	}
