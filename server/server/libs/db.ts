@@ -92,6 +92,7 @@ export var catalogs = {
 	contractors: new CatalogModel<db.IContractor>(connection, "Contractors"),
 	contractortypes: new CatalogModel<db.IContractorType>(connection, "ContractorTypes"),
 	units: new CatalogModel<db.IUnit>(connection, "Units"),
+	brigades: new CatalogModel<db.IBrigade>(connection, "Brigades"),
 
 	naturalpersons: null
 };

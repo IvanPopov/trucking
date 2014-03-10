@@ -246,7 +246,7 @@ function init(app: express.Express, log: winston.Logger) {
 						required: true
 					},
 					id_brigade: {
-						type: 'integer',
+						type: ['integer', 'null'],
 						required: false
 					},
 					DOB: {
@@ -418,7 +418,7 @@ function init(app: express.Express, log: winston.Logger) {
 						type: 'integer',
 					},
 					id_brigade: {
-						type: 'integer',
+						type: ['integer', 'null'],
 					},
 					DOB: {
 						type: 'string',

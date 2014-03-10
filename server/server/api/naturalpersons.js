@@ -237,7 +237,7 @@ function init(app, log) {
                     required: true
                 },
                 id_brigade: {
-                    type: 'integer',
+                    type: ['integer', 'null'],
                     required: false
                 },
                 DOB: {
@@ -414,7 +414,7 @@ function init(app, log) {
                     type: 'integer'
                 },
                 id_brigade: {
-                    type: 'integer'
+                    type: ['integer', 'null']
                 },
                 DOB: {
                     type: 'string',

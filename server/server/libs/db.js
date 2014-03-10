@@ -94,6 +94,7 @@ exports.catalogs = {
     contractors: new exports.CatalogModel(connection, "Contractors"),
     contractortypes: new exports.CatalogModel(connection, "ContractorTypes"),
     units: new exports.CatalogModel(connection, "Units"),
+    brigades: new exports.CatalogModel(connection, "Brigades"),
     naturalpersons: null
 };
 

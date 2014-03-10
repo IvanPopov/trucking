@@ -128,7 +128,8 @@ describe("naturalpersons api", function () {
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: {
                 name: "Петров Петр Львович",
-                card_number: 1000000000001
+                card_number: 1000000000001,
+                id_brigade: null
             }
         }, function (e, res, body) {
             expect(e).toBeNull();
