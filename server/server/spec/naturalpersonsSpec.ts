@@ -116,7 +116,8 @@ describe("naturalpersons api", () => {
 					card_number: null,
 					id_metro: "3",
 					DOB: "21 July 1990",
-					height: 180
+					height: 180,
+					id_leading_type_of_work: 1
 				}
 			}, (e, res, body) => {
 				expect(e).toBeNull();
@@ -139,6 +140,110 @@ describe("naturalpersons api", () => {
 			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
+				done();
+			});
+	});
+
+	it("add naturalperson email", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/naturalpersons/4/emails"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					email: "some@example.org"
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(201);
+				expect(body.created).toBeTruthy();
+				done();
+			});
+	});
+
+	it("del naturalperson email", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/naturalpersons/4/emails/some@example.org"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(204);
+				done();
+			});
+	});
+
+	it("add naturalperson phone", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/naturalpersons/4/phones"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					phone: "+7 (917) 516-66-41"
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(201);
+				expect(body.created).toBeTruthy();
+				done();
+			});
+	});
+
+	it("del naturalperson phones", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/naturalpersons/4/phones/+7 (917) 516-66-41"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(204);
+				done();
+			});
+	});
+
+	it("add naturalperson worktype", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/naturalpersons/4/worktypes"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					id_worktype: 2
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(201);
+				expect(body.created).toBeTruthy();
+				done();
+			});
+	});
+
+	it("change naturalperson worktype", (done: () => void) => {
+		var rate = Math.floor(Math.random() * 500);
+		request.patch(
+			{
+				uri: setups.path("/api/naturalpersons/4/worktypes/2"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					rate: rate
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.rate).toBe(rate);
+				done();
+			});
+	});
+
+	it("del naturalperson worktype", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/naturalpersons/4/worktypes/2"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(204);
 				done();
 			});
 	});

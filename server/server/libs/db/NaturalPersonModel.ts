@@ -15,17 +15,17 @@ import CatalogModel = require("./CatalogModel");
 import IQueryCond = trucking.db.IQueryCond;
 
 class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
-	private brigades: CatalogModel<trucking.db.IBrigade>;
-	private naturalpersonsemails: CatalogModel<trucking.db.INaturalPersonEmail>;
-	private naturalpersonsphones: CatalogModel<trucking.db.INaturalPersonPhone>;
-	private naturalpersonsworktypes: CatalogModel<trucking.db.INaturalPersonWorkType>;
+	public brigades: CatalogModel<trucking.db.IBrigade>;
+	public emails: CatalogModel<trucking.db.INaturalPersonEmail>;
+	public phones: CatalogModel<trucking.db.INaturalPersonPhone>;
+	public naturalpersonsworktypes: CatalogModel<trucking.db.INaturalPersonWorkType>;
 
 	constructor(connect: mysql.Connection, public worktypes: CatalogModel<trucking.db.IWorkType>) {
 		super(connect, "NaturalPersons");
 
 		this.brigades = new CatalogModel<trucking.db.IBrigade>(connect, "Brigades");
-		this.naturalpersonsemails = new CatalogModel<trucking.db.INaturalPersonEmail>(connect, "NaturalPersonsEmails");
-		this.naturalpersonsphones = new CatalogModel<trucking.db.INaturalPersonPhone>(connect, "NaturalPersonsPhones");
+		this.emails = new CatalogModel<trucking.db.INaturalPersonEmail>(connect, "NaturalPersonsEmails");
+		this.phones = new CatalogModel<trucking.db.INaturalPersonPhone>(connect, "NaturalPersonsPhones");
 		this.naturalpersonsworktypes = new CatalogModel<trucking.db.INaturalPersonWorkType>(connect, "NaturalPersonsWorkTypes");
 	}
 
@@ -74,12 +74,12 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 
 	getEmails(id: number, cb: (e: Error, emails: trucking.db.INaturalPersonEmail[]) => void): void {
 		this.connect.query("SELECT npe.email  FROM ?? np, ?? npe WHERE np.id_naturalperson = ? AND npe.id_naturalperson = np.id_naturalperson",
-			[this.table, this.naturalpersonsemails.table, id], cb);
+			[this.table, this.emails.table, id], cb);
 	}
 
 	getPhones(id: number, cb: (e: Error, emails: trucking.db.INaturalPersonPhone[]) => void): void {
 		this.connect.query("SELECT npp.phone  FROM ?? np, ?? npp WHERE np.id_naturalperson = ? AND npp.id_naturalperson = np.id_naturalperson",
-			[this.table, this.naturalpersonsphones.table, id], cb);
+			[this.table, this.phones.table, id], cb);
 	}
 
 	getWorktypes(id: number, cb: (e: Error, types: trucking.db.IWorkType[]) => void): void {

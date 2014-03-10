@@ -112,7 +112,8 @@ describe("naturalpersons api", function () {
                 card_number: null,
                 id_metro: "3",
                 DOB: "21 July 1990",
-                height: 180
+                height: 180,
+                id_leading_type_of_work: 1
             }
         }, function (e, res, body) {
             expect(e).toBeNull();
@@ -134,6 +135,103 @@ describe("naturalpersons api", function () {
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
+            done();
+        });
+    });
+
+    it("add naturalperson email", function (done) {
+        request.post({
+            uri: setups.path("/api/naturalpersons/4/emails"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: {
+                email: "some@example.org"
+            }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(201);
+            expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("del naturalperson email", function (done) {
+        request.del({
+            uri: setups.path("/api/naturalpersons/4/emails/some@example.org"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(204);
+            done();
+        });
+    });
+
+    it("add naturalperson phone", function (done) {
+        request.post({
+            uri: setups.path("/api/naturalpersons/4/phones"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: {
+                phone: "+7 (917) 516-66-41"
+            }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(201);
+            expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("del naturalperson phones", function (done) {
+        request.del({
+            uri: setups.path("/api/naturalpersons/4/phones/+7 (917) 516-66-41"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(204);
+            done();
+        });
+    });
+
+    it("add naturalperson worktype", function (done) {
+        request.post({
+            uri: setups.path("/api/naturalpersons/4/worktypes"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: {
+                id_worktype: 2
+            }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(201);
+            expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("change naturalperson worktype", function (done) {
+        var rate = Math.floor(Math.random() * 500);
+        request.patch({
+            uri: setups.path("/api/naturalpersons/4/worktypes/2"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: {
+                rate: rate
+            }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.rate).toBe(rate);
+            done();
+        });
+    });
+
+    it("del naturalperson worktype", function (done) {
+        request.del({
+            uri: setups.path("/api/naturalpersons/4/worktypes/2"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(204);
             done();
         });
     });

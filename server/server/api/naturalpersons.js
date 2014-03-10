@@ -72,6 +72,59 @@ function init(app, log) {
     });
 
     /**
+    * @api {post} /api/naturalpersons/:id/emails Create natural person email.
+    * @apiName CreateNaturalPersonEmail
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    * @apiParam {String} email Person unique email.
+    */
+    app.post("/api/naturalpersons/:id/emails", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+        var check = revalidator.validate(req.body, {
+            properties: {
+                email: {
+                    type: 'string',
+                    format: 'email',
+                    required: true
+                }
+            }
+        }, { validateFormatsStrict: true, validateFormats: true, cast: true });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.naturalpersons.emails.create({ id_naturalperson: id, email: req.body.email }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(201, result);
+        });
+    });
+
+    /**
+    * @api {delete} /api/naturalpersons/:id/emails/:email Delete natural person email.
+    * @apiName DeleteNaturalPersonEmail
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    * @apiParam {String} email Person unique email.
+    */
+    app.del("/api/naturalpersons/:id/emails/:email", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+        var email = req.params.email;
+
+        db.naturalpersons.emails.del({ email: email }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(204, null);
+        });
+    });
+
+    /**
     * @api {get} /api/naturalpersons/:id/worktypes Get worktypes.
     * @apiName GetNaturalPersonWorkTypes
     * @apiGroup NaturalPersons
@@ -90,6 +143,95 @@ function init(app, log) {
     });
 
     /**
+    * @api {post} /api/naturalpersons/:id/worktypes Create natural person worktype.
+    * @apiName CreateNaturalPersonWorktype
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    * @apiParam {Integer} id_worktype Person worktype.
+    */
+    app.post("/api/naturalpersons/:id/worktypes", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                id_worktype: {
+                    type: 'integer',
+                    required: true
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.naturalpersons.naturalpersonsworktypes.create({ id_naturalperson: id, id_worktype: req.body.id_worktype }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(201, result);
+        });
+    });
+
+    /**
+    * @api {patch} /api/naturalpersons/:id/worktypes/:worktype Change natural person worktype.
+    * @apiName ChangeNaturalPersonWorktype
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    * @apiParam {Integer} worktype Person unique worktype id.
+    *
+    * @apiParam {Number} rate Rate.
+    */
+    app.patch("/api/naturalpersons/:id/worktypes/:worktype", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+        var worktype = parseInt(req.params.worktype) || 0;
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                rate: {
+                    type: ['number', 'null'],
+                    required: true
+                }
+            }
+        }, { validateFormatsStrict: true, validateFormats: true, cast: true });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.naturalpersons.naturalpersonsworktypes.patch({ id_naturalperson: id, id_worktype: worktype }, req.body, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(result);
+        });
+    });
+
+    /**
+    * @api {delete} /api/naturalpersons/:id/worktypes/:worktype Delete natural person worktype.
+    * @apiName DeleteNaturalPersonWorktype
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    * @apiParam {Integer} worktype Person unique worktype id.
+    */
+    app.del("/api/naturalpersons/:id/worktypes/:worktype", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+        var worktype = parseInt(req.params.worktype) || 0;
+
+        db.naturalpersons.naturalpersonsworktypes.del({ id_naturalperson: id, id_worktype: worktype }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(204, null);
+        });
+    });
+
+    /**
     * @api {get} /api/naturalpersons/:id/phones Get phones.
     * @apiName GetNaturalPersonPhones
     * @apiGroup NaturalPersons
@@ -104,6 +246,62 @@ function init(app, log) {
             if (err)
                 return done(err);
             res.json(phones);
+        });
+    });
+
+    /**
+    * @api {post} /api/naturalpersons/:id/phones Create natural person phone.
+    * @apiName CreateNaturalPersonPhone
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    * @apiParam {String} phone Person unique phone.
+    */
+    app.post("/api/naturalpersons/:id/phones", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+        var pattern = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
+        var phone = req.body.phone;
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                phone: {
+                    type: 'string',
+                    pattern: pattern,
+                    required: true
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.naturalpersons.phones.create({ id_naturalperson: id, phone: phone }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(201, result);
+        });
+    });
+
+    /**
+    * @api {delete} /api/naturalpersons/:id/phones/:phone Delete natural person phone.
+    * @apiName DeleteNaturalPersonPhone
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    * @apiParam {String} phone Person unique phone.
+    */
+    app.del("/api/naturalpersons/:id/phones/:phone", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+        var phone = req.params.phone;
+
+        db.naturalpersons.phones.del({ phone: phone }, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(204, null);
         });
     });
 
@@ -225,7 +423,7 @@ function init(app, log) {
                 },
                 id_leading_type_of_work: {
                     type: 'integer',
-                    required: false
+                    required: true
                 },
                 address: {
                     type: 'string',

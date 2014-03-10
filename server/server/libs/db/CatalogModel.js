@@ -8,6 +8,8 @@ var __extends = this.__extends || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+var mysql = require("mysql");
+
 var type = require("../type");
 var nodeExcel = require("excel-export");
 
@@ -87,7 +89,9 @@ var CatalogModel = (function (_super) {
             return cb(new Error("Data for patching not specified."), null);
         }
 
-        this.connect.query("UPDATE ?? SET ? WHERE ?", [this.table, data, cond], function (err, res) {
+        console.log(mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data]));
+
+        this.connect.query("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data], function (err, res) {
             if (err)
                 return cb(err, null);
 
@@ -105,6 +109,7 @@ var CatalogModel = (function (_super) {
             cb(null, { created: false });
         }
 
+        //console.log(mysql.format("INSERT INTO " + this.table + " SET ?", [data]));
         this.connect.query("INSERT INTO " + this.table + " SET ?", [data], function (err, res) {
             if (err)
                 return cb(err, false);
@@ -115,7 +120,8 @@ var CatalogModel = (function (_super) {
     };
 
     CatalogModel.prototype.del = function (cond, cb) {
-        this.connect.query("DELETE FROM " + this.table + " WHERE ?", cond, function (err, res) {
+        this.connect.query("DELETE FROM ?? WHERE " + CatalogModel.where(cond), [this.table], function (err, res) {
+            //console.log(res);
             if (err)
                 return cb(Model.parseError(err), false);
             cb(null, true);
@@ -171,6 +177,17 @@ var CatalogModel = (function (_super) {
         }
 
         return null;
+    };
+
+    CatalogModel.where = function (cond) {
+        var where = "";
+        for (var field in cond) {
+            where += (where.length ? " AND " : "") + mysql.format("?? = ?", [field, cond[field]]);
+        }
+
+        where += " LIMIT 1";
+
+        return where;
     };
     CatalogModel.MYSQL_NUMBER_TYPES = [
         "TINYINT",

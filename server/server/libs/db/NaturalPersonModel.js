@@ -20,8 +20,8 @@ var NaturalPersonModel = (function (_super) {
         this.worktypes = worktypes;
 
         this.brigades = new CatalogModel(connect, "Brigades");
-        this.naturalpersonsemails = new CatalogModel(connect, "NaturalPersonsEmails");
-        this.naturalpersonsphones = new CatalogModel(connect, "NaturalPersonsPhones");
+        this.emails = new CatalogModel(connect, "NaturalPersonsEmails");
+        this.phones = new CatalogModel(connect, "NaturalPersonsPhones");
         this.naturalpersonsworktypes = new CatalogModel(connect, "NaturalPersonsWorkTypes");
     }
     NaturalPersonModel.prototype.findByPassport = function (serial, numb, cb) {
@@ -67,11 +67,11 @@ var NaturalPersonModel = (function (_super) {
     };
 
     NaturalPersonModel.prototype.getEmails = function (id, cb) {
-        this.connect.query("SELECT npe.email  FROM ?? np, ?? npe WHERE np.id_naturalperson = ? AND npe.id_naturalperson = np.id_naturalperson", [this.table, this.naturalpersonsemails.table, id], cb);
+        this.connect.query("SELECT npe.email  FROM ?? np, ?? npe WHERE np.id_naturalperson = ? AND npe.id_naturalperson = np.id_naturalperson", [this.table, this.emails.table, id], cb);
     };
 
     NaturalPersonModel.prototype.getPhones = function (id, cb) {
-        this.connect.query("SELECT npp.phone  FROM ?? np, ?? npp WHERE np.id_naturalperson = ? AND npp.id_naturalperson = np.id_naturalperson", [this.table, this.naturalpersonsphones.table, id], cb);
+        this.connect.query("SELECT npp.phone  FROM ?? np, ?? npp WHERE np.id_naturalperson = ? AND npp.id_naturalperson = np.id_naturalperson", [this.table, this.phones.table, id], cb);
     };
 
     NaturalPersonModel.prototype.getWorktypes = function (id, cb) {

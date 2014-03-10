@@ -87,9 +87,11 @@ class CatalogModel<ENTRY_T> extends Model {
 			return cb(new Error("Data for patching not specified."), null);
 		}
 
-		this.connect.query("UPDATE ?? SET ? WHERE ?", [this.table, data, cond], (err, res) => {
+		console.log(mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data]));
+
+		this.connect.query("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data], (err, res) => {
 			if (err) return cb(err, null);
-			
+
 			//avoid conflicts in condition dependent data.
 			for (var i in data) {
 				if (type.isDef(cond[i]))
@@ -104,7 +106,7 @@ class CatalogModel<ENTRY_T> extends Model {
 		if (!type.isDefAndNotNull(data)) {
 			cb(null, { created: false });
 		}
-
+		//console.log(mysql.format("INSERT INTO " + this.table + " SET ?", [data]));
 		this.connect.query("INSERT INTO " + this.table + " SET ?", [data], (err, res) => {
 			if (err) return cb(err, false);
 			//console.log(res);
@@ -113,7 +115,8 @@ class CatalogModel<ENTRY_T> extends Model {
 	}
 
 	del(cond: Object, cb: (err: Error, result: any) => void): void {
-		this.connect.query("DELETE FROM " + this.table + " WHERE ?", cond, (err, res) => {
+		this.connect.query("DELETE FROM ?? WHERE " + CatalogModel.where(cond), [this.table], (err, res) => {
+			//console.log(res);
 			if (err) return cb(Model.parseError(err), false);
 			cb(null, /*res.affectedRows > 0*/true);
 		});
@@ -189,6 +192,17 @@ class CatalogModel<ENTRY_T> extends Model {
 		}
 
 		return null;
+	}
+
+	static where(cond: any): string {
+		var where: string = "";
+		for (var field in cond) {
+			where += (where.length ? " AND " : "") + mysql.format("?? = ?", [field, cond[field]]);
+		}
+
+		where += " LIMIT 1";
+
+		return where;
 	}
 }
 
