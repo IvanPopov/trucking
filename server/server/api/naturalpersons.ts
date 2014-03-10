@@ -202,27 +202,30 @@ function init(app: express.Express, log: winston.Logger) {
 						pattern: '^([a-zA-Zа-яА-Я]{2,}\\s*)+$'
 					},
 					pass_serial: {
-						type: "integer",
+						type: ['integer', 'null'],
 						exclusiveMinimum: 1,
 						exclusiveMaximum: 9999,
-						required: false
+						required: false,
+						allowEmpty: true
 					},
 					pass_number: {
-						type: "integer",
+						type: ['integer', 'null'],
 						exclusiveMinimum: 1,
 						exclusiveMaximum: 999999,
-						required: false
+						required: false,
+						allowEmpty: true
 					},
 					pass_issued: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
-						required: false
+						required: false,
+						allowEmpty: true
 					},
 					card_number: {
-						type: 'integer',
-						exclusiveMinimum: 1000000000000,
-						exclusiveMaximum: 9999999999999999,
-						required: false
+						type: 'any',
+						conform: (x) => (x === null || (parseInt(x) > 1000000000000 && parseInt(x) < 9999999999999999)),
+						required: false,
+						allowEmpty: true
 					},
 					requisites_comment: {
 						type: 'string',
@@ -297,6 +300,10 @@ function init(app: express.Express, log: winston.Logger) {
 			person.fired = type.isDef(person.fired) ? person.fired : false;
 			person.id_employee = req.user.id_employee;
 			person.DOB = new Date(Date.parse(<any>person.DOB));
+
+			if (type.isString(person.card_number)) {
+				person.card_number = parseInt(<any>person.card_number);
+			}
 
 			db.naturalpersons.create(person, (e: Error, result) => {
 				if (e) return done(e);
@@ -376,23 +383,25 @@ function init(app: express.Express, log: winston.Logger) {
 						pattern: '^([a-zA-Zа-яА-Я]{2,}\\s*)+$'
 					},
 					pass_serial: {
-						type: "integer",
+						type: ['integer', 'null'],
 						exclusiveMinimum: 1,
 						exclusiveMaximum: 9999,
+						allowEmpty: true
 					},
 					pass_number: {
-						type: "integer",
+						type: ['integer', 'null'],
 						exclusiveMinimum: 1,
 						exclusiveMaximum: 999999,
+						allowEmpty: true
 					},
 					pass_issued: {
 						type: 'string',
 						maxLength: 256,
 					},
 					card_number: {
-						type: 'integer',
-						exclusiveMinimum: 1000000000000,
-						exclusiveMaximum: 9999999999999999,
+						type: 'any',
+						conform: (x) => (x === null || (parseInt(x) > 1000000000000 && parseInt(x) < 9999999999999999)),
+						allowEmpty: true
 					},
 					requisites_comment: {
 						type: 'string',
@@ -443,11 +452,16 @@ function init(app: express.Express, log: winston.Logger) {
 			}, { validateFormatsStrict: true, validateFormats: true, cast: true });
 
 			if (!check.valid) {
+				console.log(req.body);
 				res.json(400, check);
 				return;
 			}
 
 			var person: trucking.db.INaturalPerson = req.body;
+
+			if (type.isString(person.card_number)) {
+				person.card_number = parseInt(<any>person.card_number);
+			}
 
 			if (type.isDef(person.DOB)) {
 				person.DOB = new Date(Date.parse(<any>person.DOB));

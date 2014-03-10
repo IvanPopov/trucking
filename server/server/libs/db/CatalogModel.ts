@@ -107,7 +107,7 @@ class CatalogModel<ENTRY_T> extends Model {
 
 		this.connect.query("INSERT INTO " + this.table + " SET ?", [data], (err, res) => {
 			if (err) return cb(err, false);
-			console.log(res);
+			//console.log(res);
 			return cb(null, { created: res.affectedRows > 0 });
 		});
 	}

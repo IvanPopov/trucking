@@ -109,10 +109,11 @@ describe("naturalpersons api", () => {
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: {
 					name: "Петров Петр Петрович",
-					pass_serial: "4000",
-					pass_number: "600000",
+					pass_serial: 4000,
+					pass_number: 600000,
 					pass_issued: "Красногорским УВД, Красногорского района 0059",
 					address: "Бульварное кольцо, 10, Москва, 10000",
+					card_number: null,
 					id_metro: "3",
 					DOB: "21 July 1990",
 					height: 180
@@ -132,6 +133,7 @@ describe("naturalpersons api", () => {
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: {
 					name: "Петров Петр Львович",
+					card_number: 1000000000001
 				}
 			}, (e, res, body) => {
 				expect(e).toBeNull();
@@ -155,4 +157,4 @@ describe("naturalpersons api", () => {
 	});
 
 });
-
+allowEmpty: true

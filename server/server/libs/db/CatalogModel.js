@@ -108,7 +108,8 @@ var CatalogModel = (function (_super) {
         this.connect.query("INSERT INTO " + this.table + " SET ?", [data], function (err, res) {
             if (err)
                 return cb(err, false);
-            console.log(res);
+
+            //console.log(res);
             return cb(null, { created: res.affectedRows > 0 });
         });
     };

@@ -1,7 +1,8 @@
-﻿/// <reference path="../idl/winston.d.ts" />
+/// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
 /// <reference path="../idl/db.d.ts" />
+var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
@@ -190,27 +191,32 @@ function init(app, log) {
                     pattern: '^([a-zA-Zа-яА-Я]{2,}\\s*)+$'
                 },
                 pass_serial: {
-                    type: "integer",
+                    type: ['integer', 'null'],
                     exclusiveMinimum: 1,
                     exclusiveMaximum: 9999,
-                    required: false
+                    required: false,
+                    allowEmpty: true
                 },
                 pass_number: {
-                    type: "integer",
+                    type: ['integer', 'null'],
                     exclusiveMinimum: 1,
                     exclusiveMaximum: 999999,
-                    required: false
+                    required: false,
+                    allowEmpty: true
                 },
                 pass_issued: {
-                    type: 'string',
+                    type: ['string', 'null'],
                     maxLength: 256,
-                    required: false
+                    required: false,
+                    allowEmpty: true
                 },
                 card_number: {
-                    type: 'integer',
-                    exclusiveMinimum: 1000000000000,
-                    exclusiveMaximum: 9999999999999999,
-                    required: false
+                    type: 'any',
+                    conform: function (x) {
+                        return (x === null || (parseInt(x) > 1000000000000 && parseInt(x) < 9999999999999999));
+                    },
+                    required: false,
+                    allowEmpty: true
                 },
                 requisites_comment: {
                     type: 'string',
@@ -290,6 +296,10 @@ function init(app, log) {
         person.id_employee = req.user.id_employee;
         person.DOB = new Date(Date.parse(person.DOB));
 
+        if (type.isString(person.card_number)) {
+            person.card_number = parseInt(person.card_number);
+        }
+
         db.naturalpersons.create(person, function (e, result) {
             if (e)
                 return done(e);
@@ -367,23 +377,27 @@ function init(app, log) {
                     pattern: '^([a-zA-Zа-яА-Я]{2,}\\s*)+$'
                 },
                 pass_serial: {
-                    type: "integer",
+                    type: ['integer', 'null'],
                     exclusiveMinimum: 1,
-                    exclusiveMaximum: 9999
+                    exclusiveMaximum: 9999,
+                    allowEmpty: true
                 },
                 pass_number: {
-                    type: "integer",
+                    type: ['integer', 'null'],
                     exclusiveMinimum: 1,
-                    exclusiveMaximum: 999999
+                    exclusiveMaximum: 999999,
+                    allowEmpty: true
                 },
                 pass_issued: {
                     type: 'string',
                     maxLength: 256
                 },
                 card_number: {
-                    type: 'integer',
-                    exclusiveMinimum: 1000000000000,
-                    exclusiveMaximum: 9999999999999999
+                    type: 'any',
+                    conform: function (x) {
+                        return (x === null || (parseInt(x) > 1000000000000 && parseInt(x) < 9999999999999999));
+                    },
+                    allowEmpty: true
                 },
                 requisites_comment: {
                     type: 'string',
@@ -438,11 +452,16 @@ function init(app, log) {
         }, { validateFormatsStrict: true, validateFormats: true, cast: true });
 
         if (!check.valid) {
+            console.log(req.body);
             res.json(400, check);
             return;
         }
 
         var person = req.body;
+
+        if (type.isString(person.card_number)) {
+            person.card_number = parseInt(person.card_number);
+        }
 
         if (type.isDef(person.DOB)) {
             person.DOB = new Date(Date.parse(person.DOB));
