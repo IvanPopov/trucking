@@ -43,6 +43,15 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 			});
 	}
 
+	patchByPassport(serial: number, numb: number, data: Object,
+		cb: (e: Error, result) => void): void {
+			this.connect.query("UPDATE ?? SET ? WHERE `pass_serial` = ? AND `pass_number` = ?",
+				[this.table, data, serial, numb], (err, res) => {
+				if (err) return cb(err, null);
+					this.findByPassport(serial, numb, cb);
+			});
+	}
+
 	search(query: string, cb: (e: Error, person: trucking.db.INaturalPerson) => void): void {
 		this.connect.fields(this.table, (e: Error, fields: IMap<mysql.Field>) => {
 			if (e) {

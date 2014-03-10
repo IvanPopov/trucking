@@ -1950,6 +1950,482 @@ define({ api: [
     "filename": "server\\api\\metro.js"
   },
   {
+    "type": "patch",
+    "url": "/api/naturalpersons/:id",
+    "title": "Change natural person by id.",
+    "name": "ChangeNaturalPersonById",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Id."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "pass_serial",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "pass_number",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "pass_issued",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "card_number",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "requisites_comment",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_leading_type_of_work",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "address",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_brigade",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "field": "DOB",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "field": "date_of_employment",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "status",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "field": "fired",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "firing_comments",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "clothing_size",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "height",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "patched",
+            "optional": false,
+            "description": "Is patched."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "patch",
+    "url": "/api/naturalpersons/:passport",
+    "title": "Change natural person passport.",
+    "name": "ChangeNaturalPersonByPassport",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "passport",
+            "optional": false,
+            "description": "Passport serial/number if romat 0000-000000."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "pass_serial",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "pass_number",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "pass_issued",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "card_number",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "requisites_comment",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_leading_type_of_work",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "address",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_brigade",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "field": "DOB",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "field": "date_of_employment",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "status",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "field": "fired",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "firing_comments",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "clothing_size",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "height",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "patched",
+            "optional": false,
+            "description": "Is patched."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "post",
+    "url": "/api/naturalpersons/:id",
+    "title": "Create person.",
+    "name": "CreateNaturalPerson",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "pass_serial",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "pass_number",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "pass_issued",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "card_number",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "requisites_comment",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_leading_type_of_work",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "address",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_brigade",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "field": "DOB",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "field": "date_of_employment",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "status",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Boolean",
+            "field": "fired",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "firing_comments",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "clothing_size",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "height",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "created",
+            "optional": false,
+            "description": "Is created."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
     "type": "delete",
     "url": "/api/naturalpersons/:id",
     "title": "Delete person by id.",
@@ -2334,40 +2810,6 @@ define({ api: [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metro",
-            "optional": false,
-            "description": "Station unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metrobranch",
-            "optional": false,
-            "description": "Branch unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "field": "station",
-            "optional": false,
-            "description": "Station unique name."
-          }
-        ]
-      }
-    },
-    "group": "metro.js",
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "server\\api\\metro.js"
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
             "type": "String",
             "field": "name",
             "optional": false,
@@ -2400,6 +2842,40 @@ define({ api: [
             "field": "stations.station",
             "optional": false,
             "description": "Branch station name."
+          }
+        ]
+      }
+    },
+    "group": "metro.js",
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "server\\api\\metro.js"
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": false,
+            "description": "Station unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metrobranch",
+            "optional": false,
+            "description": "Branch unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "station",
+            "optional": false,
+            "description": "Station unique name."
           }
         ]
       }

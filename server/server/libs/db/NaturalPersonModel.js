@@ -36,6 +36,15 @@ var NaturalPersonModel = (function (_super) {
         });
     };
 
+    NaturalPersonModel.prototype.patchByPassport = function (serial, numb, data, cb) {
+        var _this = this;
+        this.connect.query("UPDATE ?? SET ? WHERE `pass_serial` = ? AND `pass_number` = ?", [this.table, data, serial, numb], function (err, res) {
+            if (err)
+                return cb(err, null);
+            _this.findByPassport(serial, numb, cb);
+        });
+    };
+
     NaturalPersonModel.prototype.search = function (query, cb) {
         var _this = this;
         this.connect.fields(this.table, function (e, fields) {

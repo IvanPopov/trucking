@@ -1,4 +1,4 @@
-/// <reference path="../idl/request.d.ts" />
+﻿/// <reference path="../idl/request.d.ts" />
 /// <reference path="../idl/jasmine.d.ts" />
 /// <reference path="../idl/jasmine-matchers.d.ts" />
 /// <reference path="../idl/spec.d.ts" />
@@ -117,6 +117,20 @@ describe("naturalpersons api", function () {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(201);
             expect(body.created).toBeTruthy();
+            done();
+        });
+    });
+
+    it("change naturalpersons 4000-600000", function (done) {
+        request.patch({
+            uri: setups.path("/api/naturalpersons/4000-600000"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: {
+                name: "Петров Петр Львович"
+            }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
             done();
         });
     });

@@ -1,8 +1,7 @@
-/// <reference path="../idl/winston.d.ts" />
+﻿/// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
 /// <reference path="../idl/db.d.ts" />
-var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
@@ -152,6 +151,33 @@ function init(app, log) {
         }
     });
 
+    /**
+    * @api {post} /api/naturalpersons/:id Create person.
+    * @apiName CreateNaturalPerson
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    *
+    * @apiParam {String} name
+    * @apiParam {Integer} [pass_serial]
+    * @apiParam {Integer} [pass_number]
+    * @apiParam {String} [pass_issued]
+    * @apiParam {Integer} [card_number]
+    * @apiParam {String} [requisites_comment]
+    * @apiParam {Integer} [id_leading_type_of_work]
+    * @apiParam {String} address
+    * @apiParam {Integer} id_metro
+    * @apiParam {Integer} [id_brigade]
+    * @apiParam {Date} DOB
+    * @apiParam {Date} [date_of_employment]
+    * @apiParam {Integer} [status]
+    * @apiParam {Boolean} [fired]
+    * @apiParam {String} [firing_comments]
+    * @apiParam {String} [clothing_size]
+    * @apiParam {Number} height
+    *
+    * @apiSuccessStructure Created
+    */
     app.post("/api/naturalpersons", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var check = revalidator.validate(req.body, {
             properties: {
@@ -269,6 +295,174 @@ function init(app, log) {
                 return done(e);
             res.json(201, result);
         });
+    });
+
+    /**
+    * @api {patch} /api/naturalpersons/:id Change natural person by id.
+    * @apiName ChangeNaturalPersonById
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Id.
+    *
+    * @apiParam {String} [name]
+    * @apiParam {Integer} [pass_serial]
+    * @apiParam {Integer} [pass_number]
+    * @apiParam {String} [pass_issued]
+    * @apiParam {Integer} [card_number]
+    * @apiParam {String} [requisites_comment]
+    * @apiParam {Integer} [id_leading_type_of_work]
+    * @apiParam {String} [address]
+    * @apiParam {Integer} [id_metro]
+    * @apiParam {Integer} [id_brigade]
+    * @apiParam {Date} [DOB]
+    * @apiParam {Date} [date_of_employment]
+    * @apiParam {Integer} [status]
+    * @apiParam {Boolean} [fired]
+    * @apiParam {String} [firing_comments]
+    * @apiParam {String} [clothing_size]
+    * @apiParam {Number} [height]
+    *
+    * @apiSuccessStructure Patched
+    */
+    /**
+    * @api {patch} /api/naturalpersons/:passport Change natural person passport.
+    * @apiName ChangeNaturalPersonByPassport
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {String} passport Passport serial/number if romat 0000-000000.
+    *
+    * @apiParam {String} [name]
+    * @apiParam {Integer} [pass_serial]
+    * @apiParam {Integer} [pass_number]
+    * @apiParam {String} [pass_issued]
+    * @apiParam {Integer} [card_number]
+    * @apiParam {String} [requisites_comment]
+    * @apiParam {Integer} [id_leading_type_of_work]
+    * @apiParam {String} [address]
+    * @apiParam {Integer} [id_metro]
+    * @apiParam {Integer} [id_brigade]
+    * @apiParam {Date} [DOB]
+    * @apiParam {Date} [date_of_employment]
+    * @apiParam {Integer} [status]
+    * @apiParam {Boolean} [fired]
+    * @apiParam {String} [firing_comments]
+    * @apiParam {String} [clothing_size]
+    * @apiParam {Number} [height]
+    *
+    * @apiSuccessStructure Patched
+    */
+    app.patch("/api/naturalpersons/:id", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var pass;
+        var id = req.params.id;
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                name: {
+                    type: 'string',
+                    maxLength: 256,
+                    minLength: 3,
+                    allowEmpty: false,
+                    pattern: '^([a-zA-Zа-яА-Я]{2,}\\s*)+$'
+                },
+                pass_serial: {
+                    type: "integer",
+                    exclusiveMinimum: 1,
+                    exclusiveMaximum: 9999
+                },
+                pass_number: {
+                    type: "integer",
+                    exclusiveMinimum: 1,
+                    exclusiveMaximum: 999999
+                },
+                pass_issued: {
+                    type: 'string',
+                    maxLength: 256
+                },
+                card_number: {
+                    type: 'integer',
+                    exclusiveMinimum: 1000000000000,
+                    exclusiveMaximum: 9999999999999999
+                },
+                requisites_comment: {
+                    type: 'string',
+                    maxLength: 256
+                },
+                id_leading_type_of_work: {
+                    type: 'integer'
+                },
+                address: {
+                    type: 'string',
+                    maxLength: 256
+                },
+                id_metro: {
+                    type: 'integer'
+                },
+                id_brigade: {
+                    type: 'integer'
+                },
+                DOB: {
+                    type: 'string',
+                    conform: function (v) {
+                        return Date.parse(v) !== NaN;
+                    }
+                },
+                date_of_employment: {
+                    type: 'string',
+                    conform: function (v) {
+                        return Date.parse(v) !== NaN;
+                    }
+                },
+                status: {
+                    type: 'integer',
+                    maxLength: 4
+                },
+                fired: {
+                    type: 'boolean'
+                },
+                firing_comments: {
+                    type: 'string',
+                    maxLength: 256
+                },
+                clothing_size: {
+                    type: 'string',
+                    maxLength: 45
+                },
+                height: {
+                    type: 'number',
+                    exclusiveMinimum: 60,
+                    exclusiveMaximum: 250
+                }
+            }
+        }, { validateFormatsStrict: true, validateFormats: true, cast: true });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        var person = req.body;
+
+        if (type.isDef(person.DOB)) {
+            person.DOB = new Date(Date.parse(person.DOB));
+        }
+
+        if (type.isInt(id)) {
+            db.naturalpersons.patch({ id_naturalperson: id }, req.body, function (err, result) {
+                if (err)
+                    return done(err);
+                res.json(result);
+            });
+        } else if (pass = id.match(/^(\d{4})\-(\d{6})$/)) {
+            db.naturalpersons.patchByPassport(parseInt(pass[1]), parseInt(pass[2]), req.body, function (err, result) {
+                if (err)
+                    return done(err);
+                res.json(result);
+            });
+        } else {
+            res.json(400, { error: "Invalid user id or pass serial/number." });
+        }
     });
 
     /**

@@ -125,6 +125,22 @@ describe("naturalpersons api", () => {
 			});
 	});
 
+	it("change naturalpersons 4000-600000", (done: () => void) => {
+		request.patch(
+			{
+				uri: setups.path("/api/naturalpersons/4000-600000"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					name: "Петров Петр Львович",
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				done();
+			});
+	});
+
+
 	it("delete naturalpersons", (done: () => void) => {
 		request.del(
 			{
