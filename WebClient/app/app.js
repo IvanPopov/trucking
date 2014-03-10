@@ -3,7 +3,7 @@
 
   #######################################################################*/
 
-var app = angular.module('WebClientDB', ['ngCookies', 'xeditable']);
+var app = angular.module('WebClientDB', ['ngCookies', 'xeditable', 'ngResource', 'ngRoute']);
 
 //This configures the routes and associates each route with a view and a controller
 app.config(function ($routeProvider) {
@@ -19,6 +19,14 @@ app.config(function ($routeProvider) {
         .when('/catalog/tools', {
             templateUrl: '/app/views/catalogTools.html',
             controller: 'CatalogToolsController'
+        })
+        .when('/catalog/naturalpersons', {
+            templateUrl: '/app/views/catalogNaturalPersons.html',
+            controller: 'CatalogNaturalPersonsController'
+        })
+        .when('/catalog/naturalpersons/:id_naturalperson', {
+            templateUrl: '/app/views/naturalPersons.html',
+            controller: 'NaturalPersonController'
         })
         .when('/catalog/:catalog', {
             templateUrl: '/app/views/catalog.html',
