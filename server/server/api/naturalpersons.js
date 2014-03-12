@@ -404,23 +404,23 @@ function init(app, log) {
     * @apiPermission emploee
     *
     *
-    * @apiParam {String} name
+    * @apiParam {String} [name]
     * @apiParam {Integer} [pass_serial]
     * @apiParam {Integer} [pass_number]
     * @apiParam {String} [pass_issued]
     * @apiParam {Integer} [card_number]
     * @apiParam {String} [requisites_comment]
     * @apiParam {Integer} [id_leading_type_of_work]
-    * @apiParam {String} address
-    * @apiParam {Integer} id_metro
+    * @apiParam {String} [address]
+    * @apiParam {Integer} [id_metro]
     * @apiParam {Integer} [id_brigade]
-    * @apiParam {Date} DOB
+    * @apiParam {Date} [DOB]
     * @apiParam {Date} [date_of_employment]
     * @apiParam {Integer} [status]
     * @apiParam {Boolean} [fired]
     * @apiParam {String} [firing_comments]
     * @apiParam {String} [clothing_size]
-    * @apiParam {Number} height
+    * @apiParam {Number} [height]
     *
     * @apiSuccessStructure Created
     */

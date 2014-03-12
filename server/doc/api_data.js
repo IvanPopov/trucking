@@ -2322,7 +2322,7 @@ define({ api: [
             "group": "Parameter",
             "type": "String",
             "field": "name",
-            "optional": false,
+            "optional": true,
             "description": ""
           },
           {
@@ -2371,14 +2371,14 @@ define({ api: [
             "group": "Parameter",
             "type": "String",
             "field": "address",
-            "optional": false,
+            "optional": true,
             "description": ""
           },
           {
             "group": "Parameter",
             "type": "Integer",
             "field": "id_metro",
-            "optional": false,
+            "optional": true,
             "description": ""
           },
           {
@@ -2392,7 +2392,7 @@ define({ api: [
             "group": "Parameter",
             "type": "Date",
             "field": "DOB",
-            "optional": false,
+            "optional": true,
             "description": ""
           },
           {
@@ -2434,7 +2434,7 @@ define({ api: [
             "group": "Parameter",
             "type": "Number",
             "field": "height",
-            "optional": false,
+            "optional": true,
             "description": ""
           }
         ]
