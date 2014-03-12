@@ -457,11 +457,11 @@ function init(app: express.Express, log: winston.Logger) {
 			var check = revalidator.validate(req.body, {
 				properties: {
 					name: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 						minLength: 3,
 						allowEmpty: false,
-						required: true,
+						required: false,
 						pattern: '^([a-zA-Zа-яА-Я]{2,}\\s*)+$'
 					},
 					pass_serial: {
@@ -491,40 +491,41 @@ function init(app: express.Express, log: winston.Logger) {
 						allowEmpty: true
 					},
 					requisites_comment: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 						required: false
 					},
 					id_leading_type_of_work: {
-						type: 'integer',
-						required: true
+						type: ['integer', 'null'],
+						required: false
 					},
 					address: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
-						required: true
+						required: false
 					},
 					id_metro: {
-						type: 'integer',
-						required: true
+						type: ['integer', 'null'],
+						required: false
 					},
 					id_brigade: {
 						type: ['integer', 'null'],
 						required: false
 					},
 					DOB: {
-						type: 'string',
-						conform: (v) => Date.parse(v) !== NaN,
-						required: true
+						type: ['string', 'null'],
+						conform: (v) => v === null || Date.parse(v) !== NaN,
+						required: false
 					},
 					date_of_employment: {
-						type: 'string',
-						conform: (v) => Date.parse(v) !== NaN,
+						type: ['string', 'null'],
+						conform: (v) => v === null || Date.parse(v) !== NaN,
 						required: false,
 						default: new Date
 					},
+					//FIXME: this field will be removed !!
 					status: {
-						type: 'integer',
+						type: ['integer', 'null'],
 						maxLength: 4,
 						required: false
 					},
@@ -534,17 +535,17 @@ function init(app: express.Express, log: winston.Logger) {
 						default: false
 					},
 					firing_comments: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 						required: false
 					},
 					clothing_size: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 45,
 						required: false
 					},
 					height: {
-						type: 'number',
+						type: ['number', 'null'],
 						required: true,
 						exclusiveMinimum: 60,
 						exclusiveMaximum: 250
@@ -639,7 +640,7 @@ function init(app: express.Express, log: winston.Logger) {
 			var check = revalidator.validate(req.body, {
 				properties: {
 					name: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 						minLength: 3,
 						allowEmpty: false,
@@ -658,7 +659,7 @@ function init(app: express.Express, log: winston.Logger) {
 						allowEmpty: true
 					},
 					pass_issued: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 					},
 					card_number: {
@@ -667,47 +668,47 @@ function init(app: express.Express, log: winston.Logger) {
 						allowEmpty: true
 					},
 					requisites_comment: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 					},
 					id_leading_type_of_work: {
-						type: 'integer',
+						type: ['integer', 'null'],
 					},
 					address: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 					},
 					id_metro: {
-						type: 'integer',
+						type: ['integer', 'null'],
 					},
 					id_brigade: {
 						type: ['integer', 'null'],
 					},
 					DOB: {
-						type: 'string',
-						conform: (v) => Date.parse(v) !== NaN,
+						type: ['string', 'null'],
+						conform: (v) => v === null || Date.parse(v) !== NaN,
 					},
 					date_of_employment: {
-						type: 'string',
-						conform: (v) => Date.parse(v) !== NaN,
+						type: ['string', 'null'],
+						conform: (v) => v === null || Date.parse(v) !== NaN,
 					},
 					status: {
-						type: 'integer',
+						type: ['integer', 'null'],
 						maxLength: 4,
 					},
 					fired: {
 						type: 'boolean',
 					},
 					firing_comments: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 256,
 					},
 					clothing_size: {
-						type: 'string',
+						type: ['string', 'null'],
 						maxLength: 45,
 					},
 					height: {
-						type: 'number',
+						type: ['number', 'null'],
 						exclusiveMinimum: 60,
 						exclusiveMaximum: 250
 					}

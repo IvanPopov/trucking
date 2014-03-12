@@ -44,7 +44,7 @@ var CatalogModel = (function (_super) {
         _super.apply(this, arguments);
     }
     CatalogModel.prototype.findRow = function (cond, cb) {
-        this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.where(cond), cb);
+        this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.stringifyWhereClause(cond), cb);
     };
 
     CatalogModel.prototype.find = function (cond, cb, limit) {
@@ -53,7 +53,9 @@ var CatalogModel = (function (_super) {
 
     //get all rows
     CatalogModel.prototype.get = function (cb, cond) {
-        this.connect.query("SELECT * FROM " + this.table + "" + Model.parseLimitCond(cond), function (err, rows) {
+        var q = mysql.format("SELECT * FROM " + this.table + "" + Model.parseLimitCond(cond));
+
+        this.connect.query(q, function (err, rows) {
             if (err) {
                 return cb(err, null);
             }
@@ -89,9 +91,8 @@ var CatalogModel = (function (_super) {
             return cb(new Error("Data for patching not specified."), null);
         }
 
-        var q = mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.where(cond), [this.table, data]);
+        var q = mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.stringifyWhereClause(cond), [this.table, data]);
 
-        //q = q.replace(/\`/g, '');
         //console.log(q);
         this.connect.query(q, function (err, res) {
             if (err)
@@ -111,18 +112,20 @@ var CatalogModel = (function (_super) {
             cb(null, { created: false });
         }
 
-        //console.log(mysql.format("INSERT INTO " + this.table + " SET ?", [data]));
-        this.connect.query("INSERT INTO " + this.table + " SET ?", [data], function (err, res) {
+        var q = mysql.format("INSERT INTO " + this.table + " SET ?", [data]);
+
+        this.connect.query(q, function (err, res) {
             if (err)
                 return cb(err, false);
-
-            //console.log(res);
+            if (res.affectedRows > 0 && res.insertId != 0) {
+            }
             return cb(null, { created: res.affectedRows > 0 });
         });
     };
 
     CatalogModel.prototype.del = function (cond, cb) {
-        this.connect.query("DELETE FROM ?? WHERE " + CatalogModel.where(cond), [this.table], function (err, res) {
+        var q = mysql.format("DELETE FROM ?? WHERE " + CatalogModel.stringifyWhereClause(cond), [this.table]);
+        this.connect.query(q, function (err, res) {
             //console.log(res);
             if (err)
                 return cb(Model.parseError(err), false);
@@ -181,7 +184,7 @@ var CatalogModel = (function (_super) {
         return null;
     };
 
-    CatalogModel.where = function (cond) {
+    CatalogModel.stringifyWhereClause = function (cond) {
         var where = "";
         for (var field in cond) {
             where += (where.length ? " AND " : "") + mysql.format("?? = ?", [field, cond[field]]);

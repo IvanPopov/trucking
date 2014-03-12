@@ -133,6 +133,7 @@ describe("naturalpersons api", function () {
                 id_brigade: null
             }
         }, function (e, res, body) {
+            //console.log(body);
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
             done();
@@ -171,7 +172,7 @@ describe("naturalpersons api", function () {
             uri: setups.path("/api/naturalpersons/4/phones"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: {
-                phone: "+7 (917) 516-66-41"
+                phone: "+7 (917) 516-6641"
             }
         }, function (e, res, body) {
             expect(e).toBeNull();
@@ -183,7 +184,7 @@ describe("naturalpersons api", function () {
 
     it("del naturalperson phones", function (done) {
         request.del({
-            uri: setups.path("/api/naturalpersons/4/phones/+7 (917) 516-66-41"),
+            uri: setups.path("/api/naturalpersons/4/phones/+7 (917) 516-6641"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {
