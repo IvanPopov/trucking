@@ -78,6 +78,7 @@ export var catalogs = {
 	streets: new CatalogModel<db.IStreet>(connection, "Streets"),
 
 	tools: new CatalogModel<db.ITool>(connection, "Tools"),
+	toolgroups: new CatalogModel<db.IToolGroup>(connection, "ToolGroups"),
 
 	paymentterms: new CatalogModel<db.IPaymentTerm>(connection, "PaymentTerms"),
 	prepaymentterms: new CatalogModel<db.IPrepaymentTerm>(connection, "PrepaymentTerms"),

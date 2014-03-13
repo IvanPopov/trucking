@@ -231,6 +231,26 @@ function init(app, log) {
         });
     });
 
+    //---------------------- TOOLS BEGIN ----------------------------
+    /**
+    * @api {get} /api/naturalpersons/:id/tools Get tools.
+    * @apiName GetNaturalPersonTools
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    */
+    app.get("/api/naturalpersons/:id/worktypes", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var id = parseInt(req.params.id) || 0;
+
+        db.naturalpersons.getWorktypes(id, function (err, types) {
+            if (err)
+                return done(err);
+            res.json(types);
+        });
+    });
+
+    //---------------------- TOOLS END ------------------------------
     /**
     * @api {get} /api/naturalpersons/:id/phones Get phones.
     * @apiName GetNaturalPersonPhones

@@ -83,6 +83,7 @@ exports.catalogs = {
     territorialsigns: new exports.CatalogModel(connection, "TerritorialSigns"),
     streets: new exports.CatalogModel(connection, "Streets"),
     tools: new exports.CatalogModel(connection, "Tools"),
+    toolgroups: new exports.CatalogModel(connection, "ToolGroups"),
     paymentterms: new exports.CatalogModel(connection, "PaymentTerms"),
     prepaymentterms: new exports.CatalogModel(connection, "PrepaymentTerms"),
     сonditionsofwork: new exports.CatalogModel(connection, "СonditionsOfWork"),

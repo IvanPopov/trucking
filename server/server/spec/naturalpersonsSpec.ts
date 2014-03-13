@@ -114,15 +114,16 @@ describe("naturalpersons api", () => {
 					pass_issued: "Красногорским УВД, Красногорского района 0059",
 					address: "Бульварное кольцо, 10, Москва, 10000",
 					card_number: null,
-					id_metro: "3",
+					id_metro: 3,
 					DOB: "21 July 1990",
 					height: 180,
 					id_leading_type_of_work: 1
 				}
 			}, (e, res, body) => {
+				console.log(body);
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
-				expect(body.created).toBeTruthy();
+				expect(body.height).toBe(180);
 				done();
 			});
 	});
@@ -156,7 +157,6 @@ describe("naturalpersons api", () => {
 			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
-				expect(body.created).toBeTruthy();
 				done();
 			});
 	});
@@ -185,7 +185,6 @@ describe("naturalpersons api", () => {
 			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
-				expect(body.created).toBeTruthy();
 				done();
 			});
 	});
@@ -214,7 +213,6 @@ describe("naturalpersons api", () => {
 			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
-				expect(body.created).toBeTruthy();
 				done();
 			});
 	});
@@ -229,7 +227,6 @@ describe("naturalpersons api", () => {
 					rate: rate
 				}
 			}, (e, res, body) => {
-				console.log(body);
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body.rate).toBe(rate);

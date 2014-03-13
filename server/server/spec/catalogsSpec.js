@@ -67,7 +67,6 @@ describe("catalogs api", function () {
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(201);
-            expect(body.created).toBeTruthy();
             done();
         });
     });
@@ -85,6 +84,43 @@ describe("catalogs api", function () {
         });
     });
 
+    it("get tool groups", function (done) {
+        request.get({
+            uri: setups.path("/api/catalogs/tools/groups"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            done();
+        });
+    });
+
+    it("create tool group", function (done) {
+        request.post({
+            uri: setups.path("/api/catalogs/tools/groups"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: { name: "test group" }
+        }, function (e, res, body) {
+            console.log(body);
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(201);
+            done();
+        });
+    });
+
+    it("delete tool group", function (done) {
+        request.del({
+            uri: setups.path("/api/catalogs/tools/groups/test group"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(204);
+            done();
+        });
+    });
+
     it("create tool", function (done) {
         request.post({
             uri: setups.path("/api/catalogs/tools"),
@@ -93,7 +129,6 @@ describe("catalogs api", function () {
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(201);
-            expect(body.created).toBeTruthy();
             done();
         });
     });

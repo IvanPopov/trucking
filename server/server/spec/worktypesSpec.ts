@@ -29,7 +29,6 @@ describe("worktypes api", ()=> {
 			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
-				expect(body.created).toBeTruthy();
 				done();
 			});
 	});

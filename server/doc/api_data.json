@@ -41,7 +41,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
         }
       ]
     },
@@ -526,7 +526,49 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "post",
+    "url": "/api/catalogs/tools/groups",
+    "title": "Create new tool group.",
+    "name": "CreateToolGroup",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": false,
+            "description": "Name."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "created",
+            "optional": false,
+            "description": "Is created."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 201 Created\n"
         }
       ]
     },
@@ -575,7 +617,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
         }
       ]
     },
@@ -659,7 +701,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
         }
       ]
     },
@@ -701,7 +743,69 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/tools/groups/:group",
+    "title": "Delete tool group by id.",
+    "name": "DelToolGroupById",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "group",
+            "optional": false,
+            "description": "Tool group unique id."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/tools/groups/:group",
+    "title": "Delete tool group by name.",
+    "name": "DelToolGroupByName",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "group",
+            "optional": false,
+            "description": "Tool group unique name."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
         }
       ]
     },
@@ -917,6 +1021,69 @@
         {
           "title": "Success-Response:",
           "content": "   HTTP/1.1 200 OK\n   [\n     \"streets\",\n     \"metro\",\n     \"holdings\"\n     \"paymentterms\",\n     \"addresstype\"\n   ]\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/catalogs/tools/groups",
+    "title": "Get tools groups.",
+    "name": "GetToolsGroups",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "from",
+            "optional": true,
+            "description": "View from number."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "count",
+            "optional": true,
+            "description": "View number of groups."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "field": "toolGroup",
+            "optional": false,
+            "description": "List of tool groups."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "toolGroup.id_toolgroup",
+            "optional": false,
+            "description": "Group."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "toolGroup.name",
+            "optional": false,
+            "description": "Name."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   [\n\t\t{\n\t\t\t\"id_toolgroup\": 0,\n\t\t\t\"name\": \"loaders\"\n\t\t}\n   ]\n"
         }
       ]
     },
@@ -1422,7 +1589,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
         }
       ]
     },
@@ -1471,7 +1638,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
         }
       ]
     },
@@ -2455,7 +2622,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "   HTTP/1.1 201 Created\n   {\n     \"created\": true\n   }\n"
+          "content": "   HTTP/1.1 201 Created\n"
         }
       ]
     },
@@ -2808,6 +2975,29 @@
   },
   {
     "type": "get",
+    "url": "/api/naturalpersons/:id/tools",
+    "title": "Get tools.",
+    "name": "GetNaturalPersonTools",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
     "url": "/api/naturalpersons/:id/worktypes",
     "title": "Get worktypes.",
     "name": "GetNaturalPersonWorkTypes",
@@ -3027,6 +3217,40 @@
         "Success 200": [
           {
             "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": false,
+            "description": "Station unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metrobranch",
+            "optional": false,
+            "description": "Branch unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "station",
+            "optional": false,
+            "description": "Station unique name."
+          }
+        ]
+      }
+    },
+    "group": "metro.js",
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "server\\api\\metro.js"
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
             "type": "String",
             "field": "name",
             "optional": false,
@@ -3059,40 +3283,6 @@
             "field": "stations.station",
             "optional": false,
             "description": "Branch station name."
-          }
-        ]
-      }
-    },
-    "group": "metro.js",
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "server\\api\\metro.js"
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metro",
-            "optional": false,
-            "description": "Station unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metrobranch",
-            "optional": false,
-            "description": "Branch unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "field": "station",
-            "optional": false,
-            "description": "Station unique name."
           }
         ]
       }

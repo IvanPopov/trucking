@@ -19,9 +19,6 @@ import IQueryCond = trucking.db.IQueryCond;
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 201 Created
- *     {
- *       "created": true
- *     } 
  */
 
 /**
@@ -42,6 +39,18 @@ import IQueryCond = trucking.db.IQueryCond;
 
 
 class CatalogModel<ENTRY_T> extends Model {
+	private pkName: string = null; //primary key Name
+
+	constructor(connect: mysql.Connection, table: string) {
+		super(connect, table);
+
+		this.connect.query("SHOW KEYS FROM ?? WHERE Key_name = 'PRIMARY'", [this.table], (e: Error, rows) => {
+			if (type.isArray(rows) && rows.length > 0) {
+				this.pkName = rows[0]['Column_name'];
+			}
+		});
+	}
+
 	findRow(cond: any, cb: (err: Error, entry: ENTRY_T) => void): void {
 		this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.stringifyWhereClause(cond), cb);
 	}
@@ -115,9 +124,12 @@ class CatalogModel<ENTRY_T> extends Model {
 		this.connect.query(q, (err, res) => {
 			if (err) return cb(err, false);
 			if (res.affectedRows > 0 && res.insertId != 0) {
-
+				var cond = {};
+				cond[this.pkName] = res.insertId;
+				return this.findRow(cond, cb);
 			}
-			return cb(null, { created: res.affectedRows > 0 });
+
+			return cb(null, "");
 		});
 	}
 

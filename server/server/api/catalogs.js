@@ -107,6 +107,110 @@ function init(app, log) {
         });
     });
 
+    /******************************************************************
+    *
+    *		Tools API
+    *
+    ******************************************************************/
+    /**
+    * @api {get} /api/catalogs/tools/groups Get tools groups.
+    * @apiName GetToolsGroups
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} [from] View from number.
+    * @apiParam {Integer} [count] View number of groups.
+    *
+    * @apiSuccess {Object[]} toolGroup List of tool groups.
+    * @apiSuccess {Integer}  toolGroup.id_toolgroup Group.
+    * @apiSuccess {String}   toolGroup.name  Name.
+    *
+    * @apiSuccessExample Success-Response:
+    *     HTTP/1.1 200 OK
+    *     [
+    *			{
+    *				"id_toolgroup": 0,
+    *				"name": "loaders"
+    *			}
+    *     ]
+    */
+    app.get("/api/catalogs/tools/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        db.catalogs.toolgroups.get(function (err, groups) {
+            if (err)
+                return done(err);
+            res.json(groups);
+        }, req.query);
+    });
+
+    /**
+    * @api {post} /api/catalogs/tools/groups Create new tool group.
+    * @apiName CreateToolGroup
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {String} name Name.
+    *
+    * @apiSuccessStructure Created
+    */
+    app.post("/api/catalogs/tools/groups", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var check = revalidator.validate(req.body, {
+            properties: {
+                name: {
+                    type: 'string',
+                    maxLength: 128,
+                    required: true
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.toolgroups.create(req.body, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(201, result);
+        });
+    });
+
+    /**
+    * @api {delete} /api/catalogs/tools/groups/:group Delete tool group by id.
+    * @apiName DelToolGroupById
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} group Tool group unique id.
+    *
+    * @apiSuccessStructure Deleted
+    */
+    /**
+    * @api {delete} /api/catalogs/tools/groups/:group Delete tool group by name.
+    * @apiName DelToolGroupByName
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {String} group Tool group unique name.
+    *
+    * @apiSuccessStructure Deleted
+    */
+    app.del("/api/catalogs/tools/groups/:group", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = {};
+        var group = req.params.group;
+
+        if (type.isInt(group))
+            cond["id_toolgroup"] = parseInt(group);
+        else
+            cond["name"] = group;
+
+        db.catalogs.toolgroups.del(cond, function (err) {
+            if (err)
+                return done(err);
+            res.json(204, null);
+        });
+    });
+
     /**
     * @api {post} /api/catalogs/tools Create new tool.
     * @apiName CreateTool

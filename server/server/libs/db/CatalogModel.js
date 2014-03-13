@@ -21,9 +21,6 @@ var Model = require("./Model");
 *
 * @apiSuccessExample Success-Response:
 *     HTTP/1.1 201 Created
-*     {
-*       "created": true
-*     }
 */
 /**
 * @apiDefineSuccessStructure Deleted
@@ -40,8 +37,16 @@ var Model = require("./Model");
 */
 var CatalogModel = (function (_super) {
     __extends(CatalogModel, _super);
-    function CatalogModel() {
-        _super.apply(this, arguments);
+    function CatalogModel(connect, table) {
+        var _this = this;
+        _super.call(this, connect, table);
+        this.pkName = null;
+
+        this.connect.query("SHOW KEYS FROM ?? WHERE Key_name = 'PRIMARY'", [this.table], function (e, rows) {
+            if (type.isArray(rows) && rows.length > 0) {
+                _this.pkName = rows[0]['Column_name'];
+            }
+        });
     }
     CatalogModel.prototype.findRow = function (cond, cb) {
         this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.stringifyWhereClause(cond), cb);
@@ -108,6 +113,7 @@ var CatalogModel = (function (_super) {
     };
 
     CatalogModel.prototype.create = function (data, cb) {
+        var _this = this;
         if (!type.isDefAndNotNull(data)) {
             cb(null, { created: false });
         }
@@ -118,8 +124,12 @@ var CatalogModel = (function (_super) {
             if (err)
                 return cb(err, false);
             if (res.affectedRows > 0 && res.insertId != 0) {
+                var cond = {};
+                cond[_this.pkName] = res.insertId;
+                return _this.findRow(cond, cb);
             }
-            return cb(null, { created: res.affectedRows > 0 });
+
+            return cb(null, "");
         });
     };
 
