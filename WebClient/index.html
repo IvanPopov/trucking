@@ -46,6 +46,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li ng-class="getClass('/main')"><a href="#/main">Главная</a></li>
+
                     <!-- Список справочников-->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Справочники <b class="caret"></b></a>
@@ -110,16 +111,21 @@
     <script src="http://vitalets.github.io/angular-xeditable/dist/js/xeditable.js"></script>
 
     <script src="app/app.js"></script>
-
+    
+    <!-- Контроллеры -->
     <script src="app/controllers/Login.js"></script>
     <script src="app/controllers/Main.js"></script>
     <script src="app/controllers/Navbar.js"></script>
     <script src="app/controllers/Catalog.js"></script>
     <script src="app/controllers/CatalogTools.js"></script>
-
+    
     <script src="app/controllers/CatalogNaturalPersons.js"></script>
     <script src="app/controllers/NaturalPerson.js"></script>
+    
+    
+    <!-- Сервисы -->
     <script src="app/services/NaturalPersonsService.js"></script>
+    <script src="app/services/SimpleCatalogs.js"></script>
     
     <script src="Scripts/FileSaver.min.js"></script>
     

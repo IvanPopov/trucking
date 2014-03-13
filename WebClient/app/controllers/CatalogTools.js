@@ -5,7 +5,7 @@
 */
 'use strict';
 
-app.controller('CatalogToolsController', function ($scope, $location, $http, $rootScope, $routeParams) {
+app.controller('CatalogToolsController', function ($scope, $location, $http, $rootScope, $routeParams, simpleCatalogs) {
 
     // Мне нравится идея складывать код инициализации в один метод таким образом
     init();
@@ -32,9 +32,29 @@ app.controller('CatalogToolsController', function ($scope, $location, $http, $ro
         }).success(function (data) {
             $scope.Units = data;
         });
+
+        $scope.newTool = {};
+        $scope.toolGroups = simpleCatalogs.getToolGroups().query( function() {
+            // Добавляем вариант "Не задано"
+            $scope.toolGroups.push(
+                {
+                    id_toolgroup: null,
+                    name: "Не задано"
+                }
+            );
+        });
     }
 
+    $scope.createTool = function (newTool) {
+        // Иначе они сериализуются в JSON как строки, и сервер их не принимает
+        newTool.rate = parseInt(newTool.rate);
+        newTool.rate_sec = parseInt(newTool.rate_sec);
+        newTool.id_toolgroup = parseInt(newTool.id_toolgroup);
 
+        simpleCatalogs.getTools().create(newTool);
+    };
+
+    // ToDel
     $scope.checkName = function (data, id) {
         return true;
     };

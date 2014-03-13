@@ -68,7 +68,84 @@
             </td>
         </tr>
     </table>
-<!--
-    <button class="btn btn-default" ng-click="addUser()">Add row</button>
--->
+    
+
+    <form class="form-horizontal">
+        <fieldset>
+
+            <!-- Form Name -->
+            <legend>Добавить инструмент</legend>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="newTool.name">Название</label>
+                <div class="col-md-4">
+                    <input ng-model="newTool.name" name="newTool.name" type="text" placeholder="" class="form-control input-md" required="">
+                    <span class="help-block">Название инструмента, например, "Молоток"</span>
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="newTool.description">Описание</label>
+                <div class="col-md-4">
+                    <input ng-model="newTool.description" name="newTool.description" type="text" placeholder="" class="form-control input-md" required="">
+                    <span class="help-block">Описание инструмента, если требуется</span>
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="newTool.rate">Ставка 1:</label>
+                <div class="col-md-4">
+                    <input ng-model="newTool.rate" name="newTool.rate" type="text" placeholder="" class="form-control input-md" required="" type="number">
+                    <span class="help-block">В большинстве операций используется именно она</span>
+                </div>
+            </div>
+
+            <!-- Select Basic -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="newTool.unit">Единица ставки 1:</label>
+                <div class="col-md-4">
+                    <select ng-model="newTool.unit" name="newTool.unit" class="form-control" ng-options="u.unit as u.unit for u in Units"></select>
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="newTool.rate_sec">Ставка 2:</label>
+                <div class="col-md-4">
+                    <input ng-model="newTool.rate_sec" name="newTool.rate_sec" type="text" placeholder="" class="form-control input-md" required="" type="number">
+                    <span class="help-block">ToDo: написать сюда подсказку</span>
+                </div>
+            </div>
+
+            <!-- Select Basic -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="newTool.unit_sec">Единица ставки 2:</label>
+                <div class="col-md-4">
+                    <select ng-model="newTool.unit_sec" name="newTool.unit_sec" class="form-control" ng-options="u.unit as u.unit for u in Units" ></select>
+                </div>
+            </div>
+
+            <!-- Select Basic -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="newTool.id_toolgroup">Группа:</label>
+                <div class="col-md-4">
+                    <select ng-model="newTool.id_toolgroup" name="newTool.id_toolgroup" class="form-control" ng-options="e.id_toolgroup as e.name for e in toolGroups"></select>
+                </div>
+            </div>
+
+            <!-- Button -->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="singlebutton"></label>
+                <div class="col-md-4">
+                    <button ng-click="createTool(newTool)" name="singlebutton" class="btn btn-primary">Добавить</button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+
+
 </div>
