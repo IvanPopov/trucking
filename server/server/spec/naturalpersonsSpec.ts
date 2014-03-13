@@ -120,7 +120,7 @@ describe("naturalpersons api", () => {
 					id_leading_type_of_work: 1
 				}
 			}, (e, res, body) => {
-				console.log(body);
+				//console.log(body);
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
 				expect(body.height).toBe(180);
@@ -238,6 +238,51 @@ describe("naturalpersons api", () => {
 		request.del(
 			{
 				uri: setups.path("/api/naturalpersons/4/worktypes/2"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(204);
+				done();
+			});
+	});
+
+	it("add naturalperson tool", (done: () => void) => {
+		request.post(
+			{
+				uri: setups.path("/api/naturalpersons/4/tools"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					id_tool: 9
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(201);
+				done();
+			});
+	});
+
+	it("change naturalperson tool", (done: () => void) => {
+		var rate = Math.floor(Math.random() * 500);
+		request.patch(
+			{
+				uri: setups.path("/api/naturalpersons/4/tools/9"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: {
+					rate: rate
+				}
+			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.rate).toBe(rate);
+				done();
+			});
+	});
+
+	it("del naturalperson tool", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/naturalpersons/4/tools/9"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
 			}, (e, res, body) => {

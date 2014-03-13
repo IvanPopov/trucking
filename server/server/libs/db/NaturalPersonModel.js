@@ -15,14 +15,16 @@ var CatalogModel = require("./CatalogModel");
 
 var NaturalPersonModel = (function (_super) {
     __extends(NaturalPersonModel, _super);
-    function NaturalPersonModel(connect, worktypes) {
+    function NaturalPersonModel(connect, worktypes, tools) {
         _super.call(this, connect, "NaturalPersons");
         this.worktypes = worktypes;
+        this.tools = tools;
 
         this.brigades = new CatalogModel(connect, "Brigades");
         this.emails = new CatalogModel(connect, "NaturalPersonsEmails");
         this.phones = new CatalogModel(connect, "NaturalPersonsPhones");
         this.naturalpersonsworktypes = new CatalogModel(connect, "NaturalPersonsWorkTypes");
+        this.naturalpersonstools = new CatalogModel(connect, "NaturalPersonsTools");
     }
     NaturalPersonModel.prototype.findByPassport = function (serial, numb, cb) {
         this.connect.queryRow("SELECT * FROM " + this.table + " where `pass_serial` = ? AND `pass_number` = ?", [serial, numb], cb);
@@ -76,6 +78,10 @@ var NaturalPersonModel = (function (_super) {
 
     NaturalPersonModel.prototype.getWorktypes = function (id, cb) {
         this.connect.query("SELECT wt.*, npwt.rate as personal_rate  FROM ?? np, ?? wt, ?? npwt WHERE np.id_naturalperson = ? AND npwt.id_naturalperson = np.id_naturalperson AND wt.id_worktype = npwt.id_worktype", [this.table, this.worktypes.table, this.naturalpersonsworktypes.table, id], cb);
+    };
+
+    NaturalPersonModel.prototype.getTools = function (id, cb) {
+        this.connect.query("SELECT t.*, npt.rate as personal_rate, npt.personal, npt.count  FROM ?? np, ?? t, ?? npt WHERE np.id_naturalperson = ? AND npt.id_naturalperson = np.id_naturalperson AND t.id_tool = npt.id_tool", [this.table, this.tools.table, this.naturalpersonstools.table, id], cb);
     };
     return NaturalPersonModel;
 })(CatalogModel);

@@ -99,7 +99,7 @@ exports.catalogs = {
     naturalpersons: null
 };
 
-exports.naturalpersons = exports.catalogs.naturalpersons = new exports.NaturalPersonModel(connection, exports.catalogs.worktypes);
+exports.naturalpersons = exports.catalogs.naturalpersons = new exports.NaturalPersonModel(connection, exports.catalogs.worktypes, exports.catalogs.tools);
 
 //for admin
 exports.systemCatalogs = {

@@ -190,6 +190,14 @@ declare module trucking.db {
 		rate: number;
 	}
 
+	interface INaturalPersonTool {
+		id_naturalperson: number;
+		id_worktype: number;
+		rate: number;
+		personal: boolean;
+		count: number;
+	}
+
 	interface INaturalPersonPhone {
 		id_naturalperson: number;
 		phone: string;

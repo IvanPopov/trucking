@@ -19,14 +19,16 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 	public emails: CatalogModel<trucking.db.INaturalPersonEmail>;
 	public phones: CatalogModel<trucking.db.INaturalPersonPhone>;
 	public naturalpersonsworktypes: CatalogModel<trucking.db.INaturalPersonWorkType>;
+	public naturalpersonstools: CatalogModel<trucking.db.INaturalPersonTool>;
 
-	constructor(connect: mysql.Connection, public worktypes: CatalogModel<trucking.db.IWorkType>) {
+	constructor(connect: mysql.Connection, public worktypes: CatalogModel<trucking.db.IWorkType>, public tools: CatalogModel<trucking.db.ITool>) {
 		super(connect, "NaturalPersons");
 
 		this.brigades = new CatalogModel<trucking.db.IBrigade>(connect, "Brigades");
 		this.emails = new CatalogModel<trucking.db.INaturalPersonEmail>(connect, "NaturalPersonsEmails");
 		this.phones = new CatalogModel<trucking.db.INaturalPersonPhone>(connect, "NaturalPersonsPhones");
 		this.naturalpersonsworktypes = new CatalogModel<trucking.db.INaturalPersonWorkType>(connect, "NaturalPersonsWorkTypes");
+		this.naturalpersonstools = new CatalogModel<trucking.db.INaturalPersonTool>(connect, "NaturalPersonsTools");
 	}
 
 	findByPassport(serial: number, numb: number,
@@ -85,6 +87,11 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 	getWorktypes(id: number, cb: (e: Error, types: trucking.db.IWorkType[]) => void): void {
 		this.connect.query("SELECT wt.*, npwt.rate as personal_rate  FROM ?? np, ?? wt, ?? npwt WHERE np.id_naturalperson = ? AND npwt.id_naturalperson = np.id_naturalperson AND wt.id_worktype = npwt.id_worktype",
 			[this.table, this.worktypes.table, this.naturalpersonsworktypes.table, id], cb);
+	}
+
+	getTools(id: number, cb: (e: Error, types: trucking.db.ITool[]) => void): void {
+		this.connect.query("SELECT t.*, npt.rate as personal_rate, npt.personal, npt.count  FROM ?? np, ?? t, ?? npt WHERE np.id_naturalperson = ? AND npt.id_naturalperson = np.id_naturalperson AND t.id_tool = npt.id_tool",
+			[this.table, this.tools.table, this.naturalpersonstools.table, id], cb);
 	}
 }
 

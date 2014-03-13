@@ -262,15 +262,114 @@ function init(app: express.Express, log: winston.Logger) {
 	 *
 	 * @apiParam {Integer} id Person unique id.
 	 */
-	app.get("/api/naturalpersons/:id/worktypes",
+	app.get("/api/naturalpersons/:id/tools",
+		//passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var id = parseInt(req.params.id) || 0;
+
+			db.naturalpersons.getTools(id, (err: Error, types: trucking.db.ITool[]) => {
+				if (err) return done(err);
+				res.json(types);
+			});
+		});
+
+	/**
+	 * @api {post} /api/naturalpersons/:id/tools Create natural person tool.
+	 * @apiName CreateNaturalPersonTool
+	 * @apiGroup NaturalPersons
+	 * @apiPermission emploee
+	 *
+	 * @apiParam {Integer} id Person unique id.
+	 * @apiParam {Integer} id_tool Person tool.
+	 */
+	app.post("/api/naturalpersons/:id/tools",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
 			var id = parseInt(req.params.id) || 0;
 
-			db.naturalpersons.getWorktypes(id, (err: Error, types: trucking.db.IWorkType[]) => {
-				if (err) return done(err);
-				res.json(types);
+			var check = revalidator.validate(req.body, {
+				properties: {
+					id_tool: {
+						type: 'integer',
+						required: true
+					}
+				}
 			});
+
+			if (!check.valid) {
+				res.json(400, check);
+				return;
+			}
+
+			db.naturalpersons.naturalpersonstools.create(
+				{ id_naturalperson: id, id_tool: req.body.id_tool },
+				(err: Error, result) => {
+					if (err) return done(err);
+					res.json(201, result);
+				});
+		});
+
+	/**
+	 * @api {patch} /api/naturalpersons/:id/tools/:tool Change natural person tool.
+	 * @apiName ChangeNaturalPersonTool
+	 * @apiGroup NaturalPersons
+	 * @apiPermission emploee
+	 *
+	 * @apiParam {Integer} id Person unique id.
+	 * @apiParam {Integer} tool Person unique tool id.
+	 *
+	 * @apiParam {Number} rate Rate.
+	 */
+	app.patch("/api/naturalpersons/:id/tools/:tool",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var id = parseInt(req.params.id) || 0;
+			var tool = parseInt(req.params.tool) || 0;
+
+			var check = revalidator.validate(req.body, {
+				properties: {
+					rate: {
+						type: ['number', 'null'],
+						required: true
+					}
+				}
+			}, { validateFormatsStrict: true, validateFormats: true, cast: true });
+
+			if (!check.valid) {
+				res.json(400, check);
+				return;
+			}
+
+			db.naturalpersons.naturalpersonstools.patch(
+				{ id_naturalperson: id, id_tool: tool },
+				req.body,
+				(err: Error, result) => {
+					if (err) return done(err);
+					res.json(result);
+				});
+		});
+
+	/**
+	 * @api {delete} /api/naturalpersons/:id/tools/:tool Delete natural person tool.
+	 * @apiName DeleteNaturalPersonTool
+	 * @apiGroup NaturalPersons
+	 * @apiPermission emploee
+	 *
+	 * @apiParam {Integer} id Person unique id.
+	 * @apiParam {Integer} tool Person unique tool id.
+	 */
+	app.del("/api/naturalpersons/:id/tools/:tool",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var id = parseInt(req.params.id) || 0;
+			var tool = parseInt(req.params.tool) || 0;
+
+			db.naturalpersons.naturalpersonstools.del(
+				{ id_naturalperson: id, id_tool: tool },
+				(err: Error, result) => {
+					if (err) return done(err);
+					res.json(204, null);
+				});
 		});
 
 	//---------------------- TOOLS END ------------------------------

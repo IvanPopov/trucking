@@ -98,7 +98,7 @@ export var catalogs = {
 	naturalpersons: null
 };
 
-export var naturalpersons = catalogs.naturalpersons = new NaturalPersonModel(connection, catalogs.worktypes);
+export var naturalpersons = catalogs.naturalpersons = new NaturalPersonModel(connection, catalogs.worktypes, catalogs.tools);
 
 //for admin
 export var systemCatalogs = {

@@ -2440,6 +2440,43 @@ define({ api: [
   },
   {
     "type": "patch",
+    "url": "/api/naturalpersons/:id/tools/:tool",
+    "title": "Change natural person tool.",
+    "name": "ChangeNaturalPersonTool",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "tool",
+            "optional": false,
+            "description": "Person unique tool id."
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "field": "rate",
+            "optional": false,
+            "description": "Rate."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "patch",
     "url": "/api/naturalpersons/:id/worktypes/:worktype",
     "title": "Change natural person worktype.",
     "name": "ChangeNaturalPersonWorktype",
@@ -2691,6 +2728,36 @@ define({ api: [
   },
   {
     "type": "post",
+    "url": "/api/naturalpersons/:id/tools",
+    "title": "Create natural person tool.",
+    "name": "CreateNaturalPersonTool",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id_tool",
+            "optional": false,
+            "description": "Person tool."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "post",
     "url": "/api/naturalpersons/:id/worktypes",
     "title": "Create natural person worktype.",
     "name": "CreateNaturalPersonWorktype",
@@ -2834,6 +2901,36 @@ define({ api: [
             "field": "phone",
             "optional": false,
             "description": "Person unique phone."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/naturalpersons/:id/tools/:tool",
+    "title": "Delete natural person tool.",
+    "name": "DeleteNaturalPersonTool",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "tool",
+            "optional": false,
+            "description": "Person unique tool id."
           }
         ]
       }
@@ -3217,40 +3314,6 @@ define({ api: [
         "Success 200": [
           {
             "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metro",
-            "optional": false,
-            "description": "Station unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "Integer",
-            "field": "id_metrobranch",
-            "optional": false,
-            "description": "Branch unique id."
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "field": "station",
-            "optional": false,
-            "description": "Station unique name."
-          }
-        ]
-      }
-    },
-    "group": "metro.js",
-    "type": "",
-    "url": "",
-    "version": "0.0.0",
-    "filename": "server\\api\\metro.js"
-  },
-  {
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
             "type": "String",
             "field": "name",
             "optional": false,
@@ -3283,6 +3346,40 @@ define({ api: [
             "field": "stations.station",
             "optional": false,
             "description": "Branch station name."
+          }
+        ]
+      }
+    },
+    "group": "metro.js",
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "server\\api\\metro.js"
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metro",
+            "optional": false,
+            "description": "Station unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "id_metrobranch",
+            "optional": false,
+            "description": "Branch unique id."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "station",
+            "optional": false,
+            "description": "Station unique name."
           }
         ]
       }

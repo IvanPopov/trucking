@@ -273,7 +273,7 @@ function init(app: express.Express, log: winston.Logger) {
 						type: 'number'
 					},
 					id_toolgroup: {
-						type: 'integer'
+						type: ['integer', 'null']
 					}
 				}
 			});

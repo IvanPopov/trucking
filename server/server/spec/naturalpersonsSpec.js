@@ -116,7 +116,7 @@ describe("naturalpersons api", function () {
                 id_leading_type_of_work: 1
             }
         }, function (e, res, body) {
-            console.log(body);
+            //console.log(body);
             expect(e).toBeNull();
             expect(res.statusCode).toBe(201);
             expect(body.height).toBe(180);
@@ -226,6 +226,48 @@ describe("naturalpersons api", function () {
     it("del naturalperson worktype", function (done) {
         request.del({
             uri: setups.path("/api/naturalpersons/4/worktypes/2"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(204);
+            done();
+        });
+    });
+
+    it("add naturalperson tool", function (done) {
+        request.post({
+            uri: setups.path("/api/naturalpersons/4/tools"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: {
+                id_tool: 9
+            }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(201);
+            done();
+        });
+    });
+
+    it("change naturalperson tool", function (done) {
+        var rate = Math.floor(Math.random() * 500);
+        request.patch({
+            uri: setups.path("/api/naturalpersons/4/tools/9"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: {
+                rate: rate
+            }
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.rate).toBe(rate);
+            done();
+        });
+    });
+
+    it("del naturalperson tool", function (done) {
+        request.del({
+            uri: setups.path("/api/naturalpersons/4/tools/9"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {
