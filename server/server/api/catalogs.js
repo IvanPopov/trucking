@@ -372,7 +372,7 @@ function init(app, log) {
     */
     /**
     * @api {delete} /api/catalogs/tools/:tool Delete tool by id.
-    * @apiName Catalogs
+    * @apiName DeleteToolById
     * @apiGroup Catalogs
     * @apiPermission emploee
     *

@@ -93,3 +93,4 @@ angular.js.tmproj
 libpeerconnection.log
 npm-debug.log
 /tmp/
+*.bak

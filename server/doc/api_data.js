@@ -97,37 +97,6 @@ define({ api: [
     "filename": "server\\api\\catalogs.js"
   },
   {
-    "type": "delete",
-    "url": "/api/catalogs/tools/:tool",
-    "title": "Delete tool by id.",
-    "name": "Catalogs",
-    "group": "Catalogs",
-    "permission": "emploee",
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "field": "tool",
-            "optional": false,
-            "description": "Tool unique id."
-          }
-        ]
-      }
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "   HTTP/1.1 204 No Content\n"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "server\\api\\catalogs.js"
-  },
-  {
     "type": "patch",
     "url": "/api/catalogs/tools/:tool",
     "title": "Change tool by id.",
@@ -920,6 +889,99 @@ define({ api: [
             "field": "group",
             "optional": false,
             "description": "Worktype group unique name."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/streets/:id",
+    "title": "Delete street by id.",
+    "name": "DeleteStreetById",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Street unique id."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\streets.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/streets/:street",
+    "title": "Delete street by name.",
+    "name": "DeleteStreetByName",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "street",
+            "optional": false,
+            "description": "Street unique name."
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 204 No Content\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\streets.js"
+  },
+  {
+    "type": "delete",
+    "url": "/api/catalogs/tools/:tool",
+    "title": "Delete tool by id.",
+    "name": "DeleteToolById",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "tool",
+            "optional": false,
+            "description": "Tool unique id."
           }
         ]
       }
@@ -3143,7 +3205,7 @@ define({ api: [
     "type": "get",
     "url": "/api/naturalpersons/:id/status",
     "title": "Get personal status.",
-    "description": "<span class=\"alert alert-error\">Incomplete / Unstable API</span>\n\nPossible statuses:\n<p style=\"font-family: consolas;\">\n\t\t<b>UNKNOWN = 0x0</b>\n\t\t<small>\n\t\tэтот статус можно поставить вручную,\n\t\tесли в самой текущей карточке физическое лицо нажать галочку уволить физ лицо.\n\t\tЕсли снять галочку, сотрудник снова считается работающим. </small>\n\t\t<b>NOT_WORKING = 0x1</b>\n\n\t\tПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не\n\t\tоткзался ни разу за прошлые 3 месяца.\n\t\tИ нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>RELIABLE = 0x2</b>\n\n\t\tПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ)\n\t\tне откзался ни разу за прошлый месяц, хотя отказывался хотя бы\n\t\tраз за последние 3 месяца.  И нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>SEMIRELIABLE = 0x4</b>\n\n\t\tВсе остальные, у кого зарегистрированы отказы.\n\t\tНо нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>REFUSES = 0x8</b>\n\n\t\tЭтот статус ставится только из карточки “физ лиц”,\n\t\tон никак не зависит от кол-ва отказов.\n\t\tВ этом статусе, только если нет штрафов за “не выход” за последние 3 месяца.\n\t\tЕсли есть, то статус прогуливает присваивается\n\t\t<b>TEMP_WORKING = 0x10</b>\n\n\t\tЗарегистрированы штрафы за “не выход” за последние 3 месяца.  см раздел штрафы ниже.\n\t\t<b>TRUANT = 0x20</b>\n</p>",
+    "description": "<span class=\"alert alert-error\">Incomplete / Unstable API</span>\n\nPossible statuses:\n<p style=\"font-family: consolas;\">\n\t\t<b>UNKNOWN = 0x0</b>\n\n\t\tэтот статус можно поставить вручную,\n\t\tесли в самой текущей карточке физическое лицо нажать галочку уволить физ лицо.\n\t\tЕсли снять галочку, сотрудник снова считается работающим.\n\t\t<b>NOT_WORKING = 0x1</b>\n\n\t\tПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не\n\t\tоткзался ни разу за прошлые 3 месяца.\n\t\tИ нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>RELIABLE = 0x2</b>\n\n\t\tПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ)\n\t\tне откзался ни разу за прошлый месяц, хотя отказывался хотя бы\n\t\tраз за последние 3 месяца.  И нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>SEMIRELIABLE = 0x4</b>\n\n\t\tВсе остальные, у кого зарегистрированы отказы.\n\t\tНо нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>REFUSES = 0x8</b>\n\n\t\tЭтот статус ставится только из карточки “физ лиц”,\n\t\tон никак не зависит от кол-ва отказов.\n\t\tВ этом статусе, только если нет штрафов за “не выход” за последние 3 месяца.\n\t\tЕсли есть, то статус прогуливает присваивается\n\t\t<b>TEMP_WORKING = 0x10</b>\n\n\t\tЗарегистрированы штрафы за “не выход” за последние 3 месяца.  см раздел штрафы ниже.\n\t\t<b>TRUANT = 0x20</b>\n</p>",
     "name": "GethNaturalPersonStatus",
     "group": "NaturalPersons",
     "permission": "emploee",
@@ -3159,6 +3221,14 @@ define({ api: [
           }
         ]
       }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   {\n     \"status\": 0,\n   }\n"
+        }
+      ]
     },
     "version": "0.0.0",
     "filename": "server\\api\\naturalpersons.js"
@@ -3186,6 +3256,167 @@ define({ api: [
     },
     "version": "0.0.0",
     "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "patch",
+    "url": "/api/streets/:id",
+    "title": "Change street by id.",
+    "name": "ChangeStreetById",
+    "group": "Streets",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Street id."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": true,
+            "description": "Street name."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "comment",
+            "optional": true,
+            "description": "Comment."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "patched",
+            "optional": false,
+            "description": "Is patched."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\streets.js"
+  },
+  {
+    "type": "patch",
+    "url": "/api/streets/:street",
+    "title": "Change street by name.",
+    "name": "ChangeStreetByName",
+    "group": "Streets",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "street",
+            "optional": false,
+            "description": "Street name."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": true,
+            "description": "Street name."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "comment",
+            "optional": true,
+            "description": "Comment."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "patched",
+            "optional": false,
+            "description": "Is patched."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\streets.js"
+  },
+  {
+    "type": "post",
+    "url": "/api/streets/",
+    "title": "Create street.",
+    "name": "CreateStreet",
+    "group": "Streets",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "name",
+            "optional": false,
+            "description": "Street name."
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "field": "comment",
+            "optional": true,
+            "description": "Comment."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Boolean",
+            "field": "created",
+            "optional": false,
+            "description": "Is created."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 201 Created\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\streets.js"
   },
   {
     "type": "get",

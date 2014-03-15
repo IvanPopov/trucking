@@ -9,8 +9,6 @@ import setups = require("./setups");
 import auth = require("./auth");
 require("jasmine-expect");
 
-import db = trucking.db;
-
 describe("metro api", () => {
 	var grant: IOAuth2Grant = null;
 	auth((e, res, body) => { grant = body; });
@@ -23,7 +21,7 @@ describe("metro api", () => {
 				uri: setups.path("/api/metro/branches"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetroBranch[]) => {
+			}, (e, res, body: trucking.db.IMetroBranch[]) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArray();
@@ -37,7 +35,7 @@ describe("metro api", () => {
 				uri: setups.path("/api/metro/branches/1"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetroBranch) => {
+			}, (e, res, body: trucking.db.IMetroBranch) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body.name).toBe("Сокольническая");
@@ -51,7 +49,7 @@ describe("metro api", () => {
 				uri: setups.path("/api/metro/branches/Сокольническая"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetroBranch) => {
+			}, (e, res, body: trucking.db.IMetroBranch) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body.name).toBe("Сокольническая");
@@ -95,7 +93,7 @@ describe("metro api", () => {
 				uri: setups.path("/api/metro/stations"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetro[]) => {
+			}, (e, res, body: trucking.db.IMetro[]) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArray();
@@ -109,7 +107,7 @@ describe("metro api", () => {
 				uri: setups.path("/api/metro/stations/Охотный ряд"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IMetro) => {
+			}, (e, res, body: trucking.db.IMetro) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body.station).toBe("Охотный ряд");

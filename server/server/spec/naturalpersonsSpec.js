@@ -86,7 +86,7 @@ describe("naturalpersons api", function () {
         });
     });
 
-    it("get naturalpersons (4)", function (done) {
+    it("get naturalperson (4)", function (done) {
         request.get({
             uri: setups.path("/api/naturalpersons/4"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
@@ -95,6 +95,19 @@ describe("naturalpersons api", function () {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
             expect(type.isString(body["name"])).toBeTruthy();
+            done();
+        });
+    });
+
+    it("get naturalperson status (4)", function (done) {
+        request.get({
+            uri: setups.path("/api/naturalpersons/4/status"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(200);
+            expect(body.status).toBeDefined();
             done();
         });
     });

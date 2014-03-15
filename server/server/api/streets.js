@@ -44,6 +44,20 @@ function init(app, log) {
         }
     });
 
+    function createCond(req) {
+        var cond = {};
+        var street = req.params.street;
+
+        //search by id
+        if (type.isInt(street)) {
+            cond["id_street"] = parseInt(street);
+        } else {
+            cond["name"] = street;
+        }
+
+        return cond;
+    }
+
     /**
     * @api {get} /api/streets/:id Get street by id.
     * @apiName GetStreetById
@@ -77,15 +91,7 @@ function init(app, log) {
     *     }
     */
     app.get("/api/streets/:street", passport.authenticate("bearer", { session: false }), function (req, res) {
-        var cond = {};
-        var street = req.params.street;
-
-        //search by id
-        if (type.isInt(street)) {
-            cond["id_street"] = parseInt(street);
-        } else {
-            cond["name"] = street;
-        }
+        var cond = createCond(req);
 
         db.streets.streets.findRow(cond, function (err, street) {
             if (err || !street) {
@@ -94,6 +100,129 @@ function init(app, log) {
             }
 
             res.json(street);
+        });
+    });
+
+    /**
+    * @api {post} /api/streets/ Create street.
+    * @apiName CreateStreet
+    * @apiGroup Streets
+    * @apiPermission emploee
+    *
+    *
+    * @apiParam {String} name Street name.
+    * @apiParam {String} [comment] Comment.
+    *
+    * @apiSuccessStructure Created
+    */
+    app.post("/api/streets", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var check = revalidator.validate(req.body, {
+            properties: {
+                name: {
+                    type: 'string',
+                    maxLength: 128,
+                    required: true
+                },
+                comment: {
+                    type: ["string", "null"],
+                    required: false
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.streets.create(req.body, function (e, result) {
+            if (e)
+                return done(e);
+            res.json(201, result);
+        });
+    });
+
+    /**
+    * @api {patch} /api/streets/:id Change street by id.
+    * @apiName ChangeStreetById
+    * @apiGroup Streets
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Street id.
+    *
+    * @apiParam {String} [name] Street name.
+    * @apiParam {String} [comment] Comment.
+    *
+    * @apiSuccessStructure Patched
+    */
+    /**
+    * @api {patch} /api/streets/:street Change street by name.
+    * @apiName ChangeStreetByName
+    * @apiGroup Streets
+    * @apiPermission emploee
+    *
+    * @apiParam {String} street Street name.
+    *
+    * @apiParam {String} [name] Street name.
+    * @apiParam {String} [comment] Comment.
+    *
+    * @apiSuccessStructure Patched
+    */
+    app.patch("/api/streets/:street", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = createCond(req);
+
+        var check = revalidator.validate(req.body, {
+            properties: {
+                name: {
+                    type: 'string',
+                    maxLength: 128,
+                    required: false
+                },
+                comment: {
+                    type: ["string", "null"],
+                    required: false
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        db.catalogs.streets.patch(cond, req.body, function (e, result) {
+            if (e)
+                return done(e);
+            res.json(result);
+        });
+    });
+
+    /**
+    * @api {delete} /api/streets/:street Delete street by name.
+    * @apiName DeleteStreetByName
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {String} street Street unique name.
+    *
+    * @apiSuccessStructure Deleted
+    */
+    /**
+    * @api {delete} /api/streets/:id Delete street by id.
+    * @apiName DeleteStreetById
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Street unique id.
+    *
+    * @apiSuccessStructure Deleted
+    */
+    app.del("/api/streets/:street", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = createCond(req);
+        db.catalogs.streets.del(cond, function (e) {
+            if (e)
+                return done(e);
+            res.json(204, null);
         });
     });
 }

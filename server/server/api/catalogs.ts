@@ -392,7 +392,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 	/**
 	 * @api {delete} /api/catalogs/tools/:tool Delete tool by id.
-	 * @apiName Catalogs
+	 * @apiName DeleteToolById
 	 * @apiGroup Catalogs
 	 * @apiPermission emploee
 	 *
