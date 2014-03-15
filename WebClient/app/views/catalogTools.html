@@ -23,19 +23,19 @@
                         <tr ng-repeat="tool in Tools">
                             <td>
                                 <!-- editable -->
-                                <span editable-text="tool.name" e-name="name" e-form="rowform" onbeforesave="checkName($data, tool.id_tool)" e-required>
+                                <span editable-text="tool.name" e-name="name" e-form="rowform" e-required>
                                     {{ tool.name || 'empty' }}
                                 </span>
                             </td>
                             <td>
                                 <!-- editable -->
-                                <span editable-text="tool.description" e-name="description" e-form="rowform" onbeforesave="checkName($data, tool.id_tool)" e-required>
+                                <span editable-text="tool.description" e-name="description" e-form="rowform" e-required>
                                     {{ tool.description || 'empty' }}
                                 </span>
                             </td>
                             <td>
                                 <!-- editable -->
-                                <span editable-text="tool.rate" e-name="rate" e-form="rowform" onbeforesave="checkName($data, tool.id_tool)" e-required>
+                                <span editable-text="tool.rate" e-name="rate" e-form="rowform" e-required>
                                     {{ tool.rate || 'empty' }}
                                 </span>
                             </td>

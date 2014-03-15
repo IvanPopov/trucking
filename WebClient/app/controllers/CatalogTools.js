@@ -5,34 +5,15 @@
 */
 'use strict';
 
-app.controller('CatalogToolsController', function ($scope, $location, $http,
-    $rootScope, $routeParams, simpleCatalogs, $filter) {
+app.controller('CatalogToolsController', function ($scope, $rootScope, simpleCatalogs,
+    $filter) {
 
     // Мне нравится идея складывать код инициализации в один метод таким образом
     init();
 
     function init() {
-        // ToDo: вынести в сервис
-        var catalogName = "Tools";
-        $http({
-            url: $rootScope.CONFIG.apiUrl + "/api/catalogs/" + catalogName,
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).success(function (data) {
-            $scope.Tools = data;
-        });
-
-        $http({
-            url: $rootScope.CONFIG.apiUrl + "/api/catalogs/" + "Units",
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).success(function (data) {
-            $scope.Units = data;
-        });
+        $scope.Tools = simpleCatalogs.getTools().query();
+        $scope.Units = simpleCatalogs.getUnits().query();
 
         $scope.newTool = {};
         $scope.toolGroups = simpleCatalogs.getToolGroups().query( function() {
@@ -60,37 +41,17 @@ app.controller('CatalogToolsController', function ($scope, $location, $http,
         simpleCatalogs.getTools().create(newTool);
     };
 
-    // ToDel
-    $scope.checkName = function (data, id) {
-        return true;
-    };
-
     $scope.saveTool = function (data, id) {
-        console.log(JSON.stringify(data));
-
-        return $http({
-            url: $rootScope.CONFIG.apiUrl + '/api/catalogs/tools/' + id,
-            data: data,
-            method: "PATCH",
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        var tool = simpleCatalogs.getTools().get({ id: id }, function () {
+            for (var k in data) tool[k] = data[k];
+            tool.$save({ id: id });
         });
     };
 
     $scope.saveField = function (name, value, id) {
-        var data = {};
-        data[name] = value;
-
-        console.log(JSON.stringify(data));
-        return $http({
-            url: $rootScope.CONFIG.apiUrl + '/api/catalogs/tools/' + id,
-            data: data,
-            method: "PATCH",
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        var tool = simpleCatalogs.getTools().get({ id: id }, function () {
+            tool[name] = value;
+            tool.$save({ id: id });
         });
     };
-
 });

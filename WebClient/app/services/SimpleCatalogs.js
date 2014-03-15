@@ -5,8 +5,6 @@
 'use strict';
 
 app.factory('simpleCatalogs', function ($rootScope, $resource) {
-    var catalogName = "naturalpersons";
-    var naturalPersons = {};
     var apiUrl = null;
 
     return init();
@@ -18,7 +16,8 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
             getWorkTypes: getWorkTypes,
             getPhones: getPhones,
             getTools: getTools,
-            getToolGroups: getToolGroups
+            getToolGroups: getToolGroups,
+            getUnits: getUnits
         };
     }
 
@@ -28,17 +27,7 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
             'create': { method: 'post', url: apiUrl + "/api/naturalPersons/" + personId + "/phones/" }
         });
     }
-
-    // Типы инструментов
-    function getTools() {
-        return $resource(apiUrl + "/api/catalogs/worktypes/:worktype", {
-            worktype: '@worktype'
-        },
-        {
-            'create': { method: 'post', url: apiUrl + "/api/catalogs/tools/" }
-        });
-    }
-
+    
     // Группы типов инструментов
     function getToolGroups() {
         return $resource(apiUrl + "/api/catalogs/tools/groups/:group", {
@@ -57,6 +46,24 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
         {
             'save': { method: 'PATCH' }
         });
+    }
+
+    // Типы инструментов
+    function getTools() {
+        return $resource(apiUrl + "/api/catalogs/tools/:id", {
+            id: '@id'
+        },
+        {
+            'save': { method: 'PATCH' },
+            'create': { method: 'post', url: apiUrl + "/api/catalogs/tools/" }
+        });
+    }
+
+    // Единицы измерения
+    function getUnits() {
+        return $resource(apiUrl + "/api/catalogs/Units/:id", {
+            id: '@id'
+       });
     }
 
     // ToDo: /api/catalogs/worktypes/groups

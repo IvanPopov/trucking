@@ -12,12 +12,18 @@ app.factory('Auth', function ($cookieStore, $http, $location, $rootScope, $q) {
     };
 
     var getAuthToken = function () {
+        if( !$cookieStore.get('auth') ) {
+            return null;
+        }
         return $cookieStore.get('auth').access_token;
     };
 
     var authenticate = function(accessToken) {
         if (typeof (accessToken) == 'undefined') {
             accessToken = getAuthToken();
+        }
+        if (accessToken == null) {
+            redirectToLogin();
         }
 
         // Let's attempt an API call
