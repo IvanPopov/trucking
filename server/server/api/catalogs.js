@@ -273,6 +273,22 @@ function init(app, log) {
         });
     });
 
+    app.get("/api/catalogs/tools/:tool", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var cond = {};
+        var tool = req.params.tool;
+
+        if (type.isInt(tool))
+            cond["id_tool"] = parseInt(tool);
+        else
+            cond["name"] = tool;
+
+        db.catalogs.tools.findRow(cond, function (err, tool) {
+            if (err)
+                return done(err);
+            res.json(tool);
+        });
+    });
+
     /**
     * @api {patch} /api/catalogs/tools/:tool Change tool by id.
     * @apiName ChangeToolById

@@ -289,6 +289,23 @@ function init(app: express.Express, log: winston.Logger) {
 			});
 		});
 
+	app.get("/api/catalogs/tools/:tool",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var cond = {};
+			var tool = req.params.tool;
+
+			if (type.isInt(tool)) //search by id
+				cond["id_tool"] = parseInt(tool);
+			else //search by name
+				cond["name"] = tool;
+
+			db.catalogs.tools.findRow(cond, (err: Error, tool: trucking.db.ITool) => {
+				if (err) return done(err);
+				res.json(tool);
+			});
+		});
+
 	/**
 	 * @api {patch} /api/catalogs/tools/:tool Change tool by id.
 	 * @apiName ChangeToolById

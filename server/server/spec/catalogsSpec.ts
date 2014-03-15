@@ -99,6 +99,20 @@ describe("catalogs api", () => {
 			});
 	});
 
+	it("get tool", (done: () => void) => {
+		request.get(
+			{
+				uri: setups.path("/api/catalogs/tools/9"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body: any) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(200);
+				expect(body.id_tool).toBe(9);
+				done();
+			});
+	});
+
 	it("create tool group", (done: () => void) => {
 		request.post(
 			{
