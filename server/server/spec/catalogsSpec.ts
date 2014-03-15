@@ -11,7 +11,6 @@ import fs = require("fs");
 
 require("jasmine-expect");
 
-import db = trucking.db;
 
 describe("catalogs api", () => {
 	var grant: IOAuth2Grant = null;
@@ -39,7 +38,7 @@ describe("catalogs api", () => {
 				uri: setups.path("/api/catalogs/streets"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
-			}, (e, res, body: db.IStreet[]) => {
+			}, (e, res, body: trucking.db.IStreet[]) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
 				expect(body).toBeArray();
@@ -107,22 +106,8 @@ describe("catalogs api", () => {
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: {name: "test group"}
 			}, (e, res, body: any) => {
-				console.log(body);
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
-				done();
-			});
-	});
-
-	it("delete tool group", (done: () => void) => {
-		request.del(
-			{
-				uri: setups.path("/api/catalogs/tools/groups/test group"),
-				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: true
-			}, (e, res, body: any) => {
-				expect(e).toBeNull();
-				expect(res.statusCode).toBe(204);
 				done();
 			});
 	});
@@ -145,7 +130,7 @@ describe("catalogs api", () => {
 			{
 				uri: setups.path("/api/catalogs/tools/tool"),
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
-				json: { description: "description" }
+				json: { description: "description", id_toolgroup: null }
 			}, (e, res, body) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(200);
@@ -162,6 +147,19 @@ describe("catalogs api", () => {
 				headers: { "Authorization": ("Bearer " + grant.access_token) },
 				json: true
 			}, (e, res, body) => {
+				expect(e).toBeNull();
+				expect(res.statusCode).toBe(204);
+				done();
+			});
+	});
+
+	it("delete tool group", (done: () => void) => {
+		request.del(
+			{
+				uri: setups.path("/api/catalogs/tools/groups/test group"),
+				headers: { "Authorization": ("Bearer " + grant.access_token) },
+				json: true
+			}, (e, res, body: any) => {
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(204);
 				done();

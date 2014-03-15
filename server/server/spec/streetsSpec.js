@@ -8,6 +8,8 @@ var setups = require("./setups");
 var auth = require("./auth");
 require("jasmine-expect");
 
+var db = trucking.db;
+
 describe("catalogs api", function () {
     var grant = null;
     auth(function (e, res, body) {

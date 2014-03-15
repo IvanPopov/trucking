@@ -2465,7 +2465,7 @@ define({ api: [
           {
             "group": "Parameter",
             "type": "Number",
-            "field": "rate",
+            "field": "personal_rate",
             "optional": false,
             "description": "Rate."
           }
@@ -2502,7 +2502,7 @@ define({ api: [
           {
             "group": "Parameter",
             "type": "Number",
-            "field": "rate",
+            "field": "personal_rate",
             "optional": false,
             "description": "Rate."
           }
@@ -3132,6 +3132,30 @@ define({ api: [
             "field": "brigade",
             "optional": true,
             "description": "Brigade unique id."
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\naturalpersons.js"
+  },
+  {
+    "type": "get",
+    "url": "/api/naturalpersons/:id/status",
+    "title": "Get personal status.",
+    "description": "<span class=\"alert alert-error\">Incomplete / Unstable API</span>\n\nPossible statuses:\n<p style=\"font-family: consolas;\">\n\t\t<b>UNKNOWN = 0x0</b>\n\t\t<small>\n\t\tэтот статус можно поставить вручную,\n\t\tесли в самой текущей карточке физическое лицо нажать галочку уволить физ лицо.\n\t\tЕсли снять галочку, сотрудник снова считается работающим. </small>\n\t\t<b>NOT_WORKING = 0x1</b>\n\n\t\tПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не\n\t\tоткзался ни разу за прошлые 3 месяца.\n\t\tИ нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>RELIABLE = 0x2</b>\n\n\t\tПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ)\n\t\tне откзался ни разу за прошлый месяц, хотя отказывался хотя бы\n\t\tраз за последние 3 месяца.  И нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>SEMIRELIABLE = 0x4</b>\n\n\t\tВсе остальные, у кого зарегистрированы отказы.\n\t\tНо нет штрафов за “не выход” за последние 3 месяца.\n\t\t<b>REFUSES = 0x8</b>\n\n\t\tЭтот статус ставится только из карточки “физ лиц”,\n\t\tон никак не зависит от кол-ва отказов.\n\t\tВ этом статусе, только если нет штрафов за “не выход” за последние 3 месяца.\n\t\tЕсли есть, то статус прогуливает присваивается\n\t\t<b>TEMP_WORKING = 0x10</b>\n\n\t\tЗарегистрированы штрафы за “не выход” за последние 3 месяца.  см раздел штрафы ниже.\n\t\t<b>TRUANT = 0x20</b>\n</p>",
+    "name": "GethNaturalPersonStatus",
+    "group": "NaturalPersons",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "id",
+            "optional": false,
+            "description": "Person unique id."
           }
         ]
       }

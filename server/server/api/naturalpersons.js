@@ -882,6 +882,70 @@ function init(app, log) {
     });
 
     /**
+    * @api {get} /api/naturalpersons/:id/status Get personal status.
+    * @apiDescription
+    * <span class="alert alert-error">Incomplete / Unstable API</span>
+    *
+    * Possible statuses:
+    * <p style="font-family: consolas;">
+    *		<b>UNKNOWN = 0x0</b>
+    *
+    *		этот статус можно поставить вручную,
+    *		если в самой текущей карточке физическое лицо нажать галочку уволить физ лицо.
+    *		Если снять галочку, сотрудник снова считается работающим.
+    *		<b>NOT_WORKING = 0x1</b>
+    *
+    *		По списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не
+    *		откзался ни разу за прошлые 3 месяца.
+    *		И нет штрафов за “не выход” за последние 3 месяца.
+    *		<b>RELIABLE = 0x2</b>
+    *
+    *		По списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ)
+    *		не откзался ни разу за прошлый месяц, хотя отказывался хотя бы
+    *		раз за последние 3 месяца.  И нет штрафов за “не выход” за последние 3 месяца.
+    *		<b>SEMIRELIABLE = 0x4</b>
+    *
+    *		Все остальные, у кого зарегистрированы отказы.
+    *		Но нет штрафов за “не выход” за последние 3 месяца.
+    *		<b>REFUSES = 0x8</b>
+    *
+    *		Этот статус ставится только из карточки “физ лиц”,
+    *		он никак не зависит от кол-ва отказов.
+    *		В этом статусе, только если нет штрафов за “не выход” за последние 3 месяца.
+    *		Если есть, то статус прогуливает присваивается
+    *		<b>TEMP_WORKING = 0x10</b>
+    *
+    *		Зарегистрированы штрафы за “не выход” за последние 3 месяца.  см раздел штрафы ниже.
+    *		<b>TRUANT = 0x20</b>
+    * </p>
+    *
+    * @apiName GethNaturalPersonStatus
+    * @apiGroup NaturalPersons
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} id Person unique id.
+    *
+    * @apiSuccessExample Success-Response:
+    *     HTTP/1.1 200 OK
+    *     {
+    *       "status": 0,
+    *     }
+    */
+    app.get("/api/naturalpersons/:id/status", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        db.naturalpersons.findRow({ id_naturalperson: parseInt(req.params.id) || 0 }, function (e, person) {
+            if (e || !person) {
+                return res.json(404, { error: "Person not found." });
+            }
+
+            if (person.fired) {
+                res.json({ status: 1 /* NOT_WORKING */ });
+            } else {
+                res.json({ status: 0 /* UNKNOWN */ });
+            }
+        });
+    });
+
+    /**
     * @api {get} /api/naturalpersons/search/:query Search natural persons.
     * @apiDescription
     * <span class="alert alert-error">Experimental API. Search occurs in the fields: name, pass_serial, pass_number, id_naturalperson</span>

@@ -54,13 +54,11 @@ function handleDisconnect(): void {
 
 handleDisconnect();
 
-import db = trucking.db;
-
-export function isAdmin(user: db.IEmployee): boolean {
+export function isAdmin(user: trucking.db.IEmployee): boolean {
 	return user.permissions == 1;
 }
 
-export function isEmployee(user: db.IEmployee): boolean {
+export function isEmployee(user: trucking.db.IEmployee): boolean {
 	return true;
 }
 
@@ -71,29 +69,29 @@ export var refreshTokens = new TokenModel(connection, "RefreshTokens");
 
 //all catalogues
 export var catalogs = {
-	metrobranches: new CatalogModel<db.IMetroBranch>(connection, "MetroBranches"),
+	metrobranches: new CatalogModel<trucking.db.IMetroBranch>(connection, "MetroBranches"),
 	//metro stations
-	metro: new CatalogModel<db.IMetro>(connection, "Metro"),
-	territorialsigns: new CatalogModel<db.ITerritorialSign>(connection, "TerritorialSigns"),
-	streets: new CatalogModel<db.IStreet>(connection, "Streets"),
+	metro: new CatalogModel<trucking.db.IMetro>(connection, "Metro"),
+	territorialsigns: new CatalogModel<trucking.db.ITerritorialSign>(connection, "TerritorialSigns"),
+	streets: new CatalogModel<trucking.db.IStreet>(connection, "Streets"),
 
-	tools: new CatalogModel<db.ITool>(connection, "Tools"),
-	toolgroups: new CatalogModel<db.IToolGroup>(connection, "ToolGroups"),
+	tools: new CatalogModel<trucking.db.ITool>(connection, "Tools"),
+	toolgroups: new CatalogModel<trucking.db.IToolGroup>(connection, "ToolGroups"),
 
-	paymentterms: new CatalogModel<db.IPaymentTerm>(connection, "PaymentTerms"),
-	prepaymentterms: new CatalogModel<db.IPrepaymentTerm>(connection, "PrepaymentTerms"),
-	сonditionsofwork: new CatalogModel<db.IСonditionOfWork>(connection, "СonditionsOfWork"),
-	addresstype: new CatalogModel<db.IAddressType>(connection, "AddressType"),
-	holdings: new CatalogModel<db.IHolding>(connection, "Holdings"),
+	paymentterms: new CatalogModel<trucking.db.IPaymentTerm>(connection, "PaymentTerms"),
+	prepaymentterms: new CatalogModel<trucking.db.IPrepaymentTerm>(connection, "PrepaymentTerms"),
+	сonditionsofwork: new CatalogModel<trucking.db.IСonditionOfWork>(connection, "СonditionsOfWork"),
+	addresstype: new CatalogModel<trucking.db.IAddressType>(connection, "AddressType"),
+	holdings: new CatalogModel<trucking.db.IHolding>(connection, "Holdings"),
 
-	worktypes: new CatalogModel<db.IWorkType>(connection, "WorkTypes"),
-	worktypegroups: new CatalogModel<db.IWorkTypeGroup>(connection, "WorkTypeGroups"),
-	worktypestools: new CatalogModel<db.IWorkTypeTool>(connection, "WorkTypesTools"),
+	worktypes: new CatalogModel<trucking.db.IWorkType>(connection, "WorkTypes"),
+	worktypegroups: new CatalogModel<trucking.db.IWorkTypeGroup>(connection, "WorkTypeGroups"),
+	worktypestools: new CatalogModel<trucking.db.IWorkTypeTool>(connection, "WorkTypesTools"),
 
-	contractors: new CatalogModel<db.IContractor>(connection, "Contractors"),
-	contractortypes: new CatalogModel<db.IContractorType>(connection, "ContractorTypes"),
-	units: new CatalogModel<db.IUnit>(connection, "Units"),
-	brigades: new CatalogModel<db.IBrigade>(connection, "Brigades"),
+	contractors: new CatalogModel<trucking.db.IContractor>(connection, "Contractors"),
+	contractortypes: new CatalogModel<trucking.db.IContractorType>(connection, "ContractorTypes"),
+	units: new CatalogModel<trucking.db.IUnit>(connection, "Units"),
+	brigades: new CatalogModel<trucking.db.IBrigade>(connection, "Brigades"),
 
 	naturalpersons: null
 };
@@ -102,7 +100,7 @@ export var naturalpersons = catalogs.naturalpersons = new NaturalPersonModel(con
 
 //for admin
 export var systemCatalogs = {
-	clientapps: new CatalogModel<db.IClientApp>(connection, "ClientApps")
+	clientapps: new CatalogModel<trucking.db.IClientApp>(connection, "ClientApps")
 };
 
 export var metro = new Metro(catalogs.metrobranches, catalogs.metro);

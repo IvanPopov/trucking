@@ -102,21 +102,8 @@ describe("catalogs api", function () {
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: { name: "test group" }
         }, function (e, res, body) {
-            console.log(body);
             expect(e).toBeNull();
             expect(res.statusCode).toBe(201);
-            done();
-        });
-    });
-
-    it("delete tool group", function (done) {
-        request.del({
-            uri: setups.path("/api/catalogs/tools/groups/test group"),
-            headers: { "Authorization": ("Bearer " + grant.access_token) },
-            json: true
-        }, function (e, res, body) {
-            expect(e).toBeNull();
-            expect(res.statusCode).toBe(204);
             done();
         });
     });
@@ -137,7 +124,7 @@ describe("catalogs api", function () {
         request.patch({
             uri: setups.path("/api/catalogs/tools/tool"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
-            json: { description: "description" }
+            json: { description: "description", id_toolgroup: null }
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
@@ -149,6 +136,18 @@ describe("catalogs api", function () {
     it("delete tool", function (done) {
         request.del({
             uri: setups.path("/api/catalogs/tools/tool"),
+            headers: { "Authorization": ("Bearer " + grant.access_token) },
+            json: true
+        }, function (e, res, body) {
+            expect(e).toBeNull();
+            expect(res.statusCode).toBe(204);
+            done();
+        });
+    });
+
+    it("delete tool group", function (done) {
+        request.del({
+            uri: setups.path("/api/catalogs/tools/groups/test group"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: true
         }, function (e, res, body) {

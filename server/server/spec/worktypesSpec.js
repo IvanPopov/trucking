@@ -9,6 +9,8 @@ var auth = require("./auth");
 
 require("jasmine-expect");
 
+var db = trucking.db;
+
 describe("worktypes api", function () {
     var grant = null;
     auth(function (e, res, body) {

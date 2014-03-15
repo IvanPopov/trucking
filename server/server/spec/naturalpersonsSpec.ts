@@ -10,7 +10,6 @@ import auth = require("./auth");
 import type = require("../libs/type");
 require("jasmine-expect");
 
-import db = trucking.db;
 
 describe("naturalpersons api", () => {
 	var grant: IOAuth2Grant = null;
@@ -117,7 +116,7 @@ describe("naturalpersons api", () => {
 					id_metro: 3,
 					DOB: "21 July 1990",
 					height: 180,
-					id_leading_type_of_work: 1
+					id_leading_type_of_work: null
 				}
 			}, (e, res, body) => {
 				//console.log(body);

@@ -343,7 +343,7 @@ function init(app, log) {
                     type: 'number'
                 },
                 id_toolgroup: {
-                    type: 'integer'
+                    type: ['integer', 'null']
                 }
             }
         });

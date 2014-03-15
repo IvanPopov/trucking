@@ -113,7 +113,7 @@ describe("naturalpersons api", function () {
                 id_metro: 3,
                 DOB: "21 July 1990",
                 height: 180,
-                id_leading_type_of_work: 1
+                id_leading_type_of_work: null
             }
         }, function (e, res, body) {
             //console.log(body);
