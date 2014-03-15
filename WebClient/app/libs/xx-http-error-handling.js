@@ -14,10 +14,13 @@
     'use strict';
     angular.module('xx-http-error-handling', [])
       .config(function ($provide, $httpProvider, $compileProvider) {
-          var elementsList = $();
+        var elementsList = $();
+        var messageTimeOut = 10 * 60 * 1000;
 
           // this message will appear for a defined amount of time and then vanish again
           var showMessage = function (content, cl, time) {
+              content = JSON.stringify(content, null, '   ');
+              console.log(content);
               $('<div/>')
                 .addClass(cl)
                 .hide()
@@ -37,38 +40,30 @@
                       // a success message with green background
                       if (successResponse.config.method.toUpperCase() != 'GET') {
                           showMessage('Success', 'xx-http-success-message', 5000);
-                          return successResponse;
                       }
+                      return successResponse;
                   },
                   // if the message returns unsuccessful we display the error 
                   function (errorResponse) {
                       switch (errorResponse.status) {
                           case 400: // if the status is 400 we return the error
-                              showMessage(errorResponse.data.message, 'xx-http-error-message', 6000);
-                              // if we have found validation error messages we will loop through
-                              // and display them
-                              if (errorResponse.data.errors.length > 0) {
-                                  for (var i = 0; i < errorResponse.data.errors.length; i++) {
-                                      showMessage(errorResponse.data.errors[i],
-                                        'xx-http-error-validation-message', 6000);
-                                  }
-                              }
+                              showMessage(errorResponse.data, 'xx-http-error-message', messageTimeOut);
                               break;
                           case 401: // if the status is 401 we return access denied
                               showMessage('Wrong email address or password!',
-                                'xx-http-error-message', 6000);
+                                'xx-http-error-message', messageTimeOut);
                               break;
                           case 403: // if the status is 403 we tell the user that authorization was denied
                               showMessage('You have insufficient privileges to do what you want to do!',
-                                'xx-http-error-message', 6000);
+                                'xx-http-error-message', messageTimeOut);
                               break;
                           case 500: // if the status is 500 we return an internal server error message
-                              showMessage('Internal server error: ' + errorResponse.data.message,
-                                'xx-http-error-message', 6000);
+                              showMessage('Internal server error: ' + errorResponse.data,
+                                'xx-http-error-message', messageTimeOut);
                               break;
                           default: // for all other errors we display a default error message
-                              showMessage('Error ' + errorResponse.status + ': ' + errorResponse.data.message,
-                                'xx-http-error-message', 6000);
+                              showMessage('Error ' + errorResponse.status + ': ' + errorResponse.data,
+                                'xx-http-error-message', messageTimeOut);
                       }
                       return $q.reject(errorResponse);
                   });
