@@ -15,7 +15,8 @@
     angular.module('xx-http-error-handling', [])
       .config(function ($provide, $httpProvider, $compileProvider) {
         var elementsList = $();
-        var messageTimeOut = 10 * 60 * 1000;
+        var messageTimeOut = 6 * 1000;
+        var errorTimeOut = 10 * 60 * 1000;
 
           // this message will appear for a defined amount of time and then vanish again
           var showMessage = function (content, cl, time) {
@@ -47,23 +48,23 @@
                   function (errorResponse) {
                       switch (errorResponse.status) {
                           case 400: // if the status is 400 we return the error
-                              showMessage(errorResponse.data, 'xx-http-error-message', messageTimeOut);
+                              showMessage(errorResponse.data, 'xx-http-error-message', errorTimeOut);
                               break;
                           case 401: // if the status is 401 we return access denied
                               showMessage('Wrong email address or password!',
-                                'xx-http-error-message', messageTimeOut);
+                                'xx-http-error-message', errorTimeOut);
                               break;
                           case 403: // if the status is 403 we tell the user that authorization was denied
                               showMessage('You have insufficient privileges to do what you want to do!',
-                                'xx-http-error-message', messageTimeOut);
+                                'xx-http-error-message', errorTimeOut);
                               break;
                           case 500: // if the status is 500 we return an internal server error message
                               showMessage('Internal server error: ' + errorResponse.data,
-                                'xx-http-error-message', messageTimeOut);
+                                'xx-http-error-message', errorTimeOut);
                               break;
                           default: // for all other errors we display a default error message
                               showMessage('Error ' + errorResponse.status + ': ' + errorResponse.data,
-                                'xx-http-error-message', messageTimeOut);
+                                'xx-http-error-message', errorTimeOut);
                       }
                       return $q.reject(errorResponse);
                   });
