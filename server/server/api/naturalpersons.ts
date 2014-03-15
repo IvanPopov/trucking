@@ -198,7 +198,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {Integer} id Person unique id.
 	 * @apiParam {Integer} worktype Person unique worktype id.
 	 *
-	 * @apiParam {Number} rate Rate.
+	 * @apiParam {Number} personal_rate Rate.
 	 */
 	app.patch("/api/naturalpersons/:id/worktypes/:worktype",
 		passport.authenticate("bearer", { session: false }),
@@ -208,7 +208,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			var check = revalidator.validate(req.body, {
 				properties: {
-					rate: {
+					personal_rate: {
 						type: ['number', 'null'],
 						required: true
 					}
@@ -318,7 +318,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiParam {Integer} id Person unique id.
 	 * @apiParam {Integer} tool Person unique tool id.
 	 *
-	 * @apiParam {Number} rate Rate.
+	 * @apiParam {Number} personal_rate Rate.
 	 */
 	app.patch("/api/naturalpersons/:id/tools/:tool",
 		passport.authenticate("bearer", { session: false }),
@@ -328,7 +328,7 @@ function init(app: express.Express, log: winston.Logger) {
 
 			var check = revalidator.validate(req.body, {
 				properties: {
-					rate: {
+					personal_rate: {
 						type: ['number', 'null'],
 						required: true
 					}

@@ -85,12 +85,12 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 	}
 
 	getWorktypes(id: number, cb: (e: Error, types: trucking.db.IWorkType[]) => void): void {
-		this.connect.query("SELECT wt.*, npwt.rate as personal_rate  FROM ?? np, ?? wt, ?? npwt WHERE np.id_naturalperson = ? AND npwt.id_naturalperson = np.id_naturalperson AND wt.id_worktype = npwt.id_worktype",
+		this.connect.query("SELECT wt.*, npwt.personal_rate  FROM ?? np, ?? wt, ?? npwt WHERE np.id_naturalperson = ? AND npwt.id_naturalperson = np.id_naturalperson AND wt.id_worktype = npwt.id_worktype",
 			[this.table, this.worktypes.table, this.naturalpersonsworktypes.table, id], cb);
 	}
 
 	getTools(id: number, cb: (e: Error, types: trucking.db.ITool[]) => void): void {
-		this.connect.query("SELECT t.*, npt.rate as personal_rate, npt.personal, npt.count  FROM ?? np, ?? t, ?? npt WHERE np.id_naturalperson = ? AND npt.id_naturalperson = np.id_naturalperson AND t.id_tool = npt.id_tool",
+		this.connect.query("SELECT t.*, npt.personal_rate, npt.personal, npt.count  FROM ?? np, ?? t, ?? npt WHERE np.id_naturalperson = ? AND npt.id_naturalperson = np.id_naturalperson AND t.id_tool = npt.id_tool",
 			[this.table, this.tools.table, this.naturalpersonstools.table, id], cb);
 	}
 }

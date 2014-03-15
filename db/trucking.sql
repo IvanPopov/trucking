@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 03 2014 г., 01:38
+-- Время создания: Мар 14 2014 г., 02:02
 -- Версия сервера: 5.5.25
 -- Версия PHP: 5.3.13
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `accesstokens` (
 --
 
 INSERT INTO `accesstokens` (`id_employee`, `id_clientapp`, `value`, `created`) VALUES
-(1, 'web_v1', 'bx1ObRxALNN2ThfHi7is/obBUuytOc0ohp/9ctZMh6I=', '2014-03-02 21:26:41');
+(1, 'web_v1', 'yi3dbmHO88cInVUZ39IM5XzTSOWaFM3r+2rsPrSzi9o=', '2014-03-13 21:03:08');
 
 -- --------------------------------------------------------
 
@@ -66,8 +66,11 @@ CREATE TABLE IF NOT EXISTS `addresstype` (
 
 CREATE TABLE IF NOT EXISTS `brigades` (
   `id_brigade` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id_brigade`),
-  UNIQUE KEY `id_brigades_UNIQUE` (`id_brigade`)
+  `name` varchar(45) DEFAULT NULL,
+  `id_leader` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Бригадир',
+  PRIMARY KEY (`id_brigade`,`id_leader`),
+  UNIQUE KEY `id_brigades_UNIQUE` (`id_brigade`),
+  KEY `fk_Brigades_NaturalPersons1_idx` (`id_leader`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Справочник "бригады"' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -298,22 +301,22 @@ INSERT INTO `metrobranches` (`id_metrobranch`, `name`, `color`) VALUES
 CREATE TABLE IF NOT EXISTS `naturalpersons` (
   `id_naturalperson` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_employee` int(11) NOT NULL COMMENT 'кто добавил сотрудника',
-  `name` varchar(256) NOT NULL,
+  `name` varchar(256) DEFAULT NULL,
   `pass_serial` int(4) unsigned DEFAULT NULL,
   `pass_number` int(6) unsigned DEFAULT NULL,
   `pass_issued` varchar(256) DEFAULT NULL,
   `card_number` int(16) DEFAULT NULL,
   `card_expired` datetime DEFAULT NULL,
   `requisites_comment` varchar(256) DEFAULT NULL,
-  `id_leading_type_of_work` int(11) NOT NULL COMMENT 'Ведущий тип работ',
-  `address` varchar(256) NOT NULL,
-  `id_metro` int(10) unsigned NOT NULL,
+  `id_leading_type_of_work` int(11) DEFAULT NULL COMMENT 'Ведущий тип работ',
+  `address` varchar(256) DEFAULT NULL,
+  `id_metro` int(10) unsigned DEFAULT NULL,
   `id_brigade` int(10) unsigned DEFAULT NULL,
   `DOB` date DEFAULT NULL COMMENT 'day of birthday',
-  `date_of_employment` date NOT NULL,
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'поле статус может быть только такое: \nнадежный\nПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не откзался ни разу за прошлые 3 месяца. И нет штрафов за “не выход” за последние 3 месяца. \nполунадежный\nПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не откзался ни разу за прошлый месяц, хотя отказывался хотя бы раз за последние 3 месяца.  И нет штрафов за “не выход” за последние 3 месяца. \nотказывается\nВсе остальные, у кого зарегистрированы отказы.  Но нет штрафов за “не выход” за последние 3 месяца. \nподработка\nЭтот статус ставится только из карточки “физ лиц”, он никак не зависит от кол-ва отказов. В этом статусе, только если нет штрафов за “не выход” за последние 3 месяца. Если есть, то статус прогуливает присваивается\nпрогуливает\nЗарегистрированы штрафы за “не выход” за последние 3 месяца.  см раздел штрафы ниже. \n\nне работает\nэтот статус можно поставить вручную, если в самой текущей карточке физическое лицо нажать галочку уволить физ лицо. Если снять галочку, сотрудник снова считается работающим. ',
-  `fired` tinyint(1) NOT NULL DEFAULT '0',
-  `firing_comments` varchar(256) NOT NULL,
+  `date_of_employment` date DEFAULT NULL,
+  `status` tinyint(4) DEFAULT '0' COMMENT 'поле статус может быть только такое: \nнадежный\nПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не откзался ни разу за прошлые 3 месяца. И нет штрафов за “не выход” за последние 3 месяца. \nполунадежный\nПо списку отказников (см ниже ОТКАЗЫ ГРУЗЧИКОВ) не откзался ни разу за прошлый месяц, хотя отказывался хотя бы раз за последние 3 месяца.  И нет штрафов за “не выход” за последние 3 месяца. \nотказывается\nВсе остальные, у кого зарегистрированы отказы.  Но нет штрафов за “не выход” за последние 3 месяца. \nподработка\nЭтот статус ставится только из карточки “физ лиц”, он никак не зависит от кол-ва отказов. В этом статусе, только если нет штрафов за “не выход” за последние 3 месяца. Если есть, то статус прогуливает присваивается\nпрогуливает\nЗарегистрированы штрафы за “не выход” за последние 3 месяца.  см раздел штрафы ниже. \n\nне работает\nэтот статус можно поставить вручную, если в самой текущей карточке физическое лицо нажать галочку уволить физ лицо. Если снять галочку, сотрудник снова считается работающим. ',
+  `fired` tinyint(1) DEFAULT '0',
+  `firing_comments` varchar(256) DEFAULT NULL,
   `id_firing_employee` int(11) DEFAULT NULL COMMENT 'Сотрудник который уволил',
   `clothing_size` varchar(45) DEFAULT NULL COMMENT 'размер одежды в чем угодно',
   `height` int(11) DEFAULT NULL COMMENT 'рост в метрах',
@@ -324,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `naturalpersons` (
   KEY `fk_NaturalPersons_Brigades1_idx` (`id_brigade`),
   KEY `fk_NaturalPersons_Employees1_idx` (`id_employee`),
   KEY `fk_NaturalPersons_Employees2_idx` (`id_firing_employee`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=83 ;
 
 --
 -- Дамп данных таблицы `naturalpersons`
@@ -386,10 +389,18 @@ CREATE TABLE IF NOT EXISTS `naturalpersonstools` (
   `id_naturalperson` int(10) unsigned NOT NULL,
   `count` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `personal` tinyint(1) NOT NULL DEFAULT '0',
+  `personal_rate` float DEFAULT NULL,
   PRIMARY KEY (`id_naturalperson`,`id_tool`),
   KEY `fk_NaturalPersonsTools_Tools1_idx` (`id_tool`),
   KEY `fk_NaturalPersonsTools_NaturalPersons1_idx` (`id_naturalperson`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `naturalpersonstools`
+--
+
+INSERT INTO `naturalpersonstools` (`id_tool`, `id_naturalperson`, `count`, `personal`, `personal_rate`) VALUES
+(10, 4, 10, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -400,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `naturalpersonstools` (
 CREATE TABLE IF NOT EXISTS `naturalpersonsworktypes` (
   `id_worktype` int(11) NOT NULL,
   `id_naturalperson` int(10) unsigned NOT NULL,
-  `rate` float DEFAULT NULL,
+  `personal_rate` float DEFAULT NULL,
   PRIMARY KEY (`id_naturalperson`,`id_worktype`),
   KEY `fk_NaturalPersonsWorkTypes_WorkTypes1_idx` (`id_worktype`),
   KEY `fk_NaturalPersonsWorkTypes_NaturalPersons1_idx` (`id_naturalperson`)
@@ -410,8 +421,8 @@ CREATE TABLE IF NOT EXISTS `naturalpersonsworktypes` (
 -- Дамп данных таблицы `naturalpersonsworktypes`
 --
 
-INSERT INTO `naturalpersonsworktypes` (`id_worktype`, `id_naturalperson`, `rate`) VALUES
-(0, 4, NULL);
+INSERT INTO `naturalpersonsworktypes` (`id_worktype`, `id_naturalperson`, `personal_rate`) VALUES
+(1, 4, 221);
 
 -- --------------------------------------------------------
 
@@ -485,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `refreshtokens` (
 --
 
 INSERT INTO `refreshtokens` (`id_employee`, `id_clientapp`, `value`, `created`) VALUES
-(1, 'web_v1', 'obf2fvL1oCLxaCU/Di+CmKNU6MswnUogmIxBslpTZds=', '2014-03-02 21:26:41');
+(1, 'web_v1', 'pPQ/a+On26TpfEaRsT1qPkAl1T7f03eOn3awLVopjF8=', '2014-03-13 21:03:08');
 
 -- --------------------------------------------------------
 
@@ -612,7 +623,7 @@ CREATE TABLE IF NOT EXISTS `tools` (
   KEY `fk_Tools_Units1_idx` (`unit`),
   KEY `tools_ibfk_2_idx` (`unit_sec`),
   KEY `fk_Tools_ToolGroups1_idx` (`id_toolgroup`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Справочник "Инструменты"' AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Справочник "Инструменты"' AUTO_INCREMENT=18 ;
 
 --
 -- Дамп данных таблицы `tools`
@@ -750,7 +761,7 @@ CREATE TABLE IF NOT EXISTS `worktypegroups` (
 --
 
 CREATE TABLE IF NOT EXISTS `worktypes` (
-  `id_worktype` int(11) NOT NULL,
+  `id_worktype` int(11) NOT NULL AUTO_INCREMENT,
   `short_name` varchar(45) NOT NULL,
   `name` varchar(256) NOT NULL,
   `unit` varchar(16) NOT NULL,
@@ -763,14 +774,15 @@ CREATE TABLE IF NOT EXISTS `worktypes` (
   KEY `fk_WorkTypes_Units1_idx` (`unit`),
   KEY `fk_WorkTypes_Units2_idx` (`unit_sec`),
   KEY `fk_WorkTypes_WorkTypeGroups1_idx` (`id_worktypegroup`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Стандартный справочник типов работ';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Стандартный справочник типов работ' AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `worktypes`
 --
 
 INSERT INTO `worktypes` (`id_worktype`, `short_name`, `name`, `unit`, `rate`, `unit_sec`, `rate_sec`, `id_worktypegroup`) VALUES
-(0, 'ш', 'шпатель-мен', 'ч', 100, NULL, 0, NULL);
+(1, 'ш', 'шпатель-мен', 'ч', 100, NULL, 0, NULL),
+(2, 'п', 'пилорез', 'ч', 50, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -858,22 +870,28 @@ CREATE TABLE IF NOT EXISTS `сontractors` (
 -- Ограничения внешнего ключа таблицы `accesstokens`
 --
 ALTER TABLE `accesstokens`
-  ADD CONSTRAINT `fk_AccessTokens_Employees1` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_AccessTokens_ClientApps1` FOREIGN KEY (`id_clientapp`) REFERENCES `clientapps` (`id_client`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_AccessTokens_ClientApps1` FOREIGN KEY (`id_clientapp`) REFERENCES `clientapps` (`id_client`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_AccessTokens_Employees1` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Ограничения внешнего ключа таблицы `brigades`
+--
+ALTER TABLE `brigades`
+  ADD CONSTRAINT `fk_Brigades_NaturalPersons1` FOREIGN KEY (`id_leader`) REFERENCES `naturalpersons` (`id_naturalperson`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `contactpersons`
 --
 ALTER TABLE `contactpersons`
-  ADD CONSTRAINT `fk_Contacts_Employees1` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Contacts_Сontractors1` FOREIGN KEY (`id_сontractor`) REFERENCES `сontractors` (`id_сontractor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_Contacts_Сontractors1` FOREIGN KEY (`id_сontractor`) REFERENCES `сontractors` (`id_сontractor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Contacts_Employees1` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `contractorscontacts`
 --
 ALTER TABLE `contractorscontacts`
-  ADD CONSTRAINT `fk_ContractorsContacts_Сontractors1` FOREIGN KEY (`id_сontractor`) REFERENCES `сontractors` (`id_сontractor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_ContractorsContacts_Contacts1` FOREIGN KEY (`id_contactperson`) REFERENCES `contactpersons` (`id_contactperson`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_ContractorsContacts_Contacts1` FOREIGN KEY (`id_contactperson`) REFERENCES `contactpersons` (`id_contactperson`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ContractorsContacts_Сontractors1` FOREIGN KEY (`id_сontractor`) REFERENCES `сontractors` (`id_сontractor`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `contractorsnomenclature`
@@ -898,8 +916,8 @@ ALTER TABLE `files`
 -- Ограничения внешнего ключа таблицы `filesinorder`
 --
 ALTER TABLE `filesinorder`
-  ADD CONSTRAINT `fk_FilesInOrder_Orders1` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_FilesInOrder_Files1` FOREIGN KEY (`id_file`) REFERENCES `files` (`id_file`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_FilesInOrder_Files1` FOREIGN KEY (`id_file`) REFERENCES `files` (`id_file`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_FilesInOrder_Orders1` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `metro`
@@ -911,11 +929,11 @@ ALTER TABLE `metro`
 -- Ограничения внешнего ключа таблицы `naturalpersons`
 --
 ALTER TABLE `naturalpersons`
+  ADD CONSTRAINT `fk_NaturalPersons_WorkTypes1` FOREIGN KEY (`id_leading_type_of_work`) REFERENCES `worktypes` (`id_worktype`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_NaturalPersons_Metro1` FOREIGN KEY (`id_metro`) REFERENCES `metro` (`id_metro`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_NaturalPersons_Brigades1` FOREIGN KEY (`id_brigade`) REFERENCES `brigades` (`id_brigade`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_NaturalPersons_Employees1` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_NaturalPersons_Employees2` FOREIGN KEY (`id_firing_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_NaturalPersons_Metro1` FOREIGN KEY (`id_metro`) REFERENCES `metro` (`id_metro`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_NaturalPersons_WorkTypes1` FOREIGN KEY (`id_leading_type_of_work`) REFERENCES `worktypes` (`id_worktype`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_NaturalPersons_Employees2` FOREIGN KEY (`id_firing_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `naturalpersonsemails`
@@ -933,36 +951,37 @@ ALTER TABLE `naturalpersonsphones`
 -- Ограничения внешнего ключа таблицы `naturalpersonstools`
 --
 ALTER TABLE `naturalpersonstools`
-  ADD CONSTRAINT `fk_NaturalPersonsTools_Tools1` FOREIGN KEY (`id_tool`) REFERENCES `tools` (`id_tool`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_NaturalPersonsTools_Tools1` FOREIGN KEY (`id_tool`) REFERENCES `tools` (`id_tool`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `naturalpersonstools_ibfk_1` FOREIGN KEY (`id_naturalperson`) REFERENCES `naturalpersons` (`id_naturalperson`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `naturalpersonsworktypes`
 --
 ALTER TABLE `naturalpersonsworktypes`
-  ADD CONSTRAINT `naturalpersonsworktypes_ibfk_1` FOREIGN KEY (`id_naturalperson`) REFERENCES `naturalpersons` (`id_naturalperson`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_NaturalPersonsWorkTypes_WorkTypes1` FOREIGN KEY (`id_worktype`) REFERENCES `worktypes` (`id_worktype`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_NaturalPersonsWorkTypes_WorkTypes1` FOREIGN KEY (`id_worktype`) REFERENCES `worktypes` (`id_worktype`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `naturalpersonsworktypes_ibfk_1` FOREIGN KEY (`id_naturalperson`) REFERENCES `naturalpersons` (`id_naturalperson`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `fk_Orders_Employees` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Orders_Сontractors1` FOREIGN KEY (`id_сontractor`) REFERENCES `сontractors` (`id_сontractor`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Orders_Employees` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Orders_PaymentTerms1` FOREIGN KEY (`id_paymentterm`) REFERENCES `paymentterms` (`id_paymentterm`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `refreshtokens`
 --
 ALTER TABLE `refreshtokens`
-  ADD CONSTRAINT `fk_AccessTokens_Employees10` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_AccessTokens_ClientApps10` FOREIGN KEY (`id_clientapp`) REFERENCES `clientapps` (`id_client`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_AccessTokens_ClientApps10` FOREIGN KEY (`id_clientapp`) REFERENCES `clientapps` (`id_client`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_AccessTokens_Employees10` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `streetsmetro`
 --
 ALTER TABLE `streetsmetro`
-  ADD CONSTRAINT `fk_StreetsMetro_Streets1` FOREIGN KEY (`id_street`) REFERENCES `streets` (`id_street`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_StreetsMetro_Metro1` FOREIGN KEY (`id_metro`) REFERENCES `metro` (`id_metro`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_StreetsMetro_Metro1` FOREIGN KEY (`id_metro`) REFERENCES `metro` (`id_metro`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_StreetsMetro_Streets1` FOREIGN KEY (`id_street`) REFERENCES `streets` (`id_street`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `territorialsignsstreets`
@@ -983,8 +1002,8 @@ ALTER TABLE `tools`
 -- Ограничения внешнего ключа таблицы `toolsforworkinorder`
 --
 ALTER TABLE `toolsforworkinorder`
-  ADD CONSTRAINT `fk_ToolsForWorkInOrder_WorkInOrder1` FOREIGN KEY (`id_workinorder`) REFERENCES `workinorder` (`id_workinorder`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_ToolsForWorkInOrder_Tools1` FOREIGN KEY (`id_tool`) REFERENCES `tools` (`id_tool`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_ToolsForWorkInOrder_Tools1` FOREIGN KEY (`id_tool`) REFERENCES `tools` (`id_tool`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_ToolsForWorkInOrder_WorkInOrder1` FOREIGN KEY (`id_workinorder`) REFERENCES `workinorder` (`id_workinorder`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `workers`
@@ -998,18 +1017,18 @@ ALTER TABLE `workers`
 -- Ограничения внешнего ключа таблицы `workerstools`
 --
 ALTER TABLE `workerstools`
-  ADD CONSTRAINT `fk_WorkersTools_Workers1` FOREIGN KEY (`id_worker`) REFERENCES `workers` (`id_worker`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_WorkersTools_Tools1` FOREIGN KEY (`id_tool`) REFERENCES `tools` (`id_tool`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_WorkersTools_Tools1` FOREIGN KEY (`id_tool`) REFERENCES `tools` (`id_tool`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_WorkersTools_Workers1` FOREIGN KEY (`id_worker`) REFERENCES `workers` (`id_worker`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `workinorder`
 --
 ALTER TABLE `workinorder`
-  ADD CONSTRAINT `fk_WorkInOrder_WorkTypes1` FOREIGN KEY (`id_worktype`) REFERENCES `worktypes` (`id_worktype`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_WorkInOrder_Orders1` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_WorkInOrder_Metro1` FOREIGN KEY (`id_metro`) REFERENCES `metro` (`id_metro`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_WorkInOrder_Orders1` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_WorkInOrder_Streets1` FOREIGN KEY (`id_street`) REFERENCES `streets` (`id_street`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_WorkInOrder_TerritorialSigns1` FOREIGN KEY (`id_territorialsign`) REFERENCES `territorialsigns` (`id_territorialsign`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_WorkInOrder_TerritorialSigns1` FOREIGN KEY (`id_territorialsign`) REFERENCES `territorialsigns` (`id_territorialsign`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_WorkInOrder_WorkTypes1` FOREIGN KEY (`id_worktype`) REFERENCES `worktypes` (`id_worktype`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `worktypes`
@@ -1030,10 +1049,10 @@ ALTER TABLE `worktypestools`
 -- Ограничения внешнего ключа таблицы `сontractors`
 --
 ALTER TABLE `сontractors`
-  ADD CONSTRAINT `fk_Сontractors_ContractorTypes1` FOREIGN KEY (`id_contractortype`) REFERENCES `contractortypes` (`id_contractortype`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Сontractors_AddressType1` FOREIGN KEY (`id_addresstype`) REFERENCES `addresstype` (`id_addresstype`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Сontractors_Contacts1` FOREIGN KEY (`id_main_manager`) REFERENCES `contactpersons` (`id_contactperson`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Сontractors_Contacts3` FOREIGN KEY (`id_responsible_for_documentation`) REFERENCES `contactpersons` (`id_contactperson`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_Сontractors_ContractorTypes1` FOREIGN KEY (`id_contractortype`) REFERENCES `contractortypes` (`id_contractortype`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Сontractors_СonditionsOfWork1` FOREIGN KEY (`id_сonditionofwork`) REFERENCES `сonditionsofwork` (`id_сonditionofwork`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Сontractors_Сontract1` FOREIGN KEY (`id_contract`) REFERENCES `files` (`id_file`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_Сontractors_Employees1` FOREIGN KEY (`id_employee`) REFERENCES `employees` (`id_employee`) ON DELETE NO ACTION ON UPDATE NO ACTION,

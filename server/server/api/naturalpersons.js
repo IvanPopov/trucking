@@ -184,7 +184,7 @@ function init(app, log) {
     * @apiParam {Integer} id Person unique id.
     * @apiParam {Integer} worktype Person unique worktype id.
     *
-    * @apiParam {Number} rate Rate.
+    * @apiParam {Number} personal_rate Rate.
     */
     app.patch("/api/naturalpersons/:id/worktypes/:worktype", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var id = parseInt(req.params.id) || 0;
@@ -192,7 +192,7 @@ function init(app, log) {
 
         var check = revalidator.validate(req.body, {
             properties: {
-                rate: {
+                personal_rate: {
                     type: ['number', 'null'],
                     required: true
                 }
@@ -293,7 +293,7 @@ function init(app, log) {
     * @apiParam {Integer} id Person unique id.
     * @apiParam {Integer} tool Person unique tool id.
     *
-    * @apiParam {Number} rate Rate.
+    * @apiParam {Number} personal_rate Rate.
     */
     app.patch("/api/naturalpersons/:id/tools/:tool", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var id = parseInt(req.params.id) || 0;
@@ -301,7 +301,7 @@ function init(app, log) {
 
         var check = revalidator.validate(req.body, {
             properties: {
-                rate: {
+                personal_rate: {
                     type: ['number', 'null'],
                     required: true
                 }

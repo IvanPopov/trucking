@@ -213,12 +213,12 @@ describe("naturalpersons api", function () {
             uri: setups.path("/api/naturalpersons/4/worktypes/2"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: {
-                rate: rate
+                personal_rate: rate
             }
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
-            expect(body.rate).toBe(rate);
+            expect(body.personal_rate).toBe(rate);
             done();
         });
     });
@@ -255,12 +255,12 @@ describe("naturalpersons api", function () {
             uri: setups.path("/api/naturalpersons/4/tools/9"),
             headers: { "Authorization": ("Bearer " + grant.access_token) },
             json: {
-                rate: rate
+                personal_rate: rate
             }
         }, function (e, res, body) {
             expect(e).toBeNull();
             expect(res.statusCode).toBe(200);
-            expect(body.rate).toBe(rate);
+            expect(body.personal_rate).toBe(rate);
             done();
         });
     });

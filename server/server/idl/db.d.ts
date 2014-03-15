@@ -193,7 +193,7 @@ declare module trucking.db {
 	interface INaturalPersonTool {
 		id_naturalperson: number;
 		id_worktype: number;
-		rate: number;
+		personal_rate: number;
 		personal: boolean;
 		count: number;
 	}
