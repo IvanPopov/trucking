@@ -1,10 +1,9 @@
-﻿<div class="hero-unit" ng-controller="MainCtrl">
+﻿<!-- Меню -->
+<ng-include src="'/app/views/Navbar.html'"></ng-include>
+
+<div class="hero-unit" ng-controller="MainCtrl">
     <h1>Welcome</h1>
     Name: {{ user.name }}
     <br />
     Id: {{ user.user_id }}
-    <br />
-    <p class="text-right">
-        <a href="#/logout">Logout</a>
-    </p>
 </div>

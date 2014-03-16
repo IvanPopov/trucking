@@ -5,7 +5,7 @@
  */
 'use strict';
 
-app.controller('NavbarController', function($scope, $location, $http, $rootScope) {
+app.controller('NavbarController', function($scope, $location, $http, $rootScope, Auth) {
 
     // Мне нравится идея складывать код инициализации в один метод таким образом
     init();
@@ -20,14 +20,22 @@ app.controller('NavbarController', function($scope, $location, $http, $rootScope
         }).success(function (data) {
             $scope.CatalogsList = data;
         });
+
+        $scope.logout = logout;
+	    $scope.getClass = getClass;
     }
 
     // Подсветка текущего пункта меню, использовать так: <a ng-class="getClass('/tasks')" href="/tasks">Tasks</a>
-    $scope.getClass = function (path) {
+    function getClass(path) {
         if ($location.path().substr(0, path.length) == path) {
             return "active";
         } else {
             return "";
         }
     };
+
+	// Выходим
+    function logout() {
+	    Auth.logout();
+    }
 });
