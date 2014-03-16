@@ -13,3 +13,30 @@ body {
     text-align: center;
     vertical-align: middle;
 }
+
+.table.borderless td {
+    border: none;
+}
+
+.table.tr-metro-stations-table td {
+    vertical-align: middle;
+}
+
+.table.tr-metro-stations-table td:first-child {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.table.tr-metro-stations-table td:first-child svg {
+    margin-top: -3px;
+    margin-bottom: -6px;
+}
+
+.table.tr-metro-stations-table td:first-child, .table.tr-metro-stations-table th:first-child {
+   border:none;
+}
+
+.table.tr-metro-stations-table svg {
+    display: block;
+    padding: 1px 0 1px 0;
+}

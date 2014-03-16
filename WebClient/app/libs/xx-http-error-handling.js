@@ -22,7 +22,7 @@
           var showMessage = function (content, cl, time) {
               content = JSON.stringify(content, null, '   ');
               console.log(content);
-              $('<div/>')
+              $('<div style="position: absolute;"/>')
                 .addClass(cl)
                 .hide()
                 .fadeIn('fast')
