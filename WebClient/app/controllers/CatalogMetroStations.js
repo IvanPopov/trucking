@@ -2,6 +2,7 @@
 
 app.controller('CatalogMetroStationsController', function ($scope, $location, $http, $rootScope,
 		$routeParams, simpleCatalogs, $q, $filter, ngTableParams) {
+	console.log("once!");
 	$scope.metroStations = simpleCatalogs.getMetroStations().query();
 	$scope.metroBranches = simpleCatalogs.getMetroBranches().query();
 
@@ -37,6 +38,7 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 			station.$save({ id: station.id_metro });
 		}
 		else {
+			$scope.inserted = null;
 			//creating new resource.
 			simpleCatalogs.getMetroStations().create(station).$promise.then(function (station) {
 				$scope.metroStations[$scope.metroStations.length - 1] = station;

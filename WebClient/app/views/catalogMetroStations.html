@@ -1,4 +1,6 @@
-﻿<div>
+﻿<ng-include src="'/app/views/Navbar.html'"></ng-include>
+
+<div >
 	<div class="row">
 		<div class="col-md-12">
 			<table ng-table="tableParams"  show-filter="true" class="table "><!--table-condensed tr-metro-stations-table-->
@@ -110,7 +112,7 @@
 					</td>
 				</tr>
 			</table>
-			<button class="btn btn-default" ng-click="addStation()">Добавить станцию</button>
+			<button class="btn btn-default" ng-click="addStation()" ng-show="!inserted">Добавить станцию</button>
 		</div>
 	</div>
 </div>
