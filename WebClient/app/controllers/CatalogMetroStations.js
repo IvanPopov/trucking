@@ -1,52 +1,51 @@
 ﻿'use strict';
 
-app.controller('CatalogMetroStationsController', function ($scope, $location, $http, $rootScope, $routeParams, simpleCatalogs, $q, $filter) {
-	init();
+app.controller('CatalogMetroStationsController', function ($scope, $location, $http, $rootScope,
+		$routeParams, simpleCatalogs, $q, $filter, ngTableParams) {
+	$scope.metroStations = simpleCatalogs.getMetroStations().query();
+	$scope.metroBranches = simpleCatalogs.getMetroBranches().query();
 
-	function init() {
-		$scope.metroStations = simpleCatalogs.getMetroStations().query();
-		$scope.metroBranches = simpleCatalogs.getMetroBranches().query();
+	$q.all([$scope.metroStations.$promise, $scope.metroBranches.$promise]).then(function () {
+		$scope.stylizeBranchSelect = function () {
+			var $p = this.$editable.elem.parent().find("select:first");
 
-		$q.all([$scope.metroStations.$promise, $scope.metroBranches.$promise]).then(function () {
-			var map = {};
-
-			$scope.metroBranches.forEach(function (branch) {
-				map[branch.id_metrobranch] = branch;
-			});
-
-			//$scope.metroStations.forEach(function (station) {
-			//	station.branch = map[station.id_metrobranch];
-			//});
-
-			$scope.stylizeBranchSelect = function () {
-				var $p = this.$editable.elem.parent().find("select:first");
-				
-				setTimeout(function () {
-					$.find("option").forEach(function (opt) {
-						var $opt = $(opt);
-						var branch = $filter('filter')($scope.metroBranches, { name: $(opt).html() })[0];
-						$opt.attr('data-content', "<span class='label' style='background-color: " +
-							decimalColorToHTMLcolor(branch.color) + ";'>" + branch.name + "</span>");
-					});
-					$p.selectpicker();
-				}, 1);
-			}
-
-			$scope.updateField = function (field, data, id) {
-				simpleCatalogs.getMetroStations().get({ id: id }, function (station) {
-					station[field] = data;
-					//TODO: $save???
-					station.$save({ id: id });
-					console.log(station.id_metrobranch, data);
+			setTimeout(function () {
+				$.find("option").forEach(function (opt) {
+					var $opt = $(opt);
+					var branch = $filter('filter')($scope.metroBranches, { name: $(opt).html() })[0];
+					$opt.attr('data-content', "<span class='label' style='background-color: " +
+						decimalColorToHTMLcolor(branch.color) + ";'>" + branch.name + "</span>");
 				});
-			}
+				$p.selectpicker();
+			}, 1);
+		}
 
-			$scope.getBranch = function (station) {
-				return $filter('filter')($scope.metroBranches, { id_metrobranch: station.id_metrobranch })[0];
-			}
-		});
+		$scope.getBranch = function (station) {
+			return $filter('filter')($scope.metroBranches, { id_metrobranch: station.id_metrobranch })[0];
+		}
+	});
+
+	//FIXME: before save element, resource dend 2 requiests for 
+	// /api/metro/branches & /api/metro/stations....
+	$scope.saveStation = function (station, data) {
+		for (var i in data) {
+			station[i] = data[i];
+		}
+
+		if (angular.isDefined(station.$save)) {
+			//save existing resource.
+			station.$save({ id: station.id_metro });
+		}
+		else {
+			//creating new resource.
+			simpleCatalogs.getMetroStations().create(station).$promise.then(function (station) {
+				$scope.metroStations[$scope.metroStations.length - 1] = station;
+			}, function () {
+				$scope.metroStations.pop();
+			});
+		}
 	}
-	
+
 	$scope.checkNotNull = function (data, msg) {
 		msg = msg || "Must be not null";
 		if (!data) {
@@ -54,21 +53,47 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 		}
 	}
 
-	$scope.removeStation = function (data) {
-		console.log(data);
+	$scope.removeStation = function (station) {
+		station.$remove({ id: station.id_metro }).then(function () {
+			//remove if success
+			$scope.metroStations.splice($scope.metroStations.indexOf(station), 1);
+		});
 	}
 
 	$scope.addStation = function () {
 		$scope.inserted = {
 			station: null,
 			id_metro: null,
-			id_metrobranch: null
+			//чтобы избежать колизиц в combobox'e, задавая значения о которых он не знает
+			//то, что раньше выглядело как пустая строка, а сейчас в обнвленной версии 
+			// как дубликат первого значения
+			id_metrobranch: $scope.metroBranches[0].id_metrobranch
 		};
 
-		$scope.metroStations.push(simpleCatalogs.getMetroStations().create($scope.inserted));
+		$scope.metroStations.push($scope.inserted);
 	}
 
-	
+	$scope.tableParams = new ngTableParams(
+		{
+			page: 1,            // show first page
+			count: 3,           // count per page
+			sorting: {
+				name: 'asc'     // initial sorting
+			}
+		},
+		{
+			total: 0, // length of data
+			getData: function ($defer, params) {
+				console.log(">>>");
+				$scope.metroStations.$promise.then(function (data) {
+					params.total(data.length);
+					var orderedData = params.sorting() ?
+						$filter('orderBy')(data, params.orderBy()) :
+						data;
+					$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+				});
+			}
+		});
 });
 
 function decimalColorToHTMLcolor(number) {

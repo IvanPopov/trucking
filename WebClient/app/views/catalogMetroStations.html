@@ -1,7 +1,69 @@
 ﻿<div>
 	<div class="row">
 		<div class="col-md-12">
-			<table class="table table-condensed tr-metro-stations-table">
+			<table ng-table="tableParams"  show-filter="true" class="table "><!--table-condensed tr-metro-stations-table-->
+				<tbody>
+					<tr ng-repeat="station in $data">
+						<!--<td data-title="" style="width:20px;">
+							<svg width="20" height="40" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+								<g>
+									<rect stroke-width="0" stroke="#000000" fill="{{getBranch(station).color|dec2HtmlColor}}" id="svg_1" height="40" width="4" y="0" x="8" />
+									<circle cx="10" cy="20" r="7.5" stroke="black" stroke-width="0" fill="{{getBranch(station).color|dec2HtmlColor}}" />
+								</g>
+							</svg>
+						</td>-->
+						<td data-title="'Станция'" filter="{ 'station': 'text' }" sortable="'station'" style="white-space: nowrap;">
+							<span onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="station.station"
+								  e-name="station" e-form="rowform" e-required>
+								{{ station.station || 'not set' }}
+							</span>
+						</td>
+						<td data-title="'Ветка'" sortable="'id_metrobranch'">
+							<span e-name="id_metrobranch" e-form="rowform"
+								  editable-select="station.id_metrobranch" onshow="stylizeBranchSelect(this)"
+								  e-ng-options="s.id_metrobranch as s.name for s in metroBranches">
+								{{ getBranch(station).name || 'not set' }}
+							</span>
+						</td>
+						<td data-title="" style="white-space: nowrap;">
+							<!-- form -->
+							<form editable-form name="rowform" onaftersave="saveStation(station, $data)"
+								  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == station">
+								<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+									save
+								</button>
+								<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+									cancel
+								</button>
+							</form>
+							<div class="buttons" ng-show="!rowform.$visible">
+								<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+								<button class="btn btn-danger" ng-click="removeStation(station)">del</button>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--<script type="text/ng-template" id="custom/pager">
+				<ul class="pager ng-cloak">
+					<li ng-repeat="page in pages"
+						ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+						ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+						<a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo; Previous</a>
+						<a ng-switch-when="next" ng-click="params.page(page.number)" href="">Next &raquo;</a>
+					</li>
+					<li>
+						<div class="btn-group">
+							<button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+							<button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+							<button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+							<button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+						</div>
+					</li>
+				</ul>
+			</script>-->
+			<hr />
+			<table class="table table-condensed tr-metro-stations-table ">
 				<tr>
 					<th></th>
 					<th style="width: 25%;">Станция</th>
@@ -18,39 +80,31 @@
 						</svg>
 					</td>
 					<td style="white-space:nowrap;">
-						<!--<span editable-text="station.station" e-name="station" e-form="rowform" e-required>
-							{{station.station}}
-						</span>-->
-					
-						<a href="#" onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="station.station"
-						   onaftersave="updateField('station', $data, station.id_metro)">
+						<span onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="station.station"
+							  e-name="station" e-form="rowform" e-required>
 							{{ station.station || 'not set' }}
-						</a>
-						
+						</span>
 					</td>
 					<td>
-						<!--<span editable-select="station.id_metrobranch" e-name="id_metrobranch" e-form="rowform" e-ng-options="s.id_metrobranch as s.name for s in metroBranches">
-							{{ getBranch(station).name }}
-						</span>-->
-
-						<a href="#" editable-select="station.id_metrobranch" onshow="stylizeBranchSelect(this)"
-						   e-ng-options="s.id_metrobranch as s.name for s in metroBranches" onaftersave="updateField('id_metrobranch', $data, station.id_metro)">
+						<span e-name="id_metrobranch" e-form="rowform"
+							  editable-select="station.id_metrobranch" onshow="stylizeBranchSelect(this)"
+							  e-ng-options="s.id_metrobranch as s.name for s in metroBranches">
 							{{ getBranch(station).name || 'not set' }}
-						</a>
-
+						</span>
 					</td>
 					<td style="white-space: nowrap">
 						<!-- form -->
-						<!--<form editable-form name="rowform" onbeforesave="saveTool($data, tool.id_tool)" ng-show="rowform.$visible" class="form-buttons form-inline">
+						<form editable-form name="rowform" onaftersave="saveStation(station, $data)"
+							  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == station">
 							<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
 								save
 							</button>
 							<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
 								cancel
 							</button>
-						</form>-->
+						</form>
 						<div class="buttons" ng-show="!rowform.$visible">
-							<!--<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>-->
+							<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
 							<button class="btn btn-danger" ng-click="removeStation(station)">del</button>
 						</div>
 					</td>

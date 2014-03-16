@@ -29,7 +29,7 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
 			'create': { method: 'post', url: apiUrl + "/api/naturalPersons/" + personId + "/phones/" }
 		});
 	}
-	
+
 	// Группы типов инструментов
 	function getToolGroups() {
 		return $resource(apiUrl + "/api/catalogs/tools/groups/:group", {
@@ -39,7 +39,7 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
 			'create': { method: 'post', url: apiUrl + "/api/catalogs/tools/groups" }
 		});
 	}
-   
+
 	// Типы работ
 	function getWorkTypes() {
 		return $resource(apiUrl + "/api/catalogs/worktypes/:worktype", {
@@ -65,7 +65,7 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
 	function getUnits() {
 		return $resource(apiUrl + "/api/catalogs/Units/:id", {
 			id: '@id'
-	   });
+		});
 	}
 
 	function getMetroStations() {

@@ -3,7 +3,7 @@
 
   #######################################################################*/
 
-var app = angular.module('WebClientDB', ['ngCookies', 'xeditable', 'ngResource',
+var app = angular.module('WebClientDB', ['ngCookies', 'xeditable', 'ngResource', 'ngTable',
 	'ngRoute', 'xx-http-error-handling']);
 
 //This configures the routes and associates each route with a view and a controller
