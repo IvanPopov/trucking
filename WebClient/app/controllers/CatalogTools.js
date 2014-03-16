@@ -16,8 +16,8 @@ app.controller('CatalogToolsController', function ($scope, $rootScope, simpleCat
         $scope.Units = simpleCatalogs.getUnits().query();
 
         $scope.newTool = {};
-        $scope.toolGroups = simpleCatalogs.getToolGroups().query( function() {
-            // Добавляем вариант "Не задано"
+        $scope.toolGroups = simpleCatalogs.getToolGroups().query(function () {
+        	// Добавляем вариант "Не задано"
             $scope.toolGroups.push(
                 {
                     id_toolgroup: null,

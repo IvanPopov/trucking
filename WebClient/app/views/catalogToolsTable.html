@@ -1,0 +1,76 @@
+﻿<table class="catalogtable table table-bordered table-hover table-condensed">
+    <tr style="font-weight: bold">
+        <td style="width:35%">Имя</td>
+        <td style="width:20%">Описание</td>
+        <td style="width:20%" title="Тут надо сделать подсказку, зачем нужна ставка 1">Ставка1</td>
+        <td style="width:25%">Единица1</td>
+        <td style="width:20%">Ставка2</td>
+        <td style="width:25%">Единица2</td>
+        <td style="width:25%">Группа</td>
+        <td style="width:25%">Edit</td>
+    </tr>
+    <tr ng-repeat="tool in Tools">
+        <td>
+            <!-- editable -->
+            <span editable-text="tool.name" e-name="name" e-form="rowform" e-required>
+                {{ tool.name || 'empty' }}
+            </span>
+        </td>
+        <td>
+            <!-- editable -->
+            <span editable-text="tool.description" e-name="description" e-form="rowform" e-required>
+                {{ tool.description || 'empty' }}
+            </span>
+        </td>
+        <td>
+            <!-- editable -->
+            <span editable-text="tool.rate" e-name="rate" e-form="rowform" e-required>
+                {{ tool.rate || 'empty' }}
+            </span>
+        </td>
+        <td>
+            <!-- editable -->
+            <span editable-select="tool.unit" e-name="unit" e-form="rowform" e-ng-options="s.unit as s.unit for s in Units">
+                {{ tool.unit || 'empty' }}
+            </span>
+        </td>
+        <td ng-mouseenter="show = true" ng-mouseleave="show = false">
+            <!-- editable -->
+            <span editable-number="tool.rate_sec" e-min="0" e-min="100000" e-name="rate_sec" e-form="rate_sec_Form" e-required onbeforesave="saveField('rate_sec', $data, tool.id_tool)">
+                {{ tool.rate_sec || 'empty' }}
+                <span class="editButton">
+                    <button type="button" class="btn btn-default btn-xs" ng-click="rate_sec_Form.$show()" ng-show="show">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </span>
+            </span>
+        </td>
+        <td>
+            <!-- editable -->
+            <span editable-select="tool.unit_sec" e-name="unit_sec" e-form="rowform" e-ng-options="s.unit as s.unit for s in Units">
+                {{ tool.unit_sec || 'empty' }}
+            </span>
+        </td>
+        <td>
+            <!-- editable -->
+            <span editable-select="tool.id_toolgroup" e-name="id_toolgroup" e-form="rowform" e-ng-options="e.id_toolgroup as e.name for e in toolGroups">
+                {{ getGroupName(tool.id_toolgroup) }}
+            </span>
+        </td>
+        <td style="white-space: nowrap">
+            <!-- form -->
+            <form editable-form name="rowform" onbeforesave="saveTool($data, tool.id_tool)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == user">
+                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                    save
+                </button>
+                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                    cancel
+                </button>
+            </form>
+            <div class="buttons" ng-show="!rowform.$visible">
+                <button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+                <button class="btn btn-danger" ng-click="removeUser($index)">del</button>
+            </div>
+        </td>
+    </tr>
+</table>

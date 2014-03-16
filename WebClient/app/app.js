@@ -11,7 +11,8 @@ app.config(function ($routeProvider) {
     $routeProvider
         .when('/main', {
               templateUrl: '/app/views/main.html',
-              controller: 'MainCtrl'
+              controller: 'MainCtrl',
+              resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
             })
         .when('/login', {
               templateUrl: '/app/views/loginForm.html',
@@ -19,23 +20,28 @@ app.config(function ($routeProvider) {
         })
         .when('/catalog/tools', {
             templateUrl: '/app/views/catalogTools.html',
-            controller: 'CatalogToolsController'
+            controller: 'CatalogToolsController',
+            resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
         })
         .when('/catalog/naturalpersons', {
             templateUrl: '/app/views/catalogNaturalPersons.html',
-            controller: 'CatalogNaturalPersonsController'
+            controller: 'CatalogNaturalPersonsController',
+            resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
         })
         .when('/catalog/naturalpersons/:id_naturalperson', {
             templateUrl: '/app/views/naturalPerson.html',
-            controller: 'NaturalPersonController'
+            controller: 'NaturalPersonController',
+            resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
         })
         .when('/catalog/:catalog/download', {
             templateUrl: '/app/views/catalog.html',
-            controller: 'CatalogControllerDownloader'
+            controller: 'CatalogControllerDownloader',
+            resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
         })
         .when('/catalog/:catalog', {
             templateUrl: '/app/views/catalog.html',
-            controller: 'CatalogController'
+            controller: 'CatalogController',
+            resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
         })
         .otherwise({ redirectTo: '/main' });
 })
@@ -48,9 +54,7 @@ app.config(function ($routeProvider) {
         clientSecret: 'abc123456',
     };
 })
-.run(function ($cookieStore, $location, $http, $rootScope, Auth, editableOptions) {
-    Auth.authenticate();
-
-    // Для редактируемых полей в таблицах
+.run(function (editableOptions) {
+    // Чтобы библиотека x-editable(для редактирования таблиц) работала с 3 bootstrap
     editableOptions.theme = 'bs3';
 });
