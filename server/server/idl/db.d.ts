@@ -1,3 +1,4 @@
+/// <reference path="mysql.d.ts" />
 
 interface MysqlError extends Error {
 	code: any;
@@ -7,8 +8,8 @@ interface IMap<T> {
 	[key: string]: T;
 }
 
-declare module trucking.db {
 
+declare module trucking.db {
 
 	interface IEmployee {
 		id_employee: number;
@@ -244,5 +245,21 @@ declare module trucking.db {
 		count?: number;
 		//select from row with number...
 		from?: number;
+		//select from page
+		page?: number;
+		extended?: boolean;
+
+		sorting: IMap<string>;
+		filter: IMap<string>;
+	}
+
+	interface IQueryResultList<T> {
+		conditions: IQueryCond;
+		//number of items
+		count: number;
+		//number ot items with this condition in table
+		total: number;
+
+		items: T[];
 	}
 }

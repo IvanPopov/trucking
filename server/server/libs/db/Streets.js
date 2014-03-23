@@ -15,7 +15,7 @@ var Streets = (function () {
         this.connect = this.streets.connect || this.territorialsigns.connect;
     }
     Streets.prototype.findBySign = function (sign, cb, cond) {
-        this.connect.query("SELECT t2.* FROM " + this.territorialsignsstreets + " t1, " + this.streets.table + " t2 WHERE t1.id_territorialsign = ? " + Model.parseLimitCond(cond), sign, cb);
+        this.connect.query("SELECT t2.* FROM " + this.territorialsignsstreets + " t1, " + this.streets.table + " t2 WHERE t1.id_territorialsign = ? " + Model.parseCond(cond), sign, cb);
     };
     return Streets;
 })();

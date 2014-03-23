@@ -53,6 +53,9 @@ var NaturalPersonModel = (function (_super) {
             if (e) {
                 return cb(e, null);
             }
+
+            //TODO: переписать через метод this.find, т.к. он теперь поддерживает условия
+            //c оператором LIKE
             var v = [_this.table];
             var q = "SELECT * FROM ?? WHERE ";
             ["name", "pass_serial", "pass_number", "id_naturalperson"].forEach(function (field, i, arr) {

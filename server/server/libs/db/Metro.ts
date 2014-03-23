@@ -27,9 +27,9 @@ class Metro {
 				if (err) { return cb(err, null); }
 
 				this.stations.find({ id_metrobranch: branch.id_metrobranch },
-					(err: Error, stations: trucking.db.IMetro[]): void => {
+					(err: Error, stations: trucking.db.IQueryResultList<trucking.db.IMetro>): void => {
 						if (err) { return cb(err, null); }
-						branch.stations = stations;
+						branch.stations = stations.items;
 						cb(null, branch);
 					});
 			});

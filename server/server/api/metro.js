@@ -248,7 +248,8 @@ function init(app, log) {
     *			}
     *		]
     */
-    app.get("/api/metro/stations", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+    app.get("/api/metro/stations", //passport.authenticate("bearer", { session: false }),
+    function (req, res, done) {
         db.metro.stations.get(function (err, stations) {
             if (err)
                 return done(err);

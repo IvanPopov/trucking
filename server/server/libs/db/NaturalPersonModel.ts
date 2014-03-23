@@ -21,7 +21,7 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 	public naturalpersonsworktypes: CatalogModel<trucking.db.INaturalPersonWorkType>;
 	public naturalpersonstools: CatalogModel<trucking.db.INaturalPersonTool>;
 
-	constructor(connect: mysql.Connection, public worktypes: CatalogModel<trucking.db.IWorkType>, public tools: CatalogModel<trucking.db.ITool>) {
+	constructor(connect: db.IConnectionWrapper, public worktypes: CatalogModel<trucking.db.IWorkType>, public tools: CatalogModel<trucking.db.ITool>) {
 		super(connect, "NaturalPersons");
 
 		this.brigades = new CatalogModel<trucking.db.IBrigade>(connect, "Brigades");
@@ -59,6 +59,10 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 			if (e) {
 				return cb(e, null);
 			}
+
+			//TODO: переписать через метод this.find, т.к. он теперь поддерживает условия
+			//c оператором LIKE
+
 			var v = [this.table];
 			var q = "SELECT * FROM ?? WHERE ";
 			["name", "pass_serial", "pass_number", "id_naturalperson"].forEach((field: string, i, arr) => {
@@ -70,7 +74,9 @@ class NaturalPersonModel extends CatalogModel<trucking.db.INaturalPerson> {
 		});
 	}
 
-	getBrigades(cb: (e: Error, brigades: trucking.db.IBrigade[]) => void): void {
+	getBrigades(cb: (e: Error, brigades: trucking.db.IQueryResultList<trucking.db.IBrigade>) => void): void;
+	getBrigades(cb: (e: Error, brigades: trucking.db.IBrigade[]) => void): void;
+	getBrigades(cb: (e: Error, brigades: any) => void): void {
 		this.brigades.get(cb);
 	}
 

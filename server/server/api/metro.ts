@@ -274,7 +274,7 @@ function init(app: express.Express, log: winston.Logger) {
 	 */
 
 	app.get("/api/metro/stations",
-		passport.authenticate("bearer", { session: false }),
+		//passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
 			db.metro.stations.get((err: Error, stations: trucking.db.IMetro[]) => {
 				if (err) return done(err);

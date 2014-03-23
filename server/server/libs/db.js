@@ -30,12 +30,39 @@ var dbConfig = {
     database: config.get("mysql:db")
 };
 
-var connection = null;
+var ConnectionWrapper = (function () {
+    function ConnectionWrapper() {
+        this.handlers = {};
+    }
+    ConnectionWrapper.prototype.setup = function (connect) {
+        this.connect = connect;
+        this.emit("connect");
+    };
 
-function handleDisconnect() {
-    connection = mysql.createConnection(dbConfig); // Recreate the connection, since
+    ConnectionWrapper.prototype.on = function (event, cb) {
+        this.handlers[event] = this.handlers[event] || [];
+        this.handlers[event].push(cb);
+    };
+
+    ConnectionWrapper.prototype.emit = function (event) {
+        var _this = this;
+        var list = this.handlers[event];
+        if (list) {
+            list.forEach(function (listener) {
+                listener(_this.connect);
+            });
+        }
+    };
+    return ConnectionWrapper;
+})();
+
+function handleDisconnect(cb) {
+    if (typeof cb === "undefined") { cb = null; }
+    var connection = mysql.createConnection(dbConfig);
 
     // the old one cannot be reused.
+    var wrapper = new ConnectionWrapper();
+
     connection.connect(function (err) {
         if (err) {
             logger.error('error when connecting to db:', err);
@@ -45,20 +72,26 @@ function handleDisconnect() {
 
         mysqlUtilities.upgrade(connection);
         mysqlUtilities.introspection(connection);
+
+        wrapper.setup(connection);
+
+        if (cb) {
+            cb(null, connection);
+        }
     });
 
     // If you're also serving http, display a 503 error.
     connection.on('error', function (err) {
         logger.error('db error', err);
         if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-            handleDisconnect(); // lost due to either server restart, or a
+            handleDisconnect(cb); // lost due to either server restart, or a
         } else {
             throw err;
         }
     });
-}
 
-handleDisconnect();
+    return wrapper;
+}
 
 function isAdmin(user) {
     return user.permissions == 1;
@@ -70,41 +103,80 @@ function isEmployee(user) {
 }
 exports.isEmployee = isEmployee;
 
+exports.clients = null;
+exports.users = null;
+exports.accessTokens = null;
+exports.refreshTokens = null;
+
+//all catalogues
+exports.catalogs = {
+    metrobranches: null,
+    //metro stations
+    metro: null,
+    territorialsigns: null,
+    streets: null,
+    tools: null,
+    toolgroups: null,
+    paymentterms: null,
+    prepaymentterms: null,
+    сonditionsofwork: null,
+    addresstype: null,
+    holdings: null,
+    worktypes: null,
+    worktypegroups: null,
+    worktypestools: null,
+    contractors: null,
+    contractortypes: null,
+    units: null,
+    brigades: null,
+    naturalpersons: null
+};
+
+exports.naturalpersons = null;
+
+//for admin
+exports.systemCatalogs = {
+    clientapps: null
+};
+
+exports.metro = null;
+exports.streets = null;
+
+var connection = handleDisconnect();
+
 exports.clients = new exports.ClientAppModel(connection, "ClientApps");
 exports.users = new exports.EmployeeModel(connection, "Employees");
 exports.accessTokens = new exports.TokenModel(connection, "AccessTokens");
 exports.refreshTokens = new exports.TokenModel(connection, "RefreshTokens");
 
-//all catalogues
-exports.catalogs = {
-    metrobranches: new exports.CatalogModel(connection, "MetroBranches"),
-    //metro stations
-    metro: new exports.CatalogModel(connection, "Metro"),
-    territorialsigns: new exports.CatalogModel(connection, "TerritorialSigns"),
-    streets: new exports.CatalogModel(connection, "Streets"),
-    tools: new exports.CatalogModel(connection, "Tools"),
-    toolgroups: new exports.CatalogModel(connection, "ToolGroups"),
-    paymentterms: new exports.CatalogModel(connection, "PaymentTerms"),
-    prepaymentterms: new exports.CatalogModel(connection, "PrepaymentTerms"),
-    сonditionsofwork: new exports.CatalogModel(connection, "СonditionsOfWork"),
-    addresstype: new exports.CatalogModel(connection, "AddressType"),
-    holdings: new exports.CatalogModel(connection, "Holdings"),
-    worktypes: new exports.CatalogModel(connection, "WorkTypes"),
-    worktypegroups: new exports.CatalogModel(connection, "WorkTypeGroups"),
-    worktypestools: new exports.CatalogModel(connection, "WorkTypesTools"),
-    contractors: new exports.CatalogModel(connection, "Contractors"),
-    contractortypes: new exports.CatalogModel(connection, "ContractorTypes"),
-    units: new exports.CatalogModel(connection, "Units"),
-    brigades: new exports.CatalogModel(connection, "Brigades"),
-    naturalpersons: null
-};
+exports.catalogs.metrobranches = new exports.CatalogModel(connection, "MetroBranches");
+
+//metro stations
+exports.catalogs.metro = new exports.CatalogModel(connection, "Metro");
+exports.catalogs.territorialsigns = new exports.CatalogModel(connection, "TerritorialSigns");
+exports.catalogs.streets = new exports.CatalogModel(connection, "Streets");
+
+exports.catalogs.tools = new exports.CatalogModel(connection, "Tools");
+exports.catalogs.toolgroups = new exports.CatalogModel(connection, "ToolGroups");
+
+exports.catalogs.paymentterms = new exports.CatalogModel(connection, "PaymentTerms");
+exports.catalogs.prepaymentterms = new exports.CatalogModel(connection, "PrepaymentTerms");
+exports.catalogs.сonditionsofwork = new exports.CatalogModel(connection, "ConditionsOfWork");
+exports.catalogs.addresstype = new exports.CatalogModel(connection, "AddressType");
+exports.catalogs.holdings = new exports.CatalogModel(connection, "Holdings");
+
+exports.catalogs.worktypes = new exports.CatalogModel(connection, "WorkTypes");
+exports.catalogs.worktypegroups = new exports.CatalogModel(connection, "WorkTypeGroups");
+exports.catalogs.worktypestools = new exports.CatalogModel(connection, "WorkTypesTools");
+
+exports.catalogs.contractors = new exports.CatalogModel(connection, "Contractors");
+exports.catalogs.contractortypes = new exports.CatalogModel(connection, "ContractorTypes");
+exports.catalogs.units = new exports.CatalogModel(connection, "Units");
+exports.catalogs.brigades = new exports.CatalogModel(connection, "Brigades");
+
+exports.systemCatalogs.clientapps = new exports.CatalogModel(connection, "ClientApps");
 
 exports.naturalpersons = exports.catalogs.naturalpersons = new exports.NaturalPersonModel(connection, exports.catalogs.worktypes, exports.catalogs.tools);
-
-//for admin
-exports.systemCatalogs = {
-    clientapps: new exports.CatalogModel(connection, "ClientApps")
-};
 
 exports.metro = new exports.Metro(exports.catalogs.metrobranches, exports.catalogs.metro);
 exports.streets = new exports.Streets("territorialsignsstreets", exports.catalogs.streets, exports.catalogs.territorialsigns);

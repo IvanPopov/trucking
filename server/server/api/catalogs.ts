@@ -941,7 +941,7 @@ function init(app: express.Express, log: winston.Logger) {
 			var catalog: db.CatalogModel<any> = db.catalogs[catalogName];
 
 			if (type.isDefAndNotNull(catalog)) {
-				catalog.get((err, rows) => {
+				catalog.get((err, result) => {
 					if (err) {
 						log.error(err.message);
 						res.json({ error: "Unknown error" });
@@ -949,6 +949,15 @@ function init(app: express.Express, log: winston.Logger) {
 					}
 
 					if (req.query.format == "xlsx" && db.isAdmin(req.user)) {
+						var rows: any[];
+
+						if (query && query.extended) {
+							rows = result.items;
+						}
+						else {
+							rows = <any>result;
+						}
+
 						catalog.convertToXlsx(rows, (e: Error, xlsx: NodeBuffer) => {
 							if (e) {
 								return res.json(500, {
@@ -962,7 +971,7 @@ function init(app: express.Express, log: winston.Logger) {
 						});
 					}
 					else {
-						res.json(rows);
+						res.json(result);
 					}
 				}, <trucking.db.IQueryCond>query);
 			}

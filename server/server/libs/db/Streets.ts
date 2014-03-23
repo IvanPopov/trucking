@@ -29,7 +29,7 @@ class Streets {
 	findBySign(sign: number, cb: (err: Error, branch: trucking.db.IStreet[]) => void, cond?: IQueryCond): void {
 		this.connect.query("SELECT t2.* FROM " + this.territorialsignsstreets + " t1, " +
 			this.streets.table + " t2 WHERE t1.id_territorialsign = ? " +
-			Model.parseLimitCond(cond), sign, cb);
+			Model.parseCond(cond), sign, cb);
 	}
 }
 

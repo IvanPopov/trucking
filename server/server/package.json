@@ -26,6 +26,7 @@
   "devDependencies": {
     "request": "~2.33.0",
     "jasmine-expect": "~1.21.0",
-    "excel-export": "~0.3.11"
+    "excel-export": "~0.3.11",
+    "es6-promise": "^0.1.1"
   }
 }

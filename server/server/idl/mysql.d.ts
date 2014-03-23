@@ -26,6 +26,22 @@ declare module "mysql" {
 		Comment: string;
 	}
 
+	interface PrimaryKeyInfo {
+		Table: string;
+		Non_unique: number;
+		Key_name: string;
+		Seq_in_index: number;
+		Column_name: string;
+		Collation: string;
+		Cardinality: number;
+		Sub_part: any;
+		Packed: any;
+		Null: string;
+		Index_type: string;
+		Comment: string;
+		Index_comment: string;
+	}
+
 	class Connection extends events.EventEmitter {
 		// class Connection implements EventEmitter {
 		static createQuery(sql, values?, cb?): any;
@@ -54,6 +70,10 @@ declare module "mysql" {
 		//mysql-utilities
 		queryRow(sql, values?, cb?: QueryCallback): void;
 		fields(table: string, cb: QueryCallback): void;
+		primary(table: string, cb: QueryCallback): void;
+		where(conditions: any): string;
+		count(table: string, cb: QueryCallback): void;
+		count(table: string, where: any, cb: QueryCallback): void;
 	}
 
 	function escape(value): string;

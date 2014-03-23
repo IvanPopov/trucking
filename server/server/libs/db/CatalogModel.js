@@ -41,32 +41,61 @@ var CatalogModel = (function (_super) {
         var _this = this;
         _super.call(this, connect, table);
         this.pkName = null;
+        this.pk = null;
 
-        this.connect.query("SHOW KEYS FROM ?? WHERE Key_name = 'PRIMARY'", [this.table], function (e, rows) {
-            if (type.isArray(rows) && rows.length > 0) {
-                _this.pkName = rows[0]['Column_name'];
-            }
+        var model = this;
+        this.connection.on('connect', function () {
+            _this.connect.primary(_this.table, (function (e, primary) {
+                if (e) {
+                    throw e;
+                }
+
+                if (primary) {
+                    _this.pk = primary;
+                    _this.pkName = primary['Column_name'];
+                }
+            }).bind(model));
         });
     }
     CatalogModel.prototype.findRow = function (cond, cb) {
-        this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.stringifyWhereClause(cond), cb);
+        this.connect.queryRow("SELECT * FROM " + this.table + " where " + this.connect.where(cond), cb);
     };
 
-    CatalogModel.prototype.find = function (cond, cb, limit) {
-        this.connect.query("SELECT * FROM " + this.table + " where ?" + " " + Model.parseLimitCond(limit), cond, cb);
-    };
+    CatalogModel.prototype.find = function (where, cb, cond) {
+        var _this = this;
+        where = Model.parseFilter(cond, where);
 
-    //get all rows
-    CatalogModel.prototype.get = function (cb, cond) {
-        var q = mysql.format("SELECT * FROM " + this.table + "" + Model.parseLimitCond(cond));
+        var q = mysql.format("SELECT * FROM " + this.table + (where ? " WHERE " + this.connect.where(where) : "") + " " + Model.parseCond(cond));
 
-        this.connect.query(q, function (err, rows) {
-            if (err) {
-                return cb(err, null);
+        //console.log(q);
+        this.connect.query(q, function (e, rows) {
+            if (e) {
+                return cb(e, null);
             }
 
-            return cb(null, rows);
+            if (!cond || !cond.extended) {
+                return cb(e, rows);
+            }
+
+            _this.connect.count(_this.table, where, function (e, count) {
+                if (e) {
+                    return cb(e, null);
+                }
+
+                var result = {
+                    conditions: cond || null,
+                    count: rows.length,
+                    items: rows,
+                    total: count
+                };
+
+                return cb(null, result);
+            });
         });
+    };
+
+    CatalogModel.prototype.get = function (cb, cond) {
+        this.find(null, cb, cond);
     };
 
     CatalogModel.prototype.convertToXlsx = function (rows, cb) {
@@ -96,7 +125,7 @@ var CatalogModel = (function (_super) {
             return cb(new Error("Data for patching not specified."), null);
         }
 
-        var q = mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.stringifyWhereClause(cond), [this.table, data]);
+        var q = mysql.format("UPDATE ?? SET ? WHERE " + this.connect.where(cond), [this.table, data]);
 
         //console.log(q);
         this.connect.query(q, function (err, res) {
@@ -126,6 +155,7 @@ var CatalogModel = (function (_super) {
             if (res.affectedRows > 0 && res.insertId != 0) {
                 var cond = {};
                 cond[_this.pkName] = res.insertId;
+                console.log(cond);
                 return _this.findRow(cond, cb);
             }
 
@@ -134,7 +164,7 @@ var CatalogModel = (function (_super) {
     };
 
     CatalogModel.prototype.del = function (cond, cb) {
-        var q = mysql.format("DELETE FROM ?? WHERE " + CatalogModel.stringifyWhereClause(cond), [this.table]);
+        var q = mysql.format("DELETE FROM ?? WHERE " + this.connect.where(cond), [this.table]);
         this.connect.query(q, function (err, res) {
             //console.log(res);
             if (err)
@@ -192,16 +222,6 @@ var CatalogModel = (function (_super) {
         }
 
         return null;
-    };
-
-    CatalogModel.stringifyWhereClause = function (cond) {
-        var where = "";
-        for (var field in cond) {
-            where += (where.length ? " AND " : "") + mysql.format("?? = ?", [field, cond[field]]);
-        }
-
-        //where += " LIMIT 1";
-        return where;
     };
     CatalogModel.MYSQL_NUMBER_TYPES = [
         "TINYINT",

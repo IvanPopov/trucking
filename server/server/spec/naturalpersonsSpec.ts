@@ -133,7 +133,6 @@ describe("naturalpersons api", () => {
 					id_leading_type_of_work: null
 				}
 			}, (e, res, body) => {
-				//console.log(body);
 				expect(e).toBeNull();
 				expect(res.statusCode).toBe(201);
 				expect(body.height).toBe(180);

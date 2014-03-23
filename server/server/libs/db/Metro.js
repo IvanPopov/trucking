@@ -20,7 +20,7 @@ var Metro = (function () {
                 if (err) {
                     return cb(err, null);
                 }
-                branch.stations = stations;
+                branch.stations = stations.items;
                 cb(null, branch);
             });
         });

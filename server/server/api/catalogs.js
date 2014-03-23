@@ -871,7 +871,7 @@ function init(app, log) {
         var catalog = db.catalogs[catalogName];
 
         if (type.isDefAndNotNull(catalog)) {
-            catalog.get(function (err, rows) {
+            catalog.get(function (err, result) {
                 if (err) {
                     log.error(err.message);
                     res.json({ error: "Unknown error" });
@@ -879,6 +879,14 @@ function init(app, log) {
                 }
 
                 if (req.query.format == "xlsx" && db.isAdmin(req.user)) {
+                    var rows;
+
+                    if (query && query.extended) {
+                        rows = result.items;
+                    } else {
+                        rows = result;
+                    }
+
                     catalog.convertToXlsx(rows, function (e, xlsx) {
                         if (e) {
                             return res.json(500, {
@@ -891,7 +899,7 @@ function init(app, log) {
                         res.end(xlsx, 'binary');
                     });
                 } else {
-                    res.json(rows);
+                    res.json(result);
                 }
             }, query);
         } else {

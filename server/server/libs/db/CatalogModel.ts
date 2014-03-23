@@ -12,7 +12,7 @@ import nodeExcel = require("excel-export");
 import Model = require("./Model");
 
 import IQueryCond = trucking.db.IQueryCond;
-
+import IQueryResultList = trucking.db.IQueryResultList;
 /**
  * @apiDefineSuccessStructure Created
  * @apiSuccess {Boolean} created Is created.
@@ -40,37 +40,68 @@ import IQueryCond = trucking.db.IQueryCond;
 
 class CatalogModel<ENTRY_T> extends Model {
 	private pkName: string = null; //primary key Name
+	private pk: mysql.PrimaryKeyInfo = null;
 
-	constructor(connect: mysql.Connection, table: string) {
+	constructor(connect: db.IConnectionWrapper, table: string) {
 		super(connect, table);
 
-		this.connect.query("SHOW KEYS FROM ?? WHERE Key_name = 'PRIMARY'", [this.table], (e: Error, rows) => {
-			if (type.isArray(rows) && rows.length > 0) {
-				this.pkName = rows[0]['Column_name'];
-			}
+		var model = this;
+		this.connection.on('connect', () => {
+			this.connect.primary(this.table, ((e: Error, primary: mysql.PrimaryKeyInfo) => {
+				if (e) {
+					throw e;
+				}
+
+				if (primary) {
+					this.pk = primary;
+					this.pkName = primary['Column_name'];
+				}
+			}).bind(model));
 		});
 	}
 
 	findRow(cond: any, cb: (err: Error, entry: ENTRY_T) => void): void {
-		this.connect.queryRow("SELECT * FROM " + this.table + " where " + CatalogModel.stringifyWhereClause(cond), cb);
+		this.connect.queryRow("SELECT * FROM " + this.table + " where " +
+			this.connect.where(cond), cb);
 	}
 
-	find(cond: any, cb: (err: Error, entry: ENTRY_T[]) => void, limit?: IQueryCond): void {
-		this.connect.query("SELECT * FROM " + this.table + " where ?" + " " + Model.parseLimitCond(limit), cond, cb);
+	find(where: any, cb: (err: Error, result: IQueryResultList<ENTRY_T>) => void, cond?: IQueryCond): void;
+	find(where: any, cb: (err: Error, rows: ENTRY_T[]) => void, cond?: IQueryCond): void;
+	find(where: any, cb: Function, cond?: IQueryCond) {
+		where = Model.parseFilter(cond, where);
+
+		var q = mysql.format("SELECT * FROM " + this.table + 
+			(where ? " WHERE " + this.connect.where(where) : "") + " " +
+			Model.parseCond(cond));
+		//console.log(q);
+		this.connect.query(q,
+			(e: Error, rows: ENTRY_T[]) => {
+				if (e) { return cb(e, null); }
+				
+				if (!cond || !cond.extended) {
+					return cb(e, rows);
+				}
+				
+				this.connect.count(this.table, where, (e: MysqlError, count: number) => {
+					if (e) { return cb(e, null); }
+
+					var result: IQueryResultList<ENTRY_T> = {
+						conditions: cond || null,
+						count: rows.length,
+						items: rows,
+						total: count
+					}
+
+					return cb(null, result);
+				});
+			});
 	}
 
 	//get all rows
-	get(cb: (err: Error, rows: ENTRY_T[]) => void, cond?: IQueryCond): void {
-		var q = mysql.format("SELECT * FROM " + this.table + "" + Model.parseLimitCond(cond));
-
-		this.connect.query(q,
-			(err: Error, rows: ENTRY_T[]) => {
-				if (err) {
-					return cb(err, null);
-				}
-
-				return cb(null, rows);
-			});
+	get(cb: (e: Error, result: IQueryResultList<ENTRY_T>) => void, cond?: IQueryCond): void;
+	get(cb: (e: Error, rows: ENTRY_T[]) => void, cond?: IQueryCond): void;
+	get(cb: Function, cond?: IQueryCond): void {
+		this.find(null, <(e: Error, rows: ENTRY_T[]) => void>cb, cond);
 	}
 
 	convertToXlsx(rows: ENTRY_T[], cb: (e: Error, xlsx: NodeBuffer) => void): void {
@@ -98,7 +129,7 @@ class CatalogModel<ENTRY_T> extends Model {
 			return cb(new Error("Data for patching not specified."), null);
 		}
 
-		var q = mysql.format("UPDATE ?? SET ? WHERE " + CatalogModel.stringifyWhereClause(cond), [this.table, data]);
+		var q = mysql.format("UPDATE ?? SET ? WHERE " + this.connect.where(cond), [this.table, data]);
 		//console.log(q);
 
 		this.connect.query(q, (err, res) => {
@@ -126,6 +157,7 @@ class CatalogModel<ENTRY_T> extends Model {
 			if (res.affectedRows > 0 && res.insertId != 0) {
 				var cond = {};
 				cond[this.pkName] = res.insertId;
+				console.log(cond);
 				return this.findRow(cond, cb);
 			}
 
@@ -134,7 +166,7 @@ class CatalogModel<ENTRY_T> extends Model {
 	}
 
 	del(cond: Object, cb: (err: Error, result: any) => void): void {
-		var q = mysql.format("DELETE FROM ?? WHERE " + CatalogModel.stringifyWhereClause(cond), [this.table]);
+		var q = mysql.format("DELETE FROM ?? WHERE " + this.connect.where(cond), [this.table]);
 		this.connect.query(q, (err, res) => {
 			//console.log(res);
 			if (err) return cb(Model.parseError(err), false);
@@ -212,17 +244,6 @@ class CatalogModel<ENTRY_T> extends Model {
 		}
 
 		return null;
-	}
-
-	static stringifyWhereClause(cond: any): string {
-		var where: string = "";
-		for (var field in cond) {
-			where += (where.length ? " AND " : "") + mysql.format("?? = ?", [field, cond[field]]);
-		}
-
-		//where += " LIMIT 1";
-
-		return where;
 	}
 }
 
