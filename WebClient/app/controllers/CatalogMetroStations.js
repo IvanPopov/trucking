@@ -1,10 +1,12 @@
 ﻿'use strict';
 
-app.controller('CatalogMetroStationsController', function ($scope, $location, $http, $rootScope,
-		$routeParams, simpleCatalogs, $q, $filter, ngTableParams) {
-	console.log("once!");
-	$scope.metroStations = simpleCatalogs.getMetroStations().query();
-	$scope.metroBranches = simpleCatalogs.getMetroBranches().query();
+app.controller('CatalogMetroStationsController', function ($scope, $location, $http, $rootScope, $resource,
+		$routeParams, simpleCatalogs, $q, $filter, ngTableParams, $timeout) {
+
+	$scope.$metroStationsResource = simpleCatalogs.getMetroStations();
+	$scope.$metroBranchesResource = simpleCatalogs.getMetroBranches();
+	$scope.metroStations = $scope.$metroStationsResource.query();
+	$scope.metroBranches = $scope.$metroBranchesResource.query();
 
 	$q.all([$scope.metroStations.$promise, $scope.metroBranches.$promise]).then(function () {
 		$scope.stylizeBranchSelect = function () {
@@ -33,7 +35,7 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 			station[i] = data[i];
 		}
 
-		if (angular.isDefined(station.$save)) {
+		if (!$scope.inserted) {
 			//save existing resource.
 			station.$save({ id: station.id_metro });
 		}
@@ -79,23 +81,54 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 		{
 			page: 1,            // show first page
 			count: 3,           // count per page
-			sorting: {
-				name: 'asc'     // initial sorting
-			}
+			extended: true
 		},
 		{
 			total: 0, // length of data
 			getData: function ($defer, params) {
-				console.log(">>>");
-				$scope.metroStations.$promise.then(function (data) {
-					params.total(data.length);
-					var orderedData = params.sorting() ?
-						$filter('orderBy')(data, params.orderBy()) :
-						data;
-					$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-				});
+				console.log(params.url());
+				$timeout(function () {
+					$scope.$metroStationsResource.get(params.url(), function (data) {
+						params.total(data.total);
+						$defer.resolve(data.items);
+					});
+				}, 500);
+				//$scope.metroStations.$promise.then(function (data) {
+				//	params.total(data.length);
+				//	var orderedData = params.sorting() ?
+				//		$filter('orderBy')(data, params.orderBy()) :
+				//		data;
+				//	$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+				//});
 			}
 		});
+
+
+}).filter('dec2HtmlColor', function () {
+	return decimalColorToHTMLcolor;
+}).filter('highlightFilter', function ($sce) {
+	return function (input, q) {
+		if (!input || !q) {
+			return $sce.trustAsHtml(input);
+		}
+
+		return $sce.trustAsHtml(input.replace(new RegExp(q, "gi"), function (s) {
+			return "<span style='background: yellow;'>" + s + "</span>";
+		}));
+	}
+}).directive('loadingContainer', function () {
+	return {
+		restrict: 'A',
+		scope: false,
+		link: function (scope, element, attrs) {
+			var loadingLayer = angular.element('<div class="loading"></div>');
+			element.append(loadingLayer);
+			element.addClass('loading-container');
+			scope.$watch(attrs.loadingContainer, function (value) {
+				loadingLayer.toggleClass('ng-hide', !value);
+			});
+		}
+	};
 });
 
 function decimalColorToHTMLcolor(number) {
@@ -126,6 +159,3 @@ function decimalColorToHTMLcolor(number) {
 	return HTMLcolor;
 }
 
-app.filter('dec2HtmlColor', function () {
-	return decimalColorToHTMLcolor;
-});

@@ -3,11 +3,12 @@
     http://getbootstrap.com/examples/navbar-fixed-top/
 */
 body {
-  
-  padding-top: 70px;
+    padding-top: 70px;
 }
 
-.editButton { float:right }
+.editButton {
+    float: right;
+}
 
 .catalogTable td {
     text-align: center;
@@ -22,21 +23,42 @@ body {
     vertical-align: middle;
 }
 
-.table.tr-metro-stations-table td:first-child {
-    padding-top: 0;
-    padding-bottom: 0;
-}
+    .table.tr-metro-stations-table td:first-child {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 
-.table.tr-metro-stations-table td:first-child svg {
-    margin-top: -3px;
-    margin-bottom: -6px;
-}
+        .table.tr-metro-stations-table td:first-child svg {
+            margin-top: -3px;
+            margin-bottom: -6px;
+        }
 
-.table.tr-metro-stations-table td:first-child, .table.tr-metro-stations-table th:first-child {
-   border:none;
-}
+    .table.tr-metro-stations-table td:first-child, .table.tr-metro-stations-table th:first-child {
+        border: none;
+    }
 
 .table.tr-metro-stations-table svg {
     display: block;
     padding: 1px 0 1px 0;
 }
+
+
+.loading-container {
+    position: relative;
+}
+
+    .loading-container .loading:before, .loading-container .loading:after {
+        content: " ";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        min-height: 50px;
+        min-width: 50px;
+    }
+
+    .loading-container .loading:before {
+        background-color: white;
+        opacity: 0.5;
+    }
