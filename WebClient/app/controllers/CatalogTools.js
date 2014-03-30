@@ -25,6 +25,7 @@ app.controller('CatalogToolsController', function ($scope, $rootScope, simpleCat
                 }
             );
         });
+	    $scope.selectedGroup = null; // Фильтрация по группе, для меню слева
     }
 
     $scope.getGroupName = function (id_toolgroup) {
