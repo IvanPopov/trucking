@@ -26,7 +26,8 @@ app.config(function ($routeProvider) {
 		.when('/catalog/metro', {
 			templateUrl: '/app/views/catalogMetroStations.html',
 			controller: 'CatalogMetroStationsController',
-			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
+			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] },
+			reloadOnSearch: false
 		})
 		.when('/catalog/metrobranches', {
 			templateUrl: '/app/views/catalogMetroBranches.html',
