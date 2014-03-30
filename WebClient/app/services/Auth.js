@@ -43,7 +43,6 @@ app.factory('Auth', function ($cookieStore, $http, $location, $rootScope, $q) {
         	deferred.reject();
         	return deferred.promise;
         }
-	    console.log(accessToken);
 
         // Let's attempt an API call
         $http.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
