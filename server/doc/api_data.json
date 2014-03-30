@@ -1091,6 +1091,118 @@
   },
   {
     "type": "get",
+    "url": "/api/catalogs/tools",
+    "title": "Get tools.",
+    "name": "GetTools",
+    "group": "Catalogs",
+    "permission": "emploee",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "from",
+            "optional": true,
+            "description": "View from number."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "count",
+            "optional": true,
+            "description": "View number of tools."
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "field": "group",
+            "optional": true,
+            "description": "Tool group."
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Object[]",
+            "field": "tools",
+            "optional": false,
+            "description": "List of tools."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "tools.name",
+            "optional": false,
+            "description": "Name."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "tools.description",
+            "optional": false,
+            "description": "Desc."
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "field": "tools.unit",
+            "optional": false,
+            "description": "Unit."
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "field": "tools.rate",
+            "optional": false,
+            "description": "Rate."
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "field": "tools.unit_sec",
+            "optional": false,
+            "description": "Unit second."
+          },
+          {
+            "group": "Success 200",
+            "type": "Number",
+            "field": "tools.rate_sec",
+            "optional": false,
+            "description": "Rate second."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "tools.id_tool",
+            "optional": false,
+            "description": "Tool id."
+          },
+          {
+            "group": "Success 200",
+            "type": "Integer",
+            "field": "tools.id_toolgroup",
+            "optional": false,
+            "description": "Group."
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "   HTTP/1.1 200 OK\n   [\n\t\t{\n\t\t\t\"name\": \"loader\",\n\t\t\t\"description\": \"...\",\n\t\t\t\"unit\": \"kg\",\n\t\t\t\"rate\": 200.0,\n\t\t\t\"unit_sec\": null,\n\t\t\t\"rate_sec\": 0,\n\t\t\t\"type\": 0,\n\t\t\t\"id_tool\": 25,\n\t\t\t\"id_toolgroup\": 0\n\t\t}\n   ]\n"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "server\\api\\catalogs.js"
+  },
+  {
+    "type": "get",
     "url": "/api/catalogs/tools/groups",
     "title": "Get tools groups.",
     "name": "GetToolsGroups",

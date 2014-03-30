@@ -212,6 +212,59 @@ function init(app, log) {
     });
 
     /**
+    * @api {get} /api/catalogs/tools Get tools.
+    * @apiName GetTools
+    * @apiGroup Catalogs
+    * @apiPermission emploee
+    *
+    * @apiParam {Integer} [from] View from number.
+    * @apiParam {Integer} [count] View number of tools.
+    * @apiParam {Integer} [group] Tool group.
+    *
+    * @apiSuccess {Object[]} tools List of tools.
+    * @apiSuccess {String}   tools.name  Name.
+    * @apiSuccess {String}   tools.description Desc.
+    * @apiSuccess {String}   tools.unit Unit.
+    * @apiSuccess {Number}   tools.rate Rate.
+    * @apiSuccess {Number}   tools.unit_sec Unit second.
+    * @apiSuccess {Number}   tools.rate_sec Rate second.
+    * @apiSuccess {Integer}  tools.id_tool Tool id.
+    * @apiSuccess {Integer}  tools.id_toolgroup Group.
+    *
+    * @apiSuccessExample Success-Response:
+    *     HTTP/1.1 200 OK
+    *     [
+    *			{
+    *				"name": "loader",
+    *				"description": "...",
+    *				"unit": "kg",
+    *				"rate": 200.0,
+    *				"unit_sec": null,
+    *				"rate_sec": 0,
+    *				"type": 0,
+    *				"id_tool": 25,
+    *				"id_toolgroup": 0
+    *			}
+    *     ]
+    */
+    app.get("/api/catalogs/tools", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        if (type.isString(req.query.group)) {
+            var cond = { id_toolgroup: parseInt(req.query.group) || 0 };
+            db.catalogs.tools.find(cond, function (err, tools) {
+                if (err)
+                    return done(err);
+                res.json(tools);
+            }, req.query);
+        } else {
+            db.catalogs.tools.get(function (err, tools) {
+                if (err)
+                    return done(err);
+                res.json(tools);
+            }, req.query);
+        }
+    });
+
+    /**
     * @api {post} /api/catalogs/tools Create new tool.
     * @apiName CreateTool
     * @apiGroup Catalogs
