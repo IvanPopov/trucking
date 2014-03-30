@@ -1,12 +1,14 @@
 ﻿'use strict';
 
-app.controller('CatalogMetroStationsController', function ($scope, $location, $http, $rootScope, $resource,
-		$routeParams, simpleCatalogs, $q, $filter, ngTableParams, $timeout) {
-
-	$scope.$metroStationsResource = simpleCatalogs.getMetroStations();
-	$scope.$metroBranchesResource = simpleCatalogs.getMetroBranches();
-	$scope.metroStations = $scope.$metroStationsResource.query();
-	$scope.metroBranches = $scope.$metroBranchesResource.query();
+app.controller('CatalogMetroStationsController', function (
+	$scope, $location, $http, $rootScope, $resource,
+	$routeParams, simpleCatalogs, $q, $filter, ngTableParams, $timeout) {
+	
+	var metroStationsResource = simpleCatalogs.getMetroStations();
+	var metroBranchesResource = simpleCatalogs.getMetroBranches();
+	
+	$scope.metroStations = metroStationsResource.query();
+	$scope.metroBranches = metroBranchesResource.query();
 
 	$q.all([$scope.metroStations.$promise, $scope.metroBranches.$promise]).then(function () {
 		$scope.stylizeBranchSelect = function () {
@@ -37,16 +39,27 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 
 		if (!$scope.inserted) {
 			//save existing resource.
-			station.$save({ id: station.id_metro });
+			metroStationsResource.save({ id: station.id_metro }, station,
+				function () {
+					//success
+				},
+				function () {
+					$scope.tableParams.reload();
+				});
 		}
 		else {
-			$scope.inserted = null;
 			//creating new resource.
-			simpleCatalogs.getMetroStations().create(station).$promise.then(function (station) {
-				$scope.metroStations[$scope.metroStations.length - 1] = station;
-			}, function () {
-				$scope.metroStations.pop();
-			});
+
+			metroStationsResource.create(station,
+				function (station) {
+					$scope.inserted = null;
+					$scope.tableParams.filter({ station: station.station });
+					$scope.tableParams.reload();
+				},
+				function () {
+					//add new station, if prev. attempt failed..
+					$scope.addStation();
+				});
 		}
 	}
 
@@ -58,51 +71,71 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 	}
 
 	$scope.removeStation = function (station) {
-		station.$remove({ id: station.id_metro }).then(function () {
-			//remove if success
-			$scope.metroStations.splice($scope.metroStations.indexOf(station), 1);
+
+		metroStationsResource.remove({ id: station.id_metro }, function () {
+			$scope.tableParams.reload();
 		});
 	}
 
 	$scope.addStation = function () {
 		$scope.inserted = {
-			station: null,
+			station: $scope.inserted ?
+				$scope.inserted.station : null,
 			id_metro: null,
 			//чтобы избежать колизиц в combobox'e, задавая значения о которых он не знает
 			//то, что раньше выглядело как пустая строка, а сейчас в обнвленной версии 
 			// как дубликат первого значения
-			id_metrobranch: $scope.metroBranches[0].id_metrobranch
+			id_metrobranch: $scope.inserted ?
+				$scope.inserted.id_metrobranch : $scope.metroBranches[0].id_metrobranch
 		};
 
-		$scope.metroStations.push($scope.inserted);
+		$scope.tableParams.reload();
 	}
+
+	$scope.cancelEditing = function (rowform, station) {
+		rowform.$cancel();
+
+		if (station == $scope.inserted) {
+			$scope.inserted = null;
+			$scope.tableParams.reload();
+		}
+	}
+
+
+	$scope.$on('$routeUpdate', function (scope, next, current) {
+		if (!angular.equals(next.params, $scope.tableParams.url())) {
+			$scope.tableParams.parameters(next.params);
+			$scope.tableParams.reload();
+		}
+	});
 
 	$scope.tableParams = new ngTableParams(
 		{
 			page: 1,            // show first page
-			count: 3,           // count per page
+			count: 10,           // count per page
 			extended: true
 		},
 		{
 			total: 0, // length of data
 			getData: function ($defer, params) {
-				console.log(params.url());
+				var delay = Math.random() * 500;
+				//эмитация загрузки разной продолжительности
+				//TODO: remove $timeout
 				$timeout(function () {
-					$scope.$metroStationsResource.get(params.url(), function (data) {
+					metroStationsResource.get(params.url(), function (data) {
+						$location.search(params.url());
+						if ($scope.inserted) {
+							data.items.push($scope.inserted);
+						}
+
 						params.total(data.total);
 						$defer.resolve(data.items);
 					});
-				}, 500);
-				//$scope.metroStations.$promise.then(function (data) {
-				//	params.total(data.length);
-				//	var orderedData = params.sorting() ?
-				//		$filter('orderBy')(data, params.orderBy()) :
-				//		data;
-				//	$defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-				//});
+				}, delay);
 			}
 		});
 
+	window.tp = $scope.tableParams;
 
 }).filter('dec2HtmlColor', function () {
 	return decimalColorToHTMLcolor;
@@ -116,7 +149,7 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 			return "<span style='background: yellow;'>" + s + "</span>";
 		}));
 	}
-}).directive('loadingContainer', function () {
+}).directive('loadingContainer', function ($timeout) {
 	return {
 		restrict: 'A',
 		scope: false,
@@ -124,8 +157,22 @@ app.controller('CatalogMetroStationsController', function ($scope, $location, $h
 			var loadingLayer = angular.element('<div class="loading"></div>');
 			element.append(loadingLayer);
 			element.addClass('loading-container');
+			var timeout = null;
 			scope.$watch(attrs.loadingContainer, function (value) {
-				loadingLayer.toggleClass('ng-hide', !value);
+				//clear timeout if exists
+				$timeout.cancel(timeout);
+
+				// если нужно показать что идент загрузка, то подождем 100мс, 
+				// чтобы избежать мерцания на быстрые
+				// ответы сервера
+				if (value) {
+					timeout = $timeout(function () {
+						loadingLayer.toggleClass('ng-hide', false);
+					}, 100);
+				}
+				else {
+					loadingLayer.toggleClass('ng-hide', true);
+				}
 			});
 		}
 	};

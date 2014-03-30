@@ -60,5 +60,15 @@ body {
 
     .loading-container .loading:before {
         background-color: white;
+        background-image: url(../Content/img/ajax-loader.gif);
+        background-repeat: no-repeat;
+        background-position: center center;
         opacity: 0.5;
     }
+
+
+.ng-table th.sortable.sort-desc, .ng-table th.sortable.sort-asc {
+    background-color: #F5F5F5 !important;
+    /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
+    text-shadow: none;
+}
