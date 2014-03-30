@@ -6,11 +6,18 @@ app.controller('CatalogMetroStationsController', function (
 	
 	var metroStationsResource = simpleCatalogs.getMetroStations();
 	var metroBranchesResource = simpleCatalogs.getMetroBranches();
+	var metroTerritorialSignsResource = simpleCatalogs.getTerritorialSignsMetro();
+	var territorialSignsResource = simpleCatalogs.getTerritorialSigns();
 	
 	$scope.metroStations = metroStationsResource.query();
 	$scope.metroBranches = metroBranchesResource.query();
+	$scope.territorialSigns = territorialSignsResource.query();
 
-	$q.all([$scope.metroStations.$promise, $scope.metroBranches.$promise]).then(function () {
+	$q.all([
+		$scope.metroStations.$promise,
+		$scope.metroBranches.$promise,
+		$scope.territorialSigns.$promise]).then(function () {
+
 		$scope.stylizeBranchSelect = function () {
 			var $p = this.$editable.elem.parent().find("select:first");
 
@@ -28,18 +35,30 @@ app.controller('CatalogMetroStationsController', function (
 		$scope.getBranch = function (station) {
 			return $filter('filter')($scope.metroBranches, { id_metrobranch: station.id_metrobranch })[0];
 		}
+
+		$scope.getSigns = function (station) {
+
+		}
 	});
+
+	function cloneStation(station) {
+		return {
+			id_metro: station.id_metro,
+			id_metrobranch: station.id_metrobranch,
+			station: station.station
+		};
+	}
 
 	//FIXME: before save element, resource dend 2 requiests for 
 	// /api/metro/branches & /api/metro/stations....
-	$scope.saveStation = function (station, data) {
+	$scope.save = function (station, data) {
 		for (var i in data) {
 			station[i] = data[i];
 		}
 
 		if (!$scope.inserted) {
 			//save existing resource.
-			metroStationsResource.save({ id: station.id_metro }, station,
+			metroStationsResource.save({ id: station.id_metro }, cloneStation(station),
 				function () {
 					//success
 				},
@@ -50,7 +69,7 @@ app.controller('CatalogMetroStationsController', function (
 		else {
 			//creating new resource.
 
-			metroStationsResource.create(station,
+			metroStationsResource.create(cloneStation(station),
 				function (station) {
 					$scope.inserted = null;
 					$scope.tableParams.filter({ station: station.station });
@@ -58,7 +77,7 @@ app.controller('CatalogMetroStationsController', function (
 				},
 				function () {
 					//add new station, if prev. attempt failed..
-					$scope.addStation();
+					$scope.add();
 				});
 		}
 	}
@@ -70,14 +89,14 @@ app.controller('CatalogMetroStationsController', function (
 		}
 	}
 
-	$scope.removeStation = function (station) {
+	$scope.remove = function (station) {
 
 		metroStationsResource.remove({ id: station.id_metro }, function () {
 			$scope.tableParams.reload();
 		});
 	}
 
-	$scope.addStation = function () {
+	$scope.add = function () {
 		$scope.inserted = {
 			station: $scope.inserted ?
 				$scope.inserted.station : null,
@@ -86,7 +105,10 @@ app.controller('CatalogMetroStationsController', function (
 			//то, что раньше выглядело как пустая строка, а сейчас в обнвленной версии 
 			// как дубликат первого значения
 			id_metrobranch: $scope.inserted ?
-				$scope.inserted.id_metrobranch : $scope.metroBranches[0].id_metrobranch
+				$scope.inserted.id_metrobranch : $scope.metroBranches[0].id_metrobranch,
+
+			//extended
+			territorialSigns: []
 		};
 
 		$scope.tableParams.reload();
@@ -129,13 +151,17 @@ app.controller('CatalogMetroStationsController', function (
 						}
 
 						params.total(data.total);
-						$defer.resolve(data.items);
+						$defer.resolve(data.items.map(function (station) {
+							if (!angular.isDefined(station.territorialSigns)) {
+								station.territorialSigns = null;
+							}
+
+							return station;
+						}));
 					});
 				}, delay);
 			}
 		});
-
-	window.tp = $scope.tableParams;
 
 }).filter('dec2HtmlColor', function () {
 	return decimalColorToHTMLcolor;

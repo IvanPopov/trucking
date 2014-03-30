@@ -19,7 +19,10 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
 			getToolGroups: getToolGroups,
 			getUnits: getUnits,
 			getMetroStations: getMetroStations,
-			getMetroBranches: getMetroBranches
+			getMetroBranches: getMetroBranches,
+
+			getTerritorialSigns: getTerritorialSigns,
+			getTerritorialSignsMetro: getTerritorialSignsMetro
 		};
 	}
 
@@ -83,6 +86,31 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
 		var path = "/api/metro/branches/";
 		return $resource(apiUrl + path + ":id", {
 			id: '@id'
+		},
+		{
+			'save': { method: 'PATCH' },
+			'create': { method: 'post', url: apiUrl + path }
+		});
+	}
+	
+	//ресурс территориальных признаков
+	function getTerritorialSigns() {
+		var path = "/api/territorialsigns/";
+		return $resource(apiUrl + path + ":id", {
+			id: '@id'
+		},
+		{
+			'save': { method: 'PATCH' },
+			'create': { method: 'post', url: apiUrl + path }
+		});
+	}
+
+	//ресурс станций метро пренадлежащих территориальным признакам
+	function getTerritorialSignsMetro() {
+		var path = "/api/territorialsigns/:id_territorialsign/metro/";
+		return $resource(apiUrl + path + ":id_metro", {
+			id_territorialsign: '@id_territorialsign',
+			id_metro: '@id_metro',
 		},
 		{
 			'save': { method: 'PATCH' },

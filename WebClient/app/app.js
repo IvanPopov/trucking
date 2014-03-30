@@ -4,7 +4,7 @@
   #######################################################################*/
 
 var app = angular.module('WebClientDB', ['ngCookies', 'xeditable', 'ngResource', 'ngTable',
-	'ngRoute', 'xx-http-error-handling']);
+	'ngRoute', 'xx-http-error-handling', 'colorpicker.module'/*, 'pascalprecht.translate'*/]);
 
 //This configures the routes and associates each route with a view and a controller
 app.config(function ($routeProvider) {
@@ -32,7 +32,8 @@ app.config(function ($routeProvider) {
 		.when('/catalog/metrobranches', {
 			templateUrl: '/app/views/catalogMetroBranches.html',
 			controller: 'CatalogMetroBranchesController',
-			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
+			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] },
+			reloadOnSearch: false
 		})
 		.when('/catalog/naturalpersons', {
 			templateUrl: '/app/views/catalogNaturalPersons.html',

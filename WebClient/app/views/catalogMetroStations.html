@@ -1,87 +1,100 @@
 ﻿<ng-include src="'/app/views/Navbar.html'"></ng-include>
 
-<div>
-	<div class="row">
-		<div class="col-md-12">
-			<div loading-container="tableParams.settings().$loading">
-				<table ng-table="tableParams" show-filter="true"
-					   class="table table-condensed tr-metro-stations-table" template-pagination="custom/pager">
-					<!--table-condensed tr-metro-stations-table-->
-					<tbody>
-						<tr ng-repeat="station in $data">
-							<td data-title="" style="width:20px;">
-								<svg width="20" height="40" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-									<g>
-										<rect stroke-width="0" stroke="#000000" fill="{{getBranch(station).color|dec2HtmlColor}}" id="svg_1" height="40" width="4" y="0" x="8" />
-										<circle cx="10" cy="20" r="7.5" stroke="black" stroke-width="0" fill="{{getBranch(station).color|dec2HtmlColor}}" />
-									</g>
-								</svg>
-							</td>
-							<td data-title="'Станция'" filter="{ 'station': 'text' }" sortable="station" style="white-space: nowrap;">
-								<span onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="station.station"
-									  e-name="station" e-form="rowform" e-required>
-									<span ng-bind-html="station.station | highlightFilter:tableParams.filter()['station']"></span>
-								</span>
-							</td>
-							<td data-title="'Ветка'" sortable="id_metrobranch">
-								<span e-name="id_metrobranch" e-form="rowform"
-									  editable-select="station.id_metrobranch" onshow="stylizeBranchSelect(this)"
-									  e-ng-options="s.id_metrobranch as s.name for s in metroBranches">
-									{{ getBranch(station).name || 'not set' }}
-								</span>
-							</td>
-							<td data-title="" style="white-space: nowrap;">
-								<!-- form -->
-								<form editable-form name="rowform" onaftersave="saveStation(station, $data)"
-									  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == station">
-									<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
-										save
-									</button>
-									<button type="button" ng-disabled="rowform.$waiting" ng-click="cancelEditing(rowform, station)" class="btn btn-default">
-										cancel
-									</button>
-								</form>
-								<div class="buttons" ng-show="!rowform.$visible">
-									<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-									<button class="btn btn-danger" ng-click="removeStation(station)">del</button>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				
-			</div>
-			<script type="text/ng-template" id="custom/pager">
-				<div class="ng-cloak">
-					<table style="width: 100%;">
-						<tr style="vertical-align: top;">
-							<td style="width: 50%; text-align: left;">
-								<ul class="pagination" style="margin: 0;">
-									<li ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}" ng-repeat="page in pages" ng-switch="page.type">
-										<a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
-										<a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
-										<a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
-										<a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a>
-										<a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
-										<a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
-									</li>
-								</ul>
-							</td>
-							<td style="width: 50%; text-align: right;">
-								<div ng-if="params.settings().counts.length" class="ng-table-counts btn-group pull-right">
-									<button type="button" class="btn btn-default disabled">View per page:</button>
-									<button ng-repeat="count in params.settings().counts" type="button" ng-class="{active:params.count()==count}" ng-click="params.count(count)" class="btn btn-default">
-										<span ng-bind="count"></span>
-									</button>
-								</div>
-							</td>
-							<td style="padding-left: 20px;">
-								<button class="btn btn-default" ng-click="addStation()" ng-show="!inserted">Добавить станцию</button>
-							</td>
-						</tr>
-					</table>
+<ul id="myTab" class="nav nav-tabs">
+	<li class=""><a href="#/catalog/metrobranches" data-toggle="tab">Линии метро</a></li>
+	<li class="active"><a href="#/catalog/metro" data-toggle="tab">Станции метро</a></li>
+</ul>
+<div class="tab-content">
+	<div class="tab-pane fade active in" id="/catalog/metro">
+		<div>
+			<div class="row">
+				<div class="col-md-12">
+					<div loading-container="tableParams.settings().$loading">
+						<table ng-table="tableParams" show-filter="true"
+							   class="table table-condensed tr-metro-stations-table" template-pagination="custom/pager">
+							<!--table-condensed tr-metro-stations-table-->
+							<tbody>
+								<tr ng-repeat="station in $data">
+									<td data-title="" style="width:20px;">
+										<svg width="20" height="40" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+											<g>
+												<rect stroke-width="0" stroke="#000000" fill="{{getBranch(station).color|dec2HtmlColor}}" id="svg_1" height="40" width="4" y="0" x="8" />
+												<circle cx="10" cy="20" r="7.5" stroke="black" stroke-width="0" fill="{{getBranch(station).color|dec2HtmlColor}}" />
+											</g>
+										</svg>
+									</td>
+									<td data-title="'Станция'" filter="{ 'station': 'text' }" sortable="station" style="white-space: nowrap;">
+										<span onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="station.station"
+											  e-name="station" e-form="rowform" e-required>
+											<span ng-bind-html="station.station | highlightFilter:tableParams.filter()['station']"></span>
+										</span>
+									</td>
+									<td data-title="'Ветка'" sortable="id_metrobranch">
+										<span e-name="id_metrobranch" e-form="rowform"
+											  editable-select="station.id_metrobranch" onshow="stylizeBranchSelect(this)"
+											  e-ng-options="s.id_metrobranch as s.name for s in metroBranches">
+											{{ getBranch(station).name || 'not set' }}
+										</span>
+									</td>
+									<!--<td data-title="'Территориальные признаки'">
+										<div loading-container="station.territorialSigns == null">
+											&nbsp;
+										</div>
+									</td>-->
+									<td data-title="" style="white-space: nowrap;">
+										<!-- form -->
+										<form editable-form name="rowform" onaftersave="save(station, $data)"
+											  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == station">
+											<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+												save
+											</button>
+											<button type="button" ng-disabled="rowform.$waiting" ng-click="cancelEditing(rowform, station)" class="btn btn-default">
+												cancel
+											</button>
+										</form>
+										<div class="buttons" ng-show="!rowform.$visible">
+											<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
+											<button class="btn btn-danger" ng-click="remove(station)">del</button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+					<script type="text/ng-template" id="custom/pager">
+						<div class="ng-cloak">
+							<table style="width: 100%;">
+								<tr style="vertical-align: top;">
+									<td style="width: 50%; text-align: left;">
+										<ul class="pagination" style="margin: 0;">
+											<li ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}" ng-repeat="page in pages" ng-switch="page.type">
+												<a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
+												<a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+												<a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+												<a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a>
+												<a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+												<a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
+											</li>
+										</ul>
+									</td>
+									<td style="width: 50%; text-align: right;">
+										<div ng-if="params.settings().counts.length" class="ng-table-counts btn-group pull-right">
+											<button type="button" class="btn btn-default disabled">View per page:</button>
+											<button ng-repeat="count in params.settings().counts" type="button" ng-class="{active:params.count()==count}" ng-click="params.count(count)" class="btn btn-default">
+												<span ng-bind="count"></span>
+											</button>
+										</div>
+									</td>
+									<td style="padding-left: 20px;">
+										<button class="btn btn-default" ng-click="add()" ng-show="!inserted">Добавить станцию</button>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</script>
 				</div>
-			</script>
+			</div>
 		</div>
 	</div>
 </div>
