@@ -21,7 +21,8 @@ app.config(function ($routeProvider) {
 		.when('/catalog/tools', {
 			templateUrl: '/app/views/catalogTools.html',
 			controller: 'CatalogToolsController',
-			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
+			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] },
+			reloadOnSearch: false
 		})
 		.when('/catalog/metro', {
 			templateUrl: '/app/views/catalogMetroStations.html',
