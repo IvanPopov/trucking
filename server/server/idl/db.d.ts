@@ -61,6 +61,12 @@ declare module trucking.db {
 		name: string;
 	}
 
+	interface IMetroStreets {
+		id_metro: number;
+		id_street: number;
+	}
+
+
 	interface ITool {
 		id_tool: number;
 		name: string;

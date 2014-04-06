@@ -142,14 +142,14 @@ function init(app: express.Express, log: winston.Logger) {
 	 *			}
 	 *     ]
 	 */
-		app.get("/api/catalogs/tools/groups",
-			passport.authenticate("bearer", { session: false }),
-			(req, res, done) => {
-				db.catalogs.toolgroups.get((err: Error, groups: trucking.db.IToolGroup[]) => {
-					if (err) return done(err);
-					res.json(groups);
-				}, req.query);
-			});
+	app.get("/api/catalogs/tools/groups",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			db.catalogs.toolgroups.get((err: Error, groups: trucking.db.IToolGroup[]) => {
+				if (err) return done(err);
+				res.json(groups);
+			}, req.query);
+		});
 
 	/**
 	 * @api {post} /api/catalogs/tools/groups Create new tool group.
@@ -598,7 +598,7 @@ function init(app: express.Express, log: winston.Logger) {
 				cond["id_worktypegroup"] = parseInt(group);
 			else //search by name
 				cond["name"] = group;
-			
+
 
 			db.catalogs.worktypegroups.del(cond, (err) => {
 				if (err) return done(err);

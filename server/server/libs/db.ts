@@ -112,6 +112,7 @@ export var catalogs = {
 	//metro stations
 	metro: <CatalogModel<trucking.db.IMetro>>null,
 	territorialsigns: <CatalogModel<trucking.db.ITerritorialSign>>null,
+	metrostreets: <CatalogModel<trucking.db.IMetroStreets>>null,
 	streets: <CatalogModel<trucking.db.IStreet>>null,
 
 	tools: <CatalogModel<trucking.db.ITool>>null,
@@ -132,7 +133,8 @@ export var catalogs = {
 	units: <CatalogModel<trucking.db.IUnit>>null,
 	brigades: <CatalogModel<trucking.db.IBrigade>>null,
 
-	naturalpersons: <CatalogModel<trucking.db.INaturalPerson>>null
+	naturalpersons: <CatalogModel<trucking.db.INaturalPerson>>null,
+
 };
 
 export var naturalpersons: NaturalPersonModel = null;
@@ -157,6 +159,7 @@ catalogs.metrobranches = new CatalogModel<trucking.db.IMetroBranch>(connection, 
 //metro stations
 catalogs.metro = new CatalogModel<trucking.db.IMetro>(connection, "Metro");
 catalogs.territorialsigns = new CatalogModel<trucking.db.ITerritorialSign>(connection, "TerritorialSigns");
+catalogs.metrostreets = new CatalogModel<trucking.db.IMetroStreets>(connection, "MetroStreets");
 catalogs.streets = new CatalogModel<trucking.db.IStreet>(connection, "Streets");
 
 catalogs.tools = new CatalogModel<trucking.db.ITool>(connection, "Tools");

@@ -114,6 +114,7 @@ exports.catalogs = {
     //metro stations
     metro: null,
     territorialsigns: null,
+    metrostreets: null,
     streets: null,
     tools: null,
     toolgroups: null,
@@ -154,6 +155,7 @@ exports.catalogs.metrobranches = new exports.CatalogModel(connection, "MetroBran
 //metro stations
 exports.catalogs.metro = new exports.CatalogModel(connection, "Metro");
 exports.catalogs.territorialsigns = new exports.CatalogModel(connection, "TerritorialSigns");
+exports.catalogs.metrostreets = new exports.CatalogModel(connection, "MetroStreets");
 exports.catalogs.streets = new exports.CatalogModel(connection, "Streets");
 
 exports.catalogs.tools = new exports.CatalogModel(connection, "Tools");

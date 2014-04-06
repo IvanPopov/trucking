@@ -115,7 +115,10 @@ function init(app, log) {
                     required: true
                 },
                 color: {
-                    type: "integer",
+                    type: ["integer", "string"],
+                    conform: function (x) {
+                        return type.isNumber(x) || /^#[\da-zA-Z]{6}$/.test(x);
+                    },
                     required: true
                 }
             }
@@ -124,6 +127,10 @@ function init(app, log) {
         if (!check.valid) {
             res.json(400, check);
             return;
+        }
+
+        if (type.isString(req.body.color)) {
+            req.body.color = hexColorToInteger(req.body.color);
         }
 
         db.metro.branches.create(req.body, function (err, result) {
@@ -155,6 +162,18 @@ function init(app, log) {
     *
     * @apiSuccessStructure Patched
     */
+    function hexColorToInteger(str) {
+        str = str.substr(1);
+
+        //console.log("before:", str);
+        var R = parseInt(str.substr(0, 2), 16);
+        var G = parseInt(str.substr(2, 2), 16);
+        var B = parseInt(str.substr(4, 2), 16);
+
+        //console.log("after:", R, G, B);
+        return (256 * 256 * B + 256 * G + R);
+    }
+
     app.patch("/api/metro/branches/:branch", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         var cond = {};
         var branch = req.params.branch;
@@ -171,7 +190,10 @@ function init(app, log) {
                     maxLength: 128
                 },
                 color: {
-                    type: "integer"
+                    type: ["integer", "string"],
+                    conform: function (x) {
+                        return type.isNumber(x) || /^#[\da-zA-Z]{6}$/.test(x);
+                    }
                 }
             }
         });
@@ -179,6 +201,10 @@ function init(app, log) {
         if (!check.valid) {
             res.json(400, check.errors);
             return;
+        }
+
+        if (type.isString(req.body.color)) {
+            req.body.color = hexColorToInteger(req.body.color);
         }
 
         db.metro.branches.patch(cond, req.body, function (err, result) {
@@ -248,12 +274,27 @@ function init(app, log) {
     *			}
     *		]
     */
-    app.get("/api/metro/stations", //passport.authenticate("bearer", { session: false }),
-    function (req, res, done) {
+    app.get("/api/metro/stations", passport.authenticate("bearer", { session: false }), function (req, res, done) {
         db.metro.stations.get(function (err, stations) {
             if (err)
                 return done(err);
             res.json(stations);
+        }, req.query);
+    });
+
+    /**
+    * @api {get} /api/metro/stations/:station/streets Get metro streets.
+    * @apiName GetStreetsByStationId
+    * @apiGroup Metro
+    * @apiPermission emploee
+    */
+    app.get("/api/metro/stations/:station/streets", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var station = req.params.station;
+
+        db.catalogs.metrostreets.find({ id_metro: parseInt(station) || 0 }, function (err, streets) {
+            if (err)
+                return done(err);
+            res.json(streets);
         }, req.query);
     });
 

@@ -133,7 +133,8 @@ function init(app: express.Express, log: winston.Logger) {
 						required: true
 					},
 					color: {
-						type: "integer",
+						type: ["integer", "string"],
+						conform: (x) => { return type.isNumber(x) || /^#[\da-zA-Z]{6}$/.test(x); },
 						required: true
 					}
 				}
@@ -142,6 +143,10 @@ function init(app: express.Express, log: winston.Logger) {
 			if (!check.valid) {
 				res.json(400, check);
 				return;
+			}
+
+			if (type.isString(req.body.color)) {
+				req.body.color = hexColorToInteger(req.body.color);
 			}
 
 			db.metro.branches.create(req.body, (err, result) => {
@@ -174,6 +179,16 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiSuccessStructure Patched
 	 */
 
+	function hexColorToInteger(str) {
+		str = str.substr(1);
+		//console.log("before:", str);
+		var R = parseInt(str.substr(0, 2), 16);
+		var G = parseInt(str.substr(2, 2), 16);
+		var B = parseInt(str.substr(4, 2), 16);
+		//console.log("after:", R, G, B);
+		return (256 * 256 * B + 256 * G + R);
+	}
+
 	app.patch("/api/metro/branches/:branch",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
@@ -192,7 +207,8 @@ function init(app: express.Express, log: winston.Logger) {
 						maxLength: 128
 					},
 					color: {
-						type: "integer",
+						type: ["integer", "string"],
+						conform: (x) => { return type.isNumber(x) || /^#[\da-zA-Z]{6}$/.test(x); }
 					}
 				}
 			});
@@ -200,6 +216,10 @@ function init(app: express.Express, log: winston.Logger) {
 			if (!check.valid) {
 				res.json(400, check.errors);
 				return;
+			}
+
+			if (type.isString(req.body.color)) {
+				req.body.color = hexColorToInteger(req.body.color);
 			}
 
 			db.metro.branches.patch(cond, req.body, (err, result) => {
@@ -240,7 +260,7 @@ function init(app: express.Express, log: winston.Logger) {
 				cond["id_metrobranch"] = parseInt(branch);
 			else //search by name
 				cond["name"] = branch;
-			
+
 			db.metro.branches.del(cond, (err: MysqlError) => {
 				if (err) return done(err);
 				res.json(204, null);
@@ -274,12 +294,30 @@ function init(app: express.Express, log: winston.Logger) {
 	 */
 
 	app.get("/api/metro/stations",
-		//passport.authenticate("bearer", { session: false }),
+		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
 			db.metro.stations.get((err: Error, stations: trucking.db.IMetro[]) => {
 				if (err) return done(err);
 				res.json(stations);
 			}, req.query);
+		});
+
+	/**
+	 * @api {get} /api/metro/stations/:station/streets Get metro streets.
+	 * @apiName GetStreetsByStationId
+	 * @apiGroup Metro
+	 * @apiPermission emploee
+	 */
+	app.get("/api/metro/stations/:station/streets",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var station = req.params.station;
+
+			db.catalogs.metrostreets.find({ id_metro: parseInt(station) || 0 },
+				(err: Error, streets: trucking.db.IMetroStreets[]) => {
+					if (err) return done(err);
+					res.json(streets);
+				}, req.query);
 		});
 
 	/**

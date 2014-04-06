@@ -102,6 +102,7 @@ var userinfo = require("./api/userinfo");
 var streets = require("./api/streets");
 var contractors = require("./api/contractors");
 var naturalpersons = require("./api/naturalpersons");
+var territorialsigns = require("./api/territorialsigns");
 
 metro(app, log);
 catalogs(app, log);
@@ -109,6 +110,7 @@ userinfo(app, log);
 streets(app, log);
 contractors(app, log);
 naturalpersons(app, log);
+territorialsigns(app, log);
 
 var port = parseInt(args.port) || config.get("port");
 var useHttps = type.isDef(args.https) ? !!args.https : config.get("https");

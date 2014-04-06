@@ -22,6 +22,7 @@
     <TypeScriptCompile Include="api\metro.ts" />
     <TypeScriptCompile Include="api\naturalpersons.ts" />
     <TypeScriptCompile Include="api\streets.ts" />
+    <TypeScriptCompile Include="api\territorialsigns.ts" />
     <TypeScriptCompile Include="api\userinfo.ts" />
     <TypeScriptCompile Include="idl\db.d.ts" />
     <TypeScriptCompile Include="idl\excel-export.d.ts" />
