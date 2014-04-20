@@ -22,7 +22,8 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
 			getMetroBranches: getMetroBranches,
 
 			getTerritorialSigns: getTerritorialSigns,
-			getTerritorialSignsMetro: getTerritorialSignsMetro
+			getMetroStreets: getMetroStreets,
+			getStreets: getStreets
 		};
 	}
 
@@ -105,16 +106,22 @@ app.factory('simpleCatalogs', function ($rootScope, $resource) {
 		});
 	}
 
-	//ресурс станций метро пренадлежащих территориальным признакам
-	function getTerritorialSignsMetro() {
-		var path = "/api/territorialsigns/:id_territorialsign/metro/";
-		return $resource(apiUrl + path + ":id_metro", {
-			id_territorialsign: '@id_territorialsign',
+	//ресурс улиц пренадлежащих станциям метро
+	function getMetroStreets() {
+		var path = "/api/metro/stations/:id_metro/streets/";
+		return $resource(apiUrl + path + ":id_street", {
 			id_metro: '@id_metro',
+			id_street: '@id_street',
 		},
 		{
 			'save': { method: 'PATCH' },
 			'create': { method: 'post', url: apiUrl + path }
+		});
+	}
+
+	function getStreets() {
+		return $resource(apiUrl + "/api/catalogs/streets/:id", {
+			id: '@id'
 		});
 	}
 

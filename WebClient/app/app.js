@@ -4,19 +4,19 @@
   #######################################################################*/
 
 var app = angular.module('WebClientDB', ['ngCookies', 'xeditable', 'ngResource', 'ngTable',
-	'ngRoute', 'xx-http-error-handling', 'colorpicker.module'/*, 'pascalprecht.translate'*/]);
+	'ngRoute', 'xx-http-error-handling', 'colorpicker.module'/*, 'pascalprecht.translate'*/, 'ngTagsInput']);
 
 //This configures the routes and associates each route with a view and a controller
 app.config(function ($routeProvider) {
 	$routeProvider
 		.when('/main', {
-			  templateUrl: '/app/views/main.html',
-			  controller: 'MainCtrl',
-			  resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
-			})
+			templateUrl: '/app/views/main.html',
+			controller: 'MainCtrl',
+			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] }
+		})
 		.when('/login', {
-			  templateUrl: '/app/views/loginForm.html',
-			  controller: 'LoginCtrl'
+			templateUrl: '/app/views/loginForm.html',
+			controller: 'LoginCtrl'
 		})
 		.when('/catalog/tools', {
 			templateUrl: '/app/views/catalogTools.html',
@@ -76,6 +76,7 @@ app.config(function ($routeProvider) {
 	$rootScope.CONFIG = {
 		//apiUrl: 'http://192.168.1.111:1337',
 		apiUrl: 'http://127.0.0.1:1337',
+		//apiUrl: 'http://78.47.66.150:3000',
 		clientId: 'web_v1',
 		clientSecret: 'abc123456'
 	};

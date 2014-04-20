@@ -28,14 +28,23 @@ body {
         padding-bottom: 0;
     }
 
-        .table.tr-metro-stations-table td:first-child svg {
-            margin-top: -3px;
-            margin-bottom: -6px;
-        }
+.table.tr-metro-stations-table th:last-child {
+    width: 100px;
+}
 
-    .table.tr-metro-stations-table td:first-child, .table.tr-metro-stations-table th:first-child {
-        border: none;
-    }
+.table.tr-metro-stations-table td[data-title-text=Ветка] {
+    width: 250px;
+}
+
+
+.table.tr-metro-stations-table td:first-child svg {
+    margin-top: -3px;
+    margin-bottom: -6px;
+}
+
+.table.tr-metro-stations-table td:first-child, .table.tr-metro-stations-table th:first-child {
+    border: none;
+}
 
 .table.tr-metro-stations-table svg {
     display: block;
@@ -71,4 +80,91 @@ body {
     background-color: #F5F5F5 !important;
     /*text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);*/
     text-shadow: none;
+}
+
+
+.bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="span"] {
+    margin-bottom: 0px !important;
+}
+
+
+.bootstrap.locked .tags {
+    border: 0;
+    box-shadow: none;
+}
+
+.bootstrap.locked .tags .input/*, .bootstrap.locked .tags a.remove-button*/ {
+    display: none;
+}
+
+.bootstrap .tags {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+    .bootstrap .tags.focused {
+        border-color: #66afe9;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6);
+    }
+
+    .bootstrap .tags .tag-item {
+        /*background: #428BCA;
+        border: 1px solid #357ebd;*/
+        /*border-radius: 4px;*/
+        /*color: #fff;*/
+        background: #EBEBEB;
+        border: 0;
+        border-radius: 2px;
+        color: #7A7A7A;
+        font-size: 12px;
+    }
+
+        .bootstrap .tags .tag-item.selected {
+            background: #d9534f;
+            border: 1px solid #d43f3a;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .bootstrap .tags .tag-item button {
+            background: transparent;
+            color: #000;
+            opacity: .4;
+        }
+
+tags-input.bootstrap  .host {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.bootstrap .tags .input {
+    font-size: 12px;
+}
+
+.bootstrap .autocomplete {
+    border-radius: 0px;
+    margin-top: 2px;
+}
+
+    .bootstrap .autocomplete .suggestion-item.selected {
+        color: #262626;
+        background-color: #e9e9e9;
+    }
+
+    .bootstrap .autocomplete .suggestion-item em {
+        font-weight: normal;
+        background-color: #ffff00;
+    }
+
+    .bootstrap .autocomplete .suggestion-item.selected em {
+        color: #262626;
+        background-color: #ffff00;
+    }
+
+.hidden {
+    display: none;
 }

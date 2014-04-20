@@ -9,15 +9,15 @@
 	$scope.metroBranches = metroBranchesResource.query();
 
 	$q.all([$scope.metroBranches.$promise, $scope.metroBranches.$promise]).then(function () {
-		$scope.stylizeColorInput = function (scope) {			
+		$scope.stylizeColorInput = function (scope) {
 			var $p = this.$editable.elem.parent().find("input:first");
-			
+
 			var button = angular.element(
 				"<button colorpicker ng-style=\"{'background-color': $data, 'border': 0}\" ng-model=\"$data\" class=\"btn btn-info\">" +
 				"pick" +
 				"</button>");
 			var el = $compile(button)(scope);
-			
+
 			//<input type="text" name="color"   ng-model="$data">
 
 			$timeout(function () {
@@ -95,7 +95,7 @@
 
 	$scope.$on('$routeUpdate', function (scope, next, current) {
 		if (!angular.equals(next.params, $scope.tableParams.url())) {
-			$scope.tableParams.parameters(next.params);
+			$scope.tableParams.parameters(next.params, true);
 			$scope.tableParams.reload();
 		}
 	});
@@ -129,72 +129,4 @@
 			}
 		});
 
-}).filter('dec2HtmlColor', function () {
-	return decimalColorToHTMLcolor;
-}).filter('highlightFilter', function ($sce) {
-	return function (input, q) {
-		if (!input || !q) {
-			return $sce.trustAsHtml(input);
-		}
-
-		return $sce.trustAsHtml(input.replace(new RegExp(q, "gi"), function (s) {
-			return "<span style='background: yellow;'>" + s + "</span>";
-		}));
-	}
-}).directive('loadingContainer', function ($timeout) {
-	return {
-		restrict: 'A',
-		scope: false,
-		link: function (scope, element, attrs) {
-			var loadingLayer = angular.element('<div class="loading"></div>');
-			element.append(loadingLayer);
-			element.addClass('loading-container');
-			var timeout = null;
-			scope.$watch(attrs.loadingContainer, function (value) {
-				//clear timeout if exists
-				$timeout.cancel(timeout);
-
-				// если нужно показать что идент загрузка, то подождем 100мс, 
-				// чтобы избежать мерцания на быстрые
-				// ответы сервера
-				if (value) {
-					timeout = $timeout(function () {
-						loadingLayer.toggleClass('ng-hide', false);
-					}, 100);
-				}
-				else {
-					loadingLayer.toggleClass('ng-hide', true);
-				}
-			});
-		}
-	};
 });
-
-function decimalColorToHTMLcolor(number) {
-	//converts to a integer
-	var intnumber = number - 0;
-
-	// isolate the colors - really not necessary
-	var red, green, blue;
-
-	// needed since toString does not zero fill on left
-	var template = "#000000";
-
-	// in the MS Windows world RGB colors
-	// are 0xBBGGRR because of the way Intel chips store bytes
-	red = (intnumber & 0x0000ff) << 16;
-	green = intnumber & 0x00ff00;
-	blue = (intnumber & 0xff0000) >>> 16;
-
-	// mask out each color and reverse the order
-	intnumber = red | green | blue;
-
-	// toString converts a number to a hexstring
-	var HTMLcolor = intnumber.toString(16);
-
-	//template adds # for standard HTML #RRGGBB
-	HTMLcolor = template.substring(0, 7 - HTMLcolor.length) + HTMLcolor;
-
-	return HTMLcolor;
-}
-

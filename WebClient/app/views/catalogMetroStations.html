@@ -14,12 +14,12 @@
 							   class="table table-condensed tr-metro-stations-table" template-pagination="custom/pager">
 							<!--table-condensed tr-metro-stations-table-->
 							<tbody>
-								<tr ng-repeat="station in $data">
+								<tr ng-repeat="station in $data" x-ng-attr-id="{{'station-' + station.id_metro}}">
 									<td data-title="" style="width:20px;">
-										<svg width="20" height="40" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+										<svg width="20" x-ng-attr-height="{{station.height}}" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
 											<g>
-												<rect stroke-width="0" stroke="#000000" fill="{{getBranch(station).color|dec2HtmlColor}}" id="svg_1" height="40" width="4" y="0" x="8" />
-												<circle cx="10" cy="20" r="7.5" stroke="black" stroke-width="0" fill="{{getBranch(station).color|dec2HtmlColor}}" />
+												<rect stroke-width="0" stroke="#000000" fill="{{getBranch(station).color|dec2HtmlColor}}" id="svg_1" x-ng-attr-height="{{station.height}}" width="4" y="0" x="8" />
+												<circle cx="10" x-ng-attr-cy="{{station.height/2}}" r="7.5" stroke="black" stroke-width="0" fill="{{getBranch(station).color|dec2HtmlColor}}" />
 											</g>
 										</svg>
 									</td>
@@ -33,28 +33,55 @@
 										<span e-name="id_metrobranch" e-form="rowform"
 											  editable-select="station.id_metrobranch" onshow="stylizeBranchSelect(this)"
 											  e-ng-options="s.id_metrobranch as s.name for s in metroBranches">
-											{{ getBranch(station).name || 'not set' }}
+											{{ getBranch(station).name || 'не задано' }}
 										</span>
 									</td>
-									<!--<td data-title="'Территориальные признаки'">
-										<div loading-container="station.territorialSigns == null">
+									<td data-title="'Территориальный признак'" sortable="id_territorialsign">
+										<!--<div loading-container="station.territorialSigns == null">
+											&nbsp;
+										</div>-->
+										
+										<span e-name="id_territorialsign" e-form="rowform" onshow="stylizeSignSelect(this)"
+											  editable-select="station.id_territorialsign" 
+											  e-ng-options="s.id_territorialsign as s.name for s in territorialSigns" ng-class="{'editable-empty':station.id_territorialsign == null}">
+											{{ getSign(station).name || 'не задано' }}
+										</span>
+									</td>
+									<td data-title="'Улицы'">
+										<div ng-class="{ 'hidden': station.streets!=null }" loading-container="station.streets == null">
 											&nbsp;
 										</div>
-									</td>-->
+										<div ng-class="{ 'hidden': station.streets==null }">
+											<tags-input ng-show="inserted != station"
+														ng-model="station.streetTags"
+														ng-class="{'locked':!rowform.$visible}"
+														display-property="name"
+														class="bootstrap"
+														placeholder="Добавить улицу"
+														add-from-autocomplete-only="true"
+														on-tag-added="streetTagAdded($tag, station)"
+														on-tag-removed="streetTagRemoved($tag, station)">
+												<auto-complete source="loadStreetTags($query)"
+															   min-length="0"
+															   debounce-delay="300"
+															   max-results="5"></auto-complete>
+											</tags-input>
+										</div>
+									</td>
 									<td data-title="" style="white-space: nowrap;">
 										<!-- form -->
 										<form editable-form name="rowform" onaftersave="save(station, $data)"
 											  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == station">
 											<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
-												save
+												<i class="glyphicon glyphicon-ok-circle"></i>
 											</button>
 											<button type="button" ng-disabled="rowform.$waiting" ng-click="cancelEditing(rowform, station)" class="btn btn-default">
-												cancel
+												<i class="glyphicon glyphicon-remove-circle"></i>
 											</button>
 										</form>
 										<div class="buttons" ng-show="!rowform.$visible">
-											<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-											<button class="btn btn-danger" ng-click="remove(station)">del</button>
+											<button class="btn btn-primary" ng-click="show(rowform, station, this)"><i class="fa fa-cogs"></i></button>
+											<button class="btn btn-danger" ng-click="remove(station)"><i class="glyphicon glyphicon-remove"></i></button>
 										</div>
 									</td>
 								</tr>
@@ -62,6 +89,18 @@
 						</table>
 
 					</div>
+					<!--<script type="text/ng-template" id="custom/header">
+						<tr>
+							<th></th>
+							<th class="header ng-scope sortable" ng-class="{'sortable': true, 'sort-asc': tableParams.sorting()['station']=='asc', 'sort-desc': tableParams.sorting()['station']=='desc'}"
+								ng-click="tableParams.sorting({'station' : tableParams.sorting()['station']=='asc' ? 'desc' : 'asc'})">
+								<div><i class="glyphicon glyphicon-user"></i> Станция</div>
+							</th>
+							<th>2</th>
+							<th>3</th>
+							<th>4</th>
+						</tr>
+					</script>-->
 					<script type="text/ng-template" id="custom/pager">
 						<div class="ng-cloak">
 							<table style="width: 100%;">

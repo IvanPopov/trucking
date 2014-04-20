@@ -66,7 +66,23 @@ function findInObjectArray(array, obj, key) {
     return item;
 }
 
-var tagsInput = angular.module('ngTagsInput', []);
+var tagsInput = angular.module('ngTagsInput', []).filter('truncate', function () {
+	return function (text, length, end) {
+		if (isNaN(length))
+			length = 10;
+
+		if (end === undefined)
+			end = "...";
+
+		if (text.length <= length || text.length - end.length <= length) {
+			return text;
+		}
+		else {
+			return String(text).substring(0, length - end.length) + end;
+		}
+
+	};
+});
 
 /**
  * @ngdoc directive
@@ -636,6 +652,7 @@ tagsInput.directive('tiAutosize', function() {
                 .css('visibility', 'hidden')
                 .css('width', 'auto')
                 .css('white-space', 'pre');
+            
 
             element.parent().append(span);
 
@@ -647,13 +664,12 @@ tagsInput.directive('tiAutosize', function() {
                 }
 
                 if (value) {
-                    span.text(value);
                     span.css('display', '');
                     width = span.prop('offsetWidth');
                     span.css('display', 'none');
                 }
 
-                element.css('width', width ? width + THRESHOLD + 'px' : '');
+                //element.css('width', width ? width + THRESHOLD + 'px' : '');
 
                 return originalValue;
             };
@@ -752,7 +768,7 @@ tagsInput.provider('tagsInputConfig', function() {
 /* HTML templates */
 tagsInput.run(["$templateCache", function($templateCache) {
     $templateCache.put('ngTagsInput/tags-input.html',
-    "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\"><span>{{getDisplayText(tag)}}</span> <a class=\"remove-button\" ng-click=\"tagList.remove($index)\">{{options.removeTagSymbol}}</a></li></ul><input class=\"input\" placeholder=\"{{options.placeholder}}\" tabindex=\"{{options.tabindex}}\" ng-model=\"newTag.text\" ng-change=\"newTagChange()\" ng-trim=\"false\" ng-class=\"{'invalid-tag': newTag.invalid}\" ti-autosize=\"\"></div></div>"
+    "<div class=\"host\" tabindex=\"-1\" ti-transclude-append=\"\"><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\"><span title=\"{{getDisplayText(tag)}}\">{{getDisplayText(tag)|truncate:16}}</span> <a class=\"remove-button\" ng-click=\"tagList.remove($index)\">{{options.removeTagSymbol}}</a></li></ul><input class=\"input\" placeholder=\"{{options.placeholder}}\" tabindex=\"{{options.tabindex}}\" ng-model=\"newTag.text\" ng-change=\"newTagChange()\" ng-trim=\"false\" ng-class=\"{'invalid-tag': newTag.invalid}\" ti-autosize=\"\"></div></div>"
   );
 
   $templateCache.put('ngTagsInput/auto-complete.html',
