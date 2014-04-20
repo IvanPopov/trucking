@@ -18,7 +18,6 @@ function init(app: express.Express, log: winston.Logger) {
 	 * @apiGroup Streets
 	 * @apiPermission emploee
 	 *
-	 * @apiParam {Integer} [sign] Only streets assigned with this territorial sign.
 	 * @apiParam {Integer} [count] Number of streets for display.
 	 * @apiParam {Integer} [from] From number of street.
 	 */
@@ -26,27 +25,13 @@ function init(app: express.Express, log: winston.Logger) {
 	app.get("/api/streets",
 		passport.authenticate("bearer", { session: false }),
 		(req, res, done) => {
-
-			var sign: number = null;
-
-			if (type.isDefAndNotNull(req.query.sign)) {
-				sign = parseInt(req.query.sign);
-			}
+		
+			//all
+			db.streets.streets.get((err: Error, streets: trucking.db.IStreet[]) => {
+				if (err) return done(err);
+				res.json(streets);
+			}, req.query);
 			
-			if (type.isDefAndNotNull(sign)) {
-				//by sign 
-				db.streets.findBySign(req.query.sign, (err: Error, streets: trucking.db.IStreet[]) => {
-					if (err || !streets) return done(err);
-					res.json(streets);
-				}, req.query);
-			}
-			else {
-				//all
-				db.streets.streets.get((err: Error, streets: trucking.db.IStreet[]) => {
-					if (err) return done(err);
-					res.json(streets);
-				}, req.query);
-			}
 		});
 
 	function createCond(req) {
@@ -245,6 +230,8 @@ function init(app: express.Express, log: winston.Logger) {
 				res.json(204, null);
 			});
 		});
+
+
 }
 
 export = init;  

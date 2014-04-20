@@ -1,8 +1,7 @@
-/// <reference path="../idl/winston.d.ts" />
+﻿/// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
 /// <reference path="../idl/db.d.ts" />
-var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
@@ -296,6 +295,76 @@ function init(app, log) {
                 return done(err);
             res.json(streets);
         }, req.query);
+    });
+
+    /**
+    * @api {post} /api/metro/stations/:station/streets Attach street for metro station.
+    * @apiName AttachStreetForMetroStation
+    * @apiGroup Metro
+    * @apiPermission emploee
+    */
+    app.post("/api/metro/stations/:station/streets", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var check = revalidator.validate(req.body, {
+            properties: {
+                id_street: {
+                    type: 'integer',
+                    required: true
+                }
+            }
+        });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        var data = {
+            id_metro: parseInt(req.params.station) || 0,
+            id_street: parseInt(req.body.id_street)
+        };
+
+        db.catalogs.metrostreets.create(data, function (err, result) {
+            if (err)
+                return done(err);
+            res.json(201, result);
+        });
+    });
+
+    /**
+    * @api {del} /api/metro/stations/:station/streets Detach street from metro station.
+    * @apiName DetachStreetFromMetroStation
+    * @apiGroup Metro
+    * @apiPermission emploee
+    */
+    app.del("/api/metro/stations/:station/streets/:street", passport.authenticate("bearer", { session: false }), function (req, res, done) {
+        var check = revalidator.validate(req.params, {
+            properties: {
+                street: {
+                    type: 'integer',
+                    required: true
+                },
+                station: {
+                    ype: 'integer',
+                    required: true
+                }
+            }
+        }, { cast: true });
+
+        if (!check.valid) {
+            res.json(400, check);
+            return;
+        }
+
+        var data = {
+            id_metro: parseInt(req.params.station),
+            id_street: parseInt(req.params.street)
+        };
+
+        db.catalogs.metrostreets.del(data, function (err) {
+            if (err)
+                return done(err);
+            res.json(204, null);
+        });
     });
 
     /**

@@ -185,5 +185,5 @@ systemCatalogs.clientapps = new CatalogModel<trucking.db.IClientApp>(connection,
 naturalpersons = catalogs.naturalpersons = new NaturalPersonModel(connection, catalogs.worktypes, catalogs.tools);
 
 metro = new Metro(catalogs.metrobranches, catalogs.metro);
-streets = new Streets("territorialsignsstreets", catalogs.streets, catalogs.territorialsigns);
+streets = new Streets(catalogs.streets, catalogs.territorialsigns);
 

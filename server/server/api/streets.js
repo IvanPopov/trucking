@@ -16,32 +16,16 @@ function init(app, log) {
     * @apiGroup Streets
     * @apiPermission emploee
     *
-    * @apiParam {Integer} [sign] Only streets assigned with this territorial sign.
     * @apiParam {Integer} [count] Number of streets for display.
     * @apiParam {Integer} [from] From number of street.
     */
     app.get("/api/streets", passport.authenticate("bearer", { session: false }), function (req, res, done) {
-        var sign = null;
-
-        if (type.isDefAndNotNull(req.query.sign)) {
-            sign = parseInt(req.query.sign);
-        }
-
-        if (type.isDefAndNotNull(sign)) {
-            //by sign
-            db.streets.findBySign(req.query.sign, function (err, streets) {
-                if (err || !streets)
-                    return done(err);
-                res.json(streets);
-            }, req.query);
-        } else {
-            //all
-            db.streets.streets.get(function (err, streets) {
-                if (err)
-                    return done(err);
-                res.json(streets);
-            }, req.query);
-        }
+        //all
+        db.streets.streets.get(function (err, streets) {
+            if (err)
+                return done(err);
+            res.json(streets);
+        }, req.query);
     });
 
     function createCond(req) {

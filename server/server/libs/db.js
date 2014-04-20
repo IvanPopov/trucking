@@ -181,4 +181,4 @@ exports.systemCatalogs.clientapps = new exports.CatalogModel(connection, "Client
 exports.naturalpersons = exports.catalogs.naturalpersons = new exports.NaturalPersonModel(connection, exports.catalogs.worktypes, exports.catalogs.tools);
 
 exports.metro = new exports.Metro(exports.catalogs.metrobranches, exports.catalogs.metro);
-exports.streets = new exports.Streets("territorialsignsstreets", exports.catalogs.streets, exports.catalogs.territorialsigns);
+exports.streets = new exports.Streets(exports.catalogs.streets, exports.catalogs.territorialsigns);
