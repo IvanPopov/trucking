@@ -194,7 +194,7 @@ app.controller('CatalogMetroStationsController', function (
 	$scope.loadStreetTags = function (query) {
 		var deferred = $q.defer();
 
-		setTimeout(function () {
+		$timeout(function () {
 			var result = [];
 
 			$scope.streets.forEach(function (street) {
@@ -258,19 +258,17 @@ app.controller('CatalogMetroStationsController', function (
 							station.streetTags = station.streetTags || null;
 							station.height = 40;
 
-							//function x() { station.height += 10; console.log(station.height); $timeout(x, 1000); }
-							//$timeout(x, 1000);
-
-							metroStreetsResource.query({ id_metro: station.id_metro }, function (streets) {
-								$timeout(function () {
-									station.streets = streets;
-									station.streetTags = [];
-									streets.forEach(function (street) {
-										station.streetTags.push($scope.getStreet(street));
-									});
-								}, delay);
-							});
-
+							if (station !== $scope.inserted) {
+								metroStreetsResource.query({ id_metro: station.id_metro }, function (streets) {
+									$timeout(function () {
+										station.streets = streets;
+										station.streetTags = [];
+										streets.forEach(function (street) {
+											station.streetTags.push($scope.getStreet(street));
+										});
+									}, delay);
+								});
+							}
 
 							return station;
 						}));

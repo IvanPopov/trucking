@@ -1,0 +1,94 @@
+﻿<ng-include src="'/app/views/Navbar.html'"></ng-include>
+
+<div loading-container="tableParams.settings().$loading">
+	<table ng-table="tableParams" show-filter="true"
+		   class="table table-condensed tr-streets-table" template-pagination="custom/pager">
+		<!--table-condensed tr-metro-stations-table-->
+		<tbody>
+			<tr ng-repeat="street in $data">
+				<td data-title="'Улица'" filter="{ 'name': 'text' }" sortable="name" style="white-space: nowrap;">
+					<span onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="street.name"
+						  e-name="name" e-form="rowform" e-required>
+						<a class="b-open-maps" target="_blank" href="https://www.google.ru/maps/preview?safe=off&q=street {{street.name}}"><i class="fa fa-map-marker"></i></a>
+						<span ng-bind-html="street.name | highlightFilter:tableParams.filter()['name']"></span>
+					</span>
+				</td>
+				<td data-title="'Комментарий'" >
+					<span e-placeholder="Комментарий" editable-textarea="street.comment" e-rows="2" e-cols="40"
+						  e-name="comment" e-form="rowform" e-required>
+						{{street.comment}}
+					</span>
+				</td>
+				<td data-title="'Улицы'">
+					<div ng-class="{ 'hidden': street.stations!=null }" loading-container="street.stations == null">
+						&nbsp;
+					</div>
+					<div ng-class="{ 'hidden': street.stations==null }">
+						<tags-input ng-show="inserted != street"
+									ng-model="street.stationTags"
+									ng-class="{'locked':!rowform.$visible}"
+									display-property="station"
+									class="bootstrap"
+									placeholder="Добавить станцию"
+									add-from-autocomplete-only="true"
+									on-tag-added="stationTagAdded($tag, street)"
+									on-tag-removed="stationTagRemoved($tag, street)">
+							<auto-complete source="loadStationTags($query)"
+										   min-length="0"
+										   debounce-delay="300"
+										   max-results="5"></auto-complete>
+						</tags-input>
+					</div>
+				</td>
+				<td data-title="" style="white-space: nowrap;">
+					<!-- form -->
+					<form editable-form name="rowform" onaftersave="save(street, $data)"
+						  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == street">
+						<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+							<i class="glyphicon glyphicon-ok-circle"></i>
+						</button>
+						<button type="button" ng-disabled="rowform.$waiting" ng-click="cancelEditing(rowform, street)" class="btn btn-default">
+							<i class="glyphicon glyphicon-remove-circle"></i>
+						</button>
+					</form>
+					<div class="buttons" ng-show="!rowform.$visible">
+						<button class="btn btn-primary" ng-click="rowform.$show()"><i class="fa fa-cogs"></i></button>
+						<button class="btn btn-danger" ng-click="remove(street)"><i class="glyphicon glyphicon-remove"></i></button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>
+<script type="text/ng-template" id="custom/pager">
+	<div class="ng-cloak">
+		<table style="width: 100%;">
+			<tr style="vertical-align: top;">
+				<td style="width: 50%; text-align: left;">
+					<ul class="pagination" style="margin: 0;">
+						<li ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}" ng-repeat="page in pages" ng-switch="page.type">
+							<a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
+							<a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+							<a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+							<a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a>
+							<a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+							<a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
+						</li>
+					</ul>
+				</td>
+				<td style="width: 50%; text-align: right;">
+					<div ng-if="params.settings().counts.length" class="ng-table-counts btn-group pull-right">
+						<button type="button" class="btn btn-default disabled">View per page:</button>
+						<button ng-repeat="count in params.settings().counts" type="button" ng-class="{active:params.count()==count}" ng-click="params.count(count)" class="btn btn-default">
+							<span ng-bind="count"></span>
+						</button>
+					</div>
+				</td>
+				<td style="padding-left: 20px;">
+					<button class="btn btn-default" ng-click="add()" ng-show="!inserted">Добавить улицу</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</script>

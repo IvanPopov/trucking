@@ -129,4 +129,5 @@
 			}
 		});
 
+	$scope.tableParams.parameters($routeParams, true);
 });

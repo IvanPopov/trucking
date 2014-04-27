@@ -26,6 +26,7 @@
 									<td data-title="'Станция'" filter="{ 'station': 'text' }" sortable="station" style="white-space: nowrap;">
 										<span onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="station.station"
 											  e-name="station" e-form="rowform" e-required>
+											<a class="b-open-maps" target="_blank" href="https://www.google.ru/maps/preview?safe=off&q=metro {{station.station}}"><i class="fa fa-map-marker"></i></a>
 											<span ng-bind-html="station.station | highlightFilter:tableParams.filter()['station']"></span>
 										</span>
 									</td>

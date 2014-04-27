@@ -27,6 +27,8 @@
 									<td data-title="'Ветка'" filter="{ 'name': 'text' }" sortable="name" style="white-space: nowrap;">
 										<span onbeforesave="checkNotNull($data)" e-placeholder="Название" editable-text="branch.name"
 											  e-name="name" e-form="rowform" e-required>
+											
+											<a class="b-open-maps" target="_blank" href="https://www.google.ru/maps/preview?safe=off&q={{branch.name}} линия метрополитена"><i class="fa fa-map-marker"></i></a>
 											<span ng-bind-html="branch.name | highlightFilter:tableParams.filter()['name']"></span>
 										</span>
 									</td>
@@ -42,15 +44,15 @@
 										<form editable-form name="rowform" onaftersave="save(branch, $data)"
 											  ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == branch">
 											<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
-												save
+												<i class="glyphicon glyphicon-ok-circle"></i>
 											</button>
 											<button type="button" ng-disabled="rowform.$waiting" ng-click="cancelEditing(rowform, branch)" class="btn btn-default">
-												cancel
+												<i class="glyphicon glyphicon-remove-circle"></i>
 											</button>
 										</form>
 										<div class="buttons" ng-show="!rowform.$visible">
-											<button class="btn btn-primary" ng-click="rowform.$show()">edit</button>
-											<button class="btn btn-danger" ng-click="remove(branch)">del</button>
+											<button class="btn btn-primary" ng-click="rowform.$show()"><i class="fa fa-cogs"></i></button>
+											<button class="btn btn-danger" ng-click="remove(branch)"><i class="glyphicon glyphicon-remove"></i></button>
 										</div>
 									</td>
 								</tr>

@@ -51,6 +51,15 @@ body {
     padding: 1px 0 1px 0;
 }
 
+table.tr-streets-table td:last-child{
+    width: 100px;
+}
+
+table.tr-streets-table td[data-title-text=Улицы] {
+    width: 30%;
+}
+
+
 
 .loading-container {
     position: relative;
@@ -167,4 +176,13 @@ tags-input.bootstrap  .host {
 
 .hidden {
     display: none;
+}
+
+
+.b-open-maps {
+    color: lightgray;
+}
+
+.b-open-maps:hover {
+    color: black;
 }

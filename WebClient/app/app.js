@@ -36,6 +36,12 @@ app.config(function ($routeProvider) {
 			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] },
 			reloadOnSearch: false
 		})
+		.when('/catalog/streets', {
+			templateUrl: '/app/views/catalogStreets.html',
+			controller: 'CatalogStreetsController',
+			resolve: { key: ['Auth', function (s) { return s.authenticate(); }] },
+			reloadOnSearch: false
+		})
 		.when('/catalog/naturalpersons', {
 			templateUrl: '/app/views/catalogNaturalPersons.html',
 			controller: 'CatalogNaturalPersonsController',
