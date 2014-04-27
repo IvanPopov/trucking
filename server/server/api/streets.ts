@@ -51,6 +51,96 @@ function init(app: express.Express, log: winston.Logger) {
 
 
 	/**
+	 * @api {get} /api/streets/:street/metro/stations Get street metro.
+	 * @apiName GetMetroStationsByStreetID
+	 * @apiGroup Streets
+	 * @apiPermission emploee
+	 */
+	app.get("/api/streets/:street/metro/stations",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var street = req.params.street;
+
+			db.catalogs.metrostreets.find({ id_street: parseInt(street) || 0 },
+				(err: Error, metro: trucking.db.IMetroStreets[]) => {
+					if (err) return done(err);
+					res.json(metro);
+				}, req.query);
+		});
+
+	/**
+	 * @api {post} /api/streets/:street/metro/stations Attach metro station to street.
+	 * @apiName AttachMetroStationToStreet
+	 * @apiGroup Streets
+	 * @apiPermission emploee
+	 */
+	app.post("/api/streets/:street/metro/stations",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var check = revalidator.validate(req.body, {
+				properties: {
+					id_metro: {
+						type: 'integer',
+						required: true
+					}
+				}
+			});
+
+			if (!check.valid) {
+				res.json(400, check);
+				return;
+			}
+
+			var data = {
+				id_street: parseInt(req.params.street) || 0,
+				id_metro: parseInt(req.body.id_metro)
+			};
+
+			db.catalogs.metrostreets.create(data, (err, result) => {
+				if (err) return done(err);
+				res.json(201, result);
+			});
+		});
+
+	/**
+	 * @api {del} /api/streets/:street/metro/stations/:station Detach metro station from street.
+	 * @apiName DetachMetroStationFromStreet
+	 * @apiGroup Metro
+	 * @apiPermission emploee
+	 */
+	app.del("/api/streets/:street/metro/stations/:station",
+		passport.authenticate("bearer", { session: false }),
+		(req, res, done) => {
+			var check = revalidator.validate(req.params, {
+				properties: {
+					street: {
+						type: 'integer',
+						required: true
+					},
+					station: {
+						ype: 'integer',
+						required: true
+					}
+				}
+			}, { cast: true });
+
+			if (!check.valid) {
+				res.json(400, check);
+				return;
+			}
+
+			var data = {
+				id_metro: parseInt(req.params.station),
+				id_street: parseInt(req.params.street)
+			};
+
+			db.catalogs.metrostreets.del(data, (err) => {
+				if (err) return done(err);
+				res.json(204, null);
+			});
+		});
+
+	/**
 	 * @api {get} /api/streets/:id Get street by id.
 	 * @apiName GetStreetById
 	 * @apiGroup Streets

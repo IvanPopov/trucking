@@ -1,7 +1,8 @@
-﻿/// <reference path="../idl/winston.d.ts" />
+/// <reference path="../idl/winston.d.ts" />
 /// <reference path="../idl/express.d.ts" />
 /// <reference path="../idl/passport.d.ts" />
 /// <reference path="../idl/db.d.ts" />
+var express = require("express");
 var passport = require("passport");
 
 var db = require("../libs/db");
